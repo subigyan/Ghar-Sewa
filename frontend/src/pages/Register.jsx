@@ -7,11 +7,18 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
+import { register } from "../services/authServices";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import authState from "../atoms/authAtom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   useEffect(() => {
     AOS.init({ duration: 1500 });
   }, []);
+
+  const [user, setUser] = useRecoilState(authState);
 
   const [showPassword, setShowPassoword] = useState(false);
   const [showConPassword, setShowConPassoword] = useState(false);
@@ -36,6 +43,7 @@ const Register = () => {
     //   "You must agree to the terms and conditions"
     // ),
   });
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -44,8 +52,30 @@ const Register = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      // alert(JSON.stringify(values, null, 2));
+      const { name, email, password } = values;
+      // const response = await register({ name, email, password });
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/customers/register",
+          {
+            name,
+            email,
+            password,
+          }
+        );
+        console.log(response.data);
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data.data));
+          setUser(response.data.data);
+        }
+      } catch (err) {
+        console.log(err.response.data.message);
+        toast.error(err.response.data.message);
+      }
+
+      // console.log(response.data, user);
     },
   });
 
@@ -68,7 +98,7 @@ const Register = () => {
             className="flex flex-col w-full items-center justify-between mt-8 min-h-[280px] space-y-3"
             onSubmit={formik.handleSubmit}
           >
-            {console.log(formik.touched.email)}
+            {/* {console.log(formik.touched.email)} */}
 
             <TextField
               id="name"
@@ -120,7 +150,7 @@ const Register = () => {
                     onClick={() => setShowPassoword(!showPassword)}
                     className="cursor-pointer"
                   >
-                    {!showPassword ? (
+                    {showPassword ? (
                       <MdVisibility size={25} />
                     ) : (
                       <MdVisibilityOff size={25} />
@@ -155,7 +185,7 @@ const Register = () => {
                     onClick={() => setShowConPassoword(!showConPassword)}
                     className="cursor-pointer"
                   >
-                    {!showConPassword ? (
+                    {showConPassword ? (
                       <MdVisibility size={25} />
                     ) : (
                       <MdVisibilityOff size={25} />

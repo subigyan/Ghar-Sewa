@@ -6,9 +6,14 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { toast } from "react-toastify";
+import authState from "../atoms/authAtom";
 
 const Register = () => {
   const [showPassword, setShowPassoword] = useState(false);
+  const [user, setUser] = useRecoilState(authState);
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -26,8 +31,25 @@ const Register = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      try {
+        const { email, password } = values;
+        const response = await axios.post(
+          "http://localhost:5000/api/customers/login",
+          {
+            email,
+            password,
+          }
+        );
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data.data));
+          setUser(response.data.data);
+          toast.success(response.data.message);
+        }
+      } catch (err) {
+        console.log(err.response.data.message);
+        toast.error(err.response.data.message);
+      }
     },
   });
   return (
@@ -81,7 +103,7 @@ const Register = () => {
                     onClick={() => setShowPassoword(!showPassword)}
                     className="cursor-pointer"
                   >
-                    {!showPassword ? (
+                    {showPassword ? (
                       <MdVisibility size={25} />
                     ) : (
                       <MdVisibilityOff size={25} />

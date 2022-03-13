@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
+import { useRecoilState } from "recoil";
+import authState from "../atoms/authAtom";
+
 const Nav = () => {
   let links = [
     { name: "Home", link: "/" },
@@ -9,6 +12,10 @@ const Nav = () => {
     { name: "About us", link: "/" },
     { name: "For Business", link: "/", unique: true },
   ];
+
+  const [user, setUser] = useRecoilState(authState);
+  console.log(user);
+
   let [open, setOpen] = useState(false);
   return (
     <div
@@ -49,19 +56,34 @@ const Nav = () => {
               </Link>
             </li>
           ))}
-          <Link to="/login">
-            <button className="md:ml-8 md:my-0 my-2 font-semibold">
-              Login
-            </button>
-          </Link>
-          <Link to="/register">
+          {user ? (
             <button
               className="bg-black_1 text-white  py-2 px-6 rounded md:ml-8 hover:bg-gray-800 
                                 duration-500 md:w-auto w-32 md:my-0 my-2"
+              onClick={() => {
+                setUser(null);
+                localStorage.removeItem("user");
+              }}
             >
-              Sign Up
+              Log Out
             </button>
-          </Link>
+          ) : (
+            <>
+              <Link to="/login">
+                <button className="md:ml-8 md:my-0 my-2 font-semibold">
+                  Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button
+                  className="bg-black_1 text-white  py-2 px-6 rounded md:ml-8 hover:bg-gray-800 
+                                duration-500 md:w-auto w-32 md:my-0 my-2"
+                >
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
         </ul>
       </div>
     </div>

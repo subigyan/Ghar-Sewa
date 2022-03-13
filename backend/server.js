@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const errorHandler = require("./middlewares/errorMiddleware");
 const colors = require("colors");
 const connectDB = require("./config/db");
+var cors = require("cors");
 
 const PORT = process.env.PORT || 5000;
 
@@ -10,6 +11,8 @@ const app = express();
 connectDB();
 
 app.use(express.json());
+app.use(cors());
+
 app.use(express.urlencoded({ extended: false }));
 
 const customerRoute = require("./routes/customerRoutes");

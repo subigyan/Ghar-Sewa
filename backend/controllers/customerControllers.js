@@ -21,9 +21,9 @@ const getCustomers = asyncHandler(async (req, res) => {
 //@route POST /api/customers
 //@access Private
 const registerCustomer = asyncHandler(async (req, res) => {
-  const { name, email, password, phoneNumber } = req.body;
+  const { name, email, password } = req.body;
 
-  if (!name || !email || !password || !phoneNumber) {
+  if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please Enter All Fields");
   }
@@ -43,7 +43,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
   const customer = await Customer.create({
     name,
     email,
-    phoneNumber,
+    // phoneNumber,
     password: hashedPassword,
   });
   if (customer) {
@@ -54,7 +54,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
         id: customer._id,
         name: customer.name,
         email: customer.email,
-        phoneNumber: customer.phoneNumber,
+        // phoneNumber: customer.phoneNumber,
         token: generateToken(customer._id),
       },
     });
@@ -138,7 +138,7 @@ const loginCustomer = asyncHandler(async (req, res) => {
         id: customer._id,
         name: customer.name,
         email: customer.email,
-        phoneNumber: customer.phoneNumber,
+        // phoneNumber: customer.phoneNumber,
         token: generateToken(customer._id),
       },
     });
