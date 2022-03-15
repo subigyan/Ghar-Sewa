@@ -10,6 +10,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState from "../atoms/authAtom";
+import { login } from "../services/customerAuth";
 
 const Register = () => {
   const [showPassword, setShowPassoword] = useState(false);
@@ -34,17 +35,17 @@ const Register = () => {
     onSubmit: async (values) => {
       try {
         const { email, password } = values;
-        const response = await axios.post(
-          "http://localhost:5000/api/customers/login",
-          {
-            email,
-            password,
-          }
-        );
-        if (response.data) {
-          localStorage.setItem("user", JSON.stringify(response.data.data));
-          setUser(response.data.data);
-          toast.success(response.data.message);
+        // const response = await axios.post(
+        //   "http://localhost:5000/api/customers/login",
+        //   {
+        //     email,
+        //     password,
+        //   }
+        // );
+        const response = await login({ email, password });
+        if (response) {
+          setUser(response.data);
+          toast.success(response.message);
         }
       } catch (err) {
         console.log(err.response.data.message);

@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
-import { register } from "../services/authServices";
+import { register } from "../services/customerAuth";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import authState from "../atoms/authAtom";
@@ -54,24 +54,16 @@ const Register = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
-      const { name, email, password } = values;
       // const response = await register({ name, email, password });
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/customers/register",
-          {
-            name,
-            email,
-            password,
-          }
-        );
-        console.log(response.data);
-        if (response.data) {
-          localStorage.setItem("user", JSON.stringify(response.data.data));
-          setUser(response.data.data);
+        const { name, email, password } = values;
+        const response = await register({ name, email, password });
+        console.log(response);
+        if (response) {
+          setUser(response.data);
+          toast.success(response.message);
         }
       } catch (err) {
-        console.log(err.response.data.message);
         toast.error(err.response.data.message);
       }
 
