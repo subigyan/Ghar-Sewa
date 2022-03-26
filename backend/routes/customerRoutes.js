@@ -13,7 +13,8 @@ const {
 
 const { protect } = require("../middlewares/authMiddleware");
 
-router.route("/").get(getCustomers).post(registerCustomer);
+router.route("/").get(getCustomers);
+// .post(registerCustomer)
 
 router.route("/:id").put(updateCustomer).delete(deleteCustomer);
 

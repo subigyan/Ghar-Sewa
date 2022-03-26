@@ -17,9 +17,12 @@ app.use(express.urlencoded({ extended: false }));
 
 const customerRoute = require("./routes/customerRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const serviceProviderRoutes = require("./routes/serviceProviderRoutes");
 
 app.use("/api/customers", customerRoute);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/serviceProviders", serviceProviderRoutes);
+
 app.use(errorHandler);
 
 app.listen(PORT, () =>

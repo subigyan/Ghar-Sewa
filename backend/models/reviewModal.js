@@ -7,11 +7,11 @@ const reviewSchema = new mongoose.Schema(
       required: true,
       ref: "Customer",
     },
-    // serviceProvider: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: "Customer",
-    // },
+    serviceProvider: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "ServiceProvider",
+    },
     review: {
       type: String,
       required: [true, "Please enter a review"],

@@ -79,7 +79,7 @@ const updateCustomer = asyncHandler(async (req, res) => {
     });
   }
 
-  const updatedGoal = await Customer.findByIdAndUpdate(
+  const updatedCustomer = await Customer.findByIdAndUpdate(
     req.params.id,
     req.body,
     {
@@ -90,7 +90,7 @@ const updateCustomer = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Customer updated successfully",
-    data: updatedGoal,
+    data: updatedCustomer,
   });
 });
 
@@ -151,8 +151,11 @@ const loginCustomer = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Login customer
+//@route GET /api/customers/me
+//@access Private
+
 const getMe = asyncHandler(async (req, res) => {
-  console.log(req.user);
   const { _id, name, email } = await Customer.findById(req.user.id);
   // console.log(req.customer);
   res.status(200).json({
