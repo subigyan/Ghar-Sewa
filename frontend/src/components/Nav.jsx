@@ -11,7 +11,7 @@ const Nav = () => {
     { name: "Home", link: "/" },
     { name: "Discover Services", link: "/" },
     { name: "About us", link: "/" },
-    { name: "For Business", link: "/", unique: true },
+    { name: "For Business", link: "/business", unique: true },
   ];
 
   const [isMobile, isTab] = useDeviceProvider();
@@ -22,11 +22,7 @@ const Nav = () => {
 
   let [open, setOpen] = useState(false);
   return (
-    <div
-      className=" w-full fixed 1;''
-        74
-         top-0 left-0"
-    >
+    <div className=" w-full fixed top-0 left-0">
       <div className="lg:flex items-center justify-between  py-4 lg:px-10 px-7">
         <div className="flex items-center justify-between">
           <div
@@ -51,14 +47,18 @@ const Nav = () => {
           {links.map((link) => (
             <li
               key={link.name}
-              className={`lg:ml-8 lg:my-0 my-2 font-medium ${
-                !isTab && "underline-animation"
-              }`}
+              className={`lg:ml-8 lg:my-0 my-2 font-medium  ${
+                !isTab && link.unique
+                  ? "underline-animation-unique"
+                  : !isTab
+                  ? "underline-animation"
+                  : ""
+              } `}
             >
               <Link
                 to={link.link}
                 className={`text-gray-800 hover:text-gray-400 duration-500  ${
-                  link.unique && "text-black_1 hover:text-dark_green "
+                  link.unique && "text-indigo-600 hover:text-blue-400 "
                 }`}
               >
                 {link.name}

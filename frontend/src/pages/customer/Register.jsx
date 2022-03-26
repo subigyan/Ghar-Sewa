@@ -7,18 +7,23 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
-import { register } from "../services/customerAuth";
+import { register } from "../../services/customerAuth";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import authState from "../atoms/authAtom";
+import authState from "../../atoms/authAtom";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  let navigate = useNavigate();
+  const [user, setUser] = useRecoilState(authState);
+
   useEffect(() => {
     AOS.init({ duration: 1500 });
+    if (user) {
+      navigate("/");
+    }
   }, []);
-
-  const [user, setUser] = useRecoilState(authState);
 
   const [showPassword, setShowPassoword] = useState(false);
   const [showConPassword, setShowConPassoword] = useState(false);
@@ -222,7 +227,9 @@ const Register = () => {
           </form>
           <p className="mt-5 text-center">
             Already Have an account?{" "}
-            <span className="bg-blue text-blue-400 ">Log in</span>
+            <a className="bg-blue text-blue-400" href="/login">
+              Log in
+            </a>
           </p>
         </div>
       </div>

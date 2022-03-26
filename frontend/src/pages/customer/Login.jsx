@@ -9,8 +9,8 @@ import { MdVisibilityOff } from "react-icons/md";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import authState from "../atoms/authAtom";
-import { login } from "../services/customerAuth";
+import authState from "../../atoms/authAtom";
+import { login } from "../../services/customerAuth";
 
 const Register = () => {
   const [showPassword, setShowPassoword] = useState(false);

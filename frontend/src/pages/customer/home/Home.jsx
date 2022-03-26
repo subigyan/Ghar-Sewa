@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BiLocationPlus } from "react-icons/bi";
 import { FaTools } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import Nav from "../../components/Nav";
+import Nav from "../../../components/Nav";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./home.css";
@@ -23,7 +23,7 @@ const Home = () => {
   }, []);
 
   return (
-    <>
+    <div className=" overflow-x-hidden">
       <Nav />
       <div className="w-screen h-screen flex flex-col justify-center lg:items-start items-center  back px-4 pb-16 lg:pl-32 ">
         <h1
@@ -86,25 +86,25 @@ const Home = () => {
           veritatis.
         </p>
         <div className="flex justify-around mt-10 lg:px-32">
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400">
-            <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl relative  transition-all">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer">
+            <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiTap className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Plumber</p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer ">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiElectric className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Electircian</p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400  cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <BiBuildingHouse className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Builder</p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400  cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <AiOutlineFormatPainter className="text-8xl text-white " />
             </div>
@@ -112,25 +112,25 @@ const Home = () => {
           </div>
         </div>
         <div className="flex justify-around mt-10 lg:px-32">
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400  cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiHandSaw className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Carpenter </p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiVacuumCleaner className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Cleaner </p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor';lk-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiMechanicGarage className="text-8xl text-white " />
             </div>
             <p className="mt-3 text-xl">Mechanic </p>
           </div>
-          <div className="flex flex-col flex-center">
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <MdHandyman className="text-8xl text-white " />
             </div>
@@ -138,7 +138,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
