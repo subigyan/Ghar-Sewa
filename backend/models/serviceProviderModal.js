@@ -19,20 +19,19 @@ const serviceProviderSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter a password"],
     },
-    neighborhood: {
-      type: String,
-      required: [true, "Please enter a neighborhood"],
-    },
-    city: {
-      type: String,
-      required: [true, "Please enter an address"],
-    },
     type: {
       type: String,
       enum: ["individual", "company"],
       required: [true, "Please enter a type"],
     },
-    about: {
+    businessEmail: {
+      type: String,
+      unique: true,
+    },
+    businessContactNumber: {
+      type: Number,
+    },
+    description: {
       type: String,
     },
     owner: {
@@ -44,6 +43,24 @@ const serviceProviderSchema = new mongoose.Schema(
     },
     services: {
       type: [String],
+    },
+    neighbourhood: {
+      type: String,
+      required: [true, "Please enter a neighbourhood "],
+    },
+    city: {
+      type: String,
+      required: [true, "Please enter an city"],
+    },
+    district: {
+      type: String,
+      required: [true, "Please enter a district"],
+    },
+    longitude: {
+      type: Number,
+    },
+    latitude: {
+      type: Number,
     },
   },
   {

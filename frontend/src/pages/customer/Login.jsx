@@ -35,16 +35,11 @@ const Register = () => {
     onSubmit: async (values) => {
       try {
         const { email, password } = values;
-        // const response = await axios.post(
-        //   "http://localhost:5000/api/customers/login",
-        //   {
-        //     email,
-        //     password,
-        //   }
-        // );
+
         const response = await login({ email, password });
         if (response) {
-          setUser(response.data);
+          console.log("token", response?.data?.token);
+          setUser(response?.data?.token);
           toast.success(response.message);
         }
       } catch (err) {

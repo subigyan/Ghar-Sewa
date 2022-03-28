@@ -10,7 +10,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState from "../../atoms/authAtom";
-import { login } from "../../services/customerAuth";
+import { login } from "../../services/serviceProviderAuth";
 
 const Register = () => {
   const [showPassword, setShowPassoword] = useState(false);
@@ -36,17 +36,20 @@ const Register = () => {
       try {
         const { email, password } = values;
         // const response = await axios.post(
-        //   "http://localhost:5000/api/customers/login",
+        //   "http://localhost:5000/api/serviceProviders/login",
         //   {
         //     email,
         //     password,
         //   }
         // );
         const response = await login({ email, password });
-        if (response) {
-          setUser(response.data);
+        if (response.data) {
+          console.log("token", response?.data?.token);
+          setUser(response?.data?.token);
+          toast.success("Done");
           toast.success(response.message);
         }
+        console.log(response);
       } catch (err) {
         console.log(err.response.data.message);
         toast.error(err.response.data.message);
@@ -54,13 +57,15 @@ const Register = () => {
     },
   });
   return (
-    <div className="w-screen h-screen  flex  justify-center items-center">
-      <div className="md:w-full flex justify-center items-center p-2">
+    <div className="w-screen h-screen  flex ">
+      <div className="w-full flex justify-center  p-2">
         <div
-          className="md:w-[500px] w-[350px] shadow-2xl border border-gray-100 rounded-md p-4 flex flex-col justify-center  
-          "
+          className="md:w-[500px] w-[400px] shadow-2xl border border-gray-100 rounded-md p-4 flex flex-col justify-center  
+          py-8 h-[400px] mt-20"
         >
-          <h1 className="text-3xl font-Medium">Login</h1>
+          <h1 className="text-3xl font-Medium text-center font-semibold">
+            Login
+          </h1>
           <form
             className="flex flex-col w-full items-center justify-between mt-8 min-h-[180px] space-y-3"
             onSubmit={formik.handleSubmit}
@@ -112,7 +117,10 @@ const Register = () => {
               }}
             />
 
-            <button className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4">
+            <button
+              className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4"
+              type="submit"
+            >
               Login
             </button>
           </form>

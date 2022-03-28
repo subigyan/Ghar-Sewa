@@ -6,6 +6,8 @@ import {
   BsTagsFill,
 } from "react-icons/bs";
 
+import Nav from "../../components/business/Nav";
+
 import { AiFillSetting } from "react-icons/ai";
 
 import snapIcon from "../../assets/icons/snap.png";
@@ -18,6 +20,7 @@ import dash from "../../assets/images/businessDash.png";
 import useDeviceProvider from "../../hooks/useDeviceProvider";
 
 import { BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   useEffect(() => {
@@ -27,24 +30,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-center flex-col ">
-      <div className=" w-full  top-0 left-0 bg-gray-100 z-50">
-        <div className="flex items-center justify-between  py-4 lg:px-14 px-7">
-          <div
-            className="font-bold text-2xl cursor-pointer flex items-end  
-                        text-gray-800"
-          >
-            Ghar Sewa
-            <span className="font-light text-base ml-2"> for business</span>
-          </div>
-          <button
-            className={`lg:ml-8 lg:my-0 my-2 font-semibold py-2 px-6 shadow shadow-purple-700
-               hover:scale-105 transition ease-in duration-100
-            `}
-          >
-            Log In
-          </button>
-        </div>
-      </div>
+      <Nav />
       <div className="flex w-full relative">
         <div
           className={`${
@@ -52,27 +38,31 @@ const Home = () => {
           } bg-[#1e1f4f] h-[80vh] flex flex-center font-roboto`}
         >
           <div
-            className={`bg-white rounded-xl h-[60%] lg:w-[70%] w-[85%] py-4 px-6 flex flex-col justify-around items-start text-justify  ${
+            className={`bg-white rounded-xl h-[60%] lg:w-[70%] w-[85%] py-4 px-6 flex flex-col justify-around items-start   ${
               isTab &&
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             }`}
           >
             <h1 className="text-4xl font-medium">Grow Your Business</h1>
-            <p className="">
+            <p className="text-justify">
               Maximize your business opportunities by increasing your exposure
               to thousands of home owner seeking to find local service providers
               just like you.
             </p>
             <p>Signing up is easy and free. Start today! </p>
-            <button className="font-semibold py-2 px-6    bg-indigo-700 text-gray-200 rounded-lg ">
-              List my Business
-            </button>
+            <Link to="/business/register">
+              <button className="font-semibold py-2 px-6    bg-indigo-700 text-gray-200 rounded-lg">
+                List my Business
+              </button>
+            </Link>
             <p>
               Already have an account?
-              <span className="underline ml-2 cursor-pointer">
-                Sign in here
-                <BsArrowRightSquare className="inline-block ml-1" />
-              </span>
+              <Link to="/business/login">
+                <span className="underline ml-2 cursor-pointer">
+                  Sign in here
+                  <BsArrowRightSquare className="inline-block ml-1" />
+                </span>
+              </Link>
             </p>
           </div>
         </div>
@@ -185,7 +175,7 @@ const Home = () => {
         </div>
         <div className="lg:w-[75%] w-[90%]  flex flex-center sm:flex-row flex-col">
           <div
-            className="w-1/2 my-4  min-w-[340px] p-2 "
+            className="w-1/2 my-6  min-w-[340px] p-2 "
             data-aos="zoom-in-right"
           >
             <h1 className="my-4 font-semibold text-2xl capitalize">
@@ -204,15 +194,17 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-48 bg-[#1e1f4f] text-white flex flex-center flex-col z-50 mt-4 px-2">
+      <div className="w-full min-h-48 p-4 text-center bg-[#1e1f4f] text-white flex flex-center flex-col z-50 mt-8 px-2">
         <h2 className="text-2xl">Seize the Opportunity waiting for you</h2>
         <p className="mt-4 text-gray-300">
           Revolutionize the way you do business with Ghar Sewa. It's free, easy,
           and only takes a few minutes.
         </p>
-        <button className="px-4 py-2 bg-slate-400 rounded-md mt-4">
-          Get Started
-        </button>
+        <Link to="/business/register">
+          <button className="px-4 py-2 bg-slate-400 rounded-md mt-4">
+            Get Started
+          </button>
+        </Link>
       </div>
       <footer className="w-full p-4 bg-white sm:p-6 ">
         <div className="md:flex md:justify-between">

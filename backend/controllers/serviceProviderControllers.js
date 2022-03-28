@@ -21,8 +21,44 @@ const getServiceProviders = asyncHandler(async (req, res) => {
 //@route POST /api/serviceProviders
 //@access Public
 const registerServiceProvider = asyncHandler(async (req, res) => {
-  const { name, email, phoneNumber, neighborhood, city, type, password } =
-    req.body;
+  const {
+    name,
+    phoneNumber,
+    email,
+    password,
+    type,
+    businessEmail,
+    businessContactNumber,
+    description,
+    owner,
+    verified,
+    services,
+    neighbourhood,
+    city,
+    district,
+    longitude,
+    latitude,
+  } = req.body;
+
+  const serviceProviderData = req.body;
+  console.log(
+    name,
+    phoneNumber,
+    email,
+    password,
+    type,
+    businessEmail,
+    businessContactNumber,
+    description,
+    owner,
+    verified,
+    services,
+    neighbourhood,
+    city,
+    district,
+    longitude,
+    latitude
+  );
 
   if (!name || !email || !password) {
     res.status(400);
@@ -43,12 +79,31 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const serviceProvider = await ServiceProvider.create({
+    // name,
+    // email,
+    // phoneNumber,
+    // neighbourhood ,
+    // city,
+    // type,
+    // district,
+    // password: hashedPassword,
+    // businessEmail,
     name,
-    email,
     phoneNumber,
-    neighborhood,
-    city,
+    email,
+    password,
     type,
+    businessEmail,
+    businessContactNumber,
+    description,
+    owner,
+    verified,
+    services,
+    neighbourhood,
+    city,
+    district,
+    longitude,
+    latitude,
     password: hashedPassword,
   });
 
@@ -61,7 +116,7 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
         name: serviceProvider.name,
         email: serviceProvider.email,
         phoneNumber,
-        neighborhood,
+        neighbourhood,
         city,
         type,
         token: generateToken(serviceProvider._id),

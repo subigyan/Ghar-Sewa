@@ -65,7 +65,7 @@ const Register = () => {
         const response = await register({ name, email, password });
         console.log(response);
         if (response) {
-          setUser(response.data);
+          setUser(response?.data?.token);
           toast.success(response.message);
         }
       } catch (err) {
@@ -88,9 +88,6 @@ const Register = () => {
           data-aos="fade-left"
         >
           <h1 className="text-3xl font-semibold">Sign Up</h1>
-          {/* yaha thyp
-           */}
-
           <form
             className="flex flex-col w-full items-center justify-between mt-8 min-h-[280px] space-y-3"
             onSubmit={formik.handleSubmit}

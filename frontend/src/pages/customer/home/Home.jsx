@@ -10,7 +10,6 @@ import Typewriter from "typewriter-effect";
 
 import { GiTap, GiElectric } from "react-icons/gi";
 import { BiBuildingHouse } from "react-icons/bi";
-
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import { GiVacuumCleaner } from "react-icons/gi";
 import { GiMechanicGarage } from "react-icons/gi";
@@ -21,6 +20,41 @@ const Home = () => {
   useEffect(() => {
     AOS.init({ duration: 2500 });
   }, []);
+
+  const serviceProviderCategories = [
+    {
+      name: "Plumber",
+      color: "#00bcd4",
+    },
+    {
+      name: "Electrician",
+      color: "#F4C837",
+    },
+    {
+      name: "Builder",
+      color: "#4caf50",
+    },
+    {
+      name: "Painter",
+      color: "#C56DFB",
+    },
+    {
+      name: "Carpenter",
+      color: "#FF6C00",
+    },
+    {
+      name: "Cleaner",
+      color: "#547DF9",
+    },
+    {
+      name: "Mechanic",
+      color: "#F05C51",
+    },
+    {
+      name: "Handyman",
+      color: "#09C097",
+    },
+  ];
 
   return (
     <div className=" overflow-x-hidden">
@@ -79,13 +113,71 @@ const Home = () => {
         </div>
       </div>
       <div className="border-2  py-6 ">
-        <h1 className="text-3xl font-semibold text-center">Our Service</h1>
-        <p className=" text-center">
+        <h1 className="text-3xl font-semibold text-center">
+          Browse Service Providers
+        </h1>
+        <p className=" text-center my-5">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea eaque
           pariatur sunt dolorum! Optio porro commodi quos tenetur! Earum,
           veritatis.
         </p>
-        <div className="flex justify-around mt-10 lg:px-32">
+
+        <div className="flex justify-center mt-5 lg:px-32 flex-wrap">
+          <div
+            className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 
+          my-6  "
+          >
+            <div className="h-32 w-32 rounded-full  bg-[#F05C51] flex flex-center shadow-md ">
+              <GiTap className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Plumber</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#3AC0FF] flex flex-center shadow-md ">
+              <GiElectric className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">
+              Electircian
+            </p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#77DF40] flex flex-center shadow-md ">
+              <BiBuildingHouse className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Builder</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#F4C837] flex flex-center shadow-md ">
+              <AiOutlineFormatPainter className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Painter</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#C56DFB] flex flex-center shadow-md ">
+              <GiHandSaw className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Carpenter</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#FF6C00] flex flex-center shadow-md ">
+              <GiVacuumCleaner className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Cleaner</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#FF4081] flex flex-center shadow-md ">
+              <GiMechanicGarage className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Mechanic</p>
+          </div>
+          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+            <div className="h-32 w-32 rounded-full  bg-[#09C097] flex flex-center shadow-md ">
+              <MdHandyman className="text-6xl text-white " />
+            </div>
+            <p className="mt-2 text-lg font-medium text-gray-600">Handyman</p>
+          </div>
+        </div>
+        {/* <div className="flex justify-around mt-10 lg:px-32">
           <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer">
             <div className="h-36 w-36 rounded-3xl bg-yellow-200 flex flex-center shadow-xl ">
               <GiTap className="text-8xl text-white " />
@@ -136,7 +228,7 @@ const Home = () => {
             </div>
             <p className="mt-3 text-xl">Handyman</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
