@@ -2,6 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 
 const Review = require("../models/reviewModal");
 const Customer = require("../models/customerModal");
+const ServiceProvider = require("../models/serviceProviderModal");
 
 //@desc Get all reviews
 //@route GET /api/reviews
@@ -21,16 +22,26 @@ const getReview = expressAsyncHandler(async (req, res) => {
 //@access Private
 const addReview = expressAsyncHandler(async (req, res) => {
   // console.log(req.user.id);
-  const user = await Customer.findById(req.user.id);
-  console.log("user", user);
-  const review = await Review.create({
-    customer: req.user.id,
-    review: req.body.review,
+
+  const foundCustomer = await Customer.findById(req.user.id.toString());
+
+  const { review, serviceProvider, rating } = req.body;
+  console.log("user", foundCustomer);
+  const newReview = await Review.create({
+    customer: foundCustomer.id,
+    review,
+    serviceProvider,
+    rating,
   });
+  const foundServiceProvider = await ServiceProvider.findById(serviceProvider);
+  foundServiceProvider.reviews.push(newReview.id);
+  await foundServiceProvider.save();
+  // console.log(req.user.id, foundCustomer.reviews);
+
   res.status(200).json({
     success: true,
     message: "Review created successfully",
-    data: review,
+    data: newReview,
   });
 });
 
@@ -53,6 +64,15 @@ const updateReview = expressAsyncHandler(async (req, res) => {
     throw new Error("Customer not found");
   }
 
+  // if (!serviceProvider) {
+  //   res.status(400);
+  //   throw new Error("Customer not found");
+  // }
+
+  // if (!rating) {
+  //   res.status(400);
+  //   throw new Error("Customer not found");
+  // }
   if (!req.body.review) {
     res.status(400);
     throw new Error("Please enter review");
@@ -96,8 +116,33 @@ const deleteReview = expressAsyncHandler(async (req, res) => {
 
 //
 
+// const getAllReviews = expressAsyncHandler(async (req, res) => {
+//   const nameQuery = req.query.name;
+//   const nameRegex = new RegExp(nameQuery, "i");
+//   await Review.find()
+//     .populate("customer")
+//     .populate("serviceProvider")
+//     .exec(function (err, reviews) {
+//       if (err) {
+//         throw new Error(err.message);
+//       }
+//       const filteredReviews = reviews.filter((review) => {
+//         // return review?.serviceProvider?.name.toLowerCase() === "service";
+//         return nameRegex.test(review?.serviceProvider?.name);
+//       });
+//       res.status(200).json({
+//         success: true,
+//         message: "All reviews",
+//         count: filteredReviews.length,
+//         data: filteredReviews,
+//       });
+//     });
+// });
+
 const getAllReviews = expressAsyncHandler(async (req, res) => {
-  const review = await Review.find();
+  const review = await Review.find()
+    .populate("customer")
+    .populate("serviceProvider");
   res.status(200).json({
     success: true,
     message: "All reviews",
@@ -105,6 +150,17 @@ const getAllReviews = expressAsyncHandler(async (req, res) => {
     data: review,
   });
 });
+
+// const search = expressAsyncHandler(async (req, res) => {
+//   const review = await Review.find({
+//     $text: { $search: req.query.q },
+//   });
+//   res.status(200).json({
+//     success: true,
+//     message: "All reviews",
+//     count: review.length,
+//     data: review,
+//   });
 
 module.exports = {
   getReview,

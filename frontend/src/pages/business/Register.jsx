@@ -392,7 +392,7 @@ const Register = () => {
                     }
                     onBlur={formik.handleBlur}
                   />
-                  {businessType === "Company" && (
+                  {businessType === "company" && (
                     <TextField
                       id="owner"
                       label={`Owner Name`}

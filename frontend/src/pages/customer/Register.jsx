@@ -65,7 +65,7 @@ const Register = () => {
         const response = await register({ name, email, password });
         console.log(response);
         if (response) {
-          setUser(response?.data?.token);
+          setUser(response?.data);
           toast.success(response.message);
         }
       } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
@@ -6,15 +6,23 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
-import axios from "axios";
+
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState from "../../atoms/authAtom";
 import { login } from "../../services/customerAuth";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
   const [showPassword, setShowPassoword] = useState(false);
   const [user, setUser] = useRecoilState(authState);
+  console.log(user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  });
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -35,11 +43,10 @@ const Register = () => {
     onSubmit: async (values) => {
       try {
         const { email, password } = values;
-
         const response = await login({ email, password });
         if (response) {
           console.log("token", response?.data?.token);
-          setUser(response?.data?.token);
+          setUser(response?.data);
           toast.success(response.message);
         }
       } catch (err) {
@@ -48,6 +55,7 @@ const Register = () => {
       }
     },
   });
+
   return (
     <div className="w-screen h-screen  flex  justify-center items-center">
       <div className="md:flex w-1/2 hidden bg-[#B2D0A9] h-full  justify-center flex-col items-center ">
@@ -125,4 +133,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

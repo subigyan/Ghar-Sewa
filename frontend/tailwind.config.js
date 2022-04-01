@@ -6,6 +6,9 @@ module.exports = {
         roboto: '"Roboto", "sans-serif"',
         poppins: '"Poppins", "sans-serif"',
         smooch: "'Smooch Sans', sans-serif",
+        montserrat: "'Montserrat', sans-serif",
+        nunito: "'Nunito', sans-serif",
+        oswald: "'Oswald', sans-serif",
       },
       colors: {
         primary: "#fedba5",
@@ -17,5 +20,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

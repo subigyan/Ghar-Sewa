@@ -18,12 +18,11 @@ const Nav = () => {
 
   console.log(isMobile, isTab);
   const [user, setUser] = useRecoilState(authState);
-  console.log(user);
 
   let [open, setOpen] = useState(false);
   return (
-    <div className=" w-full fixed top-0 left-0">
-      <div className="lg:flex items-center justify-between  py-4 lg:px-10 px-7">
+    <div className=" w-full fixed top-0 left-0 h-20 ">
+      <div className="lg:flex items-center justify-between  py-4 lg:px-14 px-7">
         <div className="flex items-center justify-between">
           <div
             className="font-bold text-2xl cursor-pointer flex items-center  
@@ -70,8 +69,8 @@ const Nav = () => {
               className="bg-black_1 text-white  py-2 px-6 rounded lg:ml-8 hover:bg-gray-800 
                                 duration-500 lg:w-auto w-32 lg:my-0 my-2"
               onClick={() => {
-                setUser(null);
                 localStorage.removeItem("user");
+                setUser(null);
               }}
             >
               Log Out

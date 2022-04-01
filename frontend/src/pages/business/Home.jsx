@@ -201,7 +201,7 @@ const Home = () => {
           and only takes a few minutes.
         </p>
         <Link to="/business/register">
-          <button className="px-4 py-2 bg-slate-400 rounded-md mt-4">
+          <button className="px-4 py-2 bg-slate-400 rounded-md mt-4 hover:bg-indigo-700">
             Get Started
           </button>
         </Link>
@@ -221,7 +221,7 @@ const Home = () => {
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-            <div class="sm:block hidden"></div>
+            <div className="sm:block hidden"></div>
             <div>
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase ">
                 About Us

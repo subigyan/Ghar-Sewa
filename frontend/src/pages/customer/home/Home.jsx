@@ -89,7 +89,7 @@ const Home = () => {
           <div className="flex items-center w-4/12  h-full py-2">
             <BiLocationPlus className="text-2xl text-brown w-12" />
             <input
-              class="h-full px-2 text-lg outline-none w-full"
+              className="h-full px-2 text-lg outline-none w-full"
               type="text"
               name=""
               id=""
@@ -100,7 +100,7 @@ const Home = () => {
           <div className="w-7/12  h-full flex items-center py-2">
             <FaTools className="text-xl text-brown w-12" />
             <input
-              class="h-full px-2 text-lg outline-none w-full"
+              className="h-full px-2 text-lg outline-none w-full"
               type="text"
               name=""
               id=""

@@ -1,6 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/serviceProviders";
+import { serviceProviderAxiosInatance as axios } from "../helpers/axiosInstance";
+
+const API_URL = "/serviceProviders";
 
 //register
 export const register = async (user) => {
@@ -15,6 +17,7 @@ export const register = async (user) => {
   return response.data;
 };
 
+//login
 export const login = async (user) => {
   const response = await axios.post(API_URL + "/login", user);
   if (response.data) {

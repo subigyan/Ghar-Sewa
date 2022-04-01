@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
@@ -9,13 +9,19 @@ import { MdVisibilityOff } from "react-icons/md";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import authState from "../../atoms/authAtom";
+import authState, { serviceProviderAuthState } from "../../atoms/authAtom";
 import { login } from "../../services/serviceProviderAuth";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [showPassword, setShowPassoword] = useState(false);
-  const [user, setUser] = useRecoilState(authState);
+  // const [user, setUser] = useRecoilState(authState);
 
+  const [serviceProvider, setServiceProvider] = useRecoilState(
+    serviceProviderAuthState
+  );
+
+  const navigate = useNavigate();
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
@@ -26,6 +32,12 @@ const Register = () => {
         "Most contain at least one letter and one number"
       ),
   });
+
+  // useEffect(() => {
+  //   if (serviceProvider) {
+  //     navigate("/");
+  //   }
+  // });
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -42,10 +54,11 @@ const Register = () => {
         //     password,
         //   }
         // );
+
         const response = await login({ email, password });
         if (response.data) {
           console.log("token", response?.data?.token);
-          setUser(response?.data?.token);
+          setServiceProvider(response?.data);
           toast.success("Done");
           toast.success(response.message);
         }

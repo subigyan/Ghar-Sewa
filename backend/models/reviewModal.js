@@ -12,6 +12,10 @@ const reviewSchema = new mongoose.Schema(
       required: true,
       ref: "ServiceProvider",
     },
+    rating: {
+      type: Number,
+      required: [true, "Please enter a rating"],
+    },
     review: {
       type: String,
       required: [true, "Please enter a review"],

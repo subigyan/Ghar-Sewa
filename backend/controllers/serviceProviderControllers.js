@@ -33,32 +33,37 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     owner,
     verified,
     services,
-    neighbourhood,
-    city,
-    district,
+    address,
     longitude,
     latitude,
   } = req.body;
 
-  const serviceProviderData = req.body;
-  console.log(
-    name,
-    phoneNumber,
-    email,
-    password,
-    type,
-    businessEmail,
-    businessContactNumber,
-    description,
-    owner,
-    verified,
-    services,
-    neighbourhood,
-    city,
-    district,
-    longitude,
-    latitude
-  );
+  // console.log(
+  //   name,
+  //   phoneNumber,
+  //   email,
+  //   password,
+  //   type,
+  //   businessEmail,
+  //   businessContactNumber,
+  //   description,
+  //   owner,
+  //   verified,
+  //   services,
+  //   neighbourhood,
+  //   city,
+  //   district,
+  //   longitude,
+  //   latitude
+  // );
+
+  // const address = {
+  //   neighbourhood,
+  //   city,
+  //   district,
+  // };
+
+  console.log(address);
 
   if (!name || !email || !password) {
     res.status(400);
@@ -99,9 +104,10 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     owner,
     verified,
     services,
-    neighbourhood,
-    city,
-    district,
+    // neighbourhood,
+    // city,
+    // district,
+    address,
     longitude,
     latitude,
     password: hashedPassword,
@@ -116,8 +122,7 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
         name: serviceProvider.name,
         email: serviceProvider.email,
         phoneNumber,
-        neighbourhood,
-        city,
+        address,
         type,
         token: generateToken(serviceProvider._id),
       },
@@ -151,7 +156,6 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
         id: serviceProvider._id,
         name: serviceProvider.name,
         email: serviceProvider.email,
-
         token: generateToken(serviceProvider._id),
       },
     });
@@ -201,7 +205,6 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
       message: "Customer not found",
     });
   }
-
   const updatedServiceProvider = await ServiceProvider.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -209,11 +212,85 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
       new: true,
     }
   );
-
   res.status(200).json({
     success: true,
     message: "ServiceProvider updated successfully",
     data: updatedServiceProvider,
+  });
+});
+
+const searchServiceProvider = asyncHandler(async (req, res) => {
+  const name = req.query.name;
+  const services = req.query.services;
+  const neighbourhood = req.query.neighbourhood;
+  const city = req.query.city;
+  const district = req.query.district;
+
+  console.log(neighbourhood);
+
+  const nameRegex = new RegExp(name, "gi");
+  const servicesRegex = new RegExp(services, "ig");
+  const neighbourhoodRegex = new RegExp(neighbourhood, "ig");
+  const cityRegex = new RegExp(city, "ig");
+  const districtRegex = new RegExp(district, "ig");
+
+  const search = await ServiceProvider.find({
+    $and: [
+      {
+        services: { $regex: servicesRegex },
+      },
+      { name: { $regex: nameRegex } },
+      {
+        $and: [
+          {
+            $or: [
+              { "address.neighbourhood": { $regex: neighbourhoodRegex } },
+              { "address.city": { $regex: cityRegex } },
+            ],
+          },
+          { "address.district": { $regex: districtRegex } },
+        ],
+      },
+    ],
+  })
+    .sort({ createdAt: -1 })
+    .populate("reviews");
+
+  // const search = await ServiceProvider.find({
+  //   $and: [
+  //     { services: { $regex: servicesRegex } },
+  //     { name: { $regex: nameRegex } },
+  //     {
+  //       $or: [
+  //         { "address.neighbourhood": { $regex: neighbourhoodRegex } },
+  //         { "address.city": { $regex: cityRegex } },
+  //       ],
+  //     },
+  //   ],
+  // });
+
+  // const search = await ServiceProvider.find({
+  //   services: { $regex: servicesRegex },
+  //   name: { $regex: nameRegex },
+  //   $or: [{ "address.neighbourhood": { $regex: neighbourhoodRegex } }],
+  // });
+
+  console.log(search.map((ser) => [ser.name, ser._id, ser.services, "okay"]));
+  res.json({
+    success: true,
+    message: "Service Providers",
+    count: search.length,
+    data: search,
+  });
+});
+
+const test = asyncHandler(async (req, res) => {
+  const test = await ServiceProvider.find({}).getReviewCount();
+
+  res.json({
+    success: true,
+    message: "Service Providers",
+    data: test,
   });
 });
 
@@ -223,4 +300,6 @@ module.exports = {
   loginServiceProvider,
   getMe,
   updateServiceProvider,
+  searchServiceProvider,
+  test,
 };

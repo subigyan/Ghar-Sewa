@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Review = require("./reviewModal");
 
 const serviceProviderSchema = new mongoose.Schema(
   {
@@ -44,23 +45,30 @@ const serviceProviderSchema = new mongoose.Schema(
     services: {
       type: [String],
     },
-    neighbourhood: {
+    profileImage: {
       type: String,
-      required: [true, "Please enter a neighbourhood "],
     },
-    city: {
-      type: String,
-      required: [true, "Please enter an city"],
-    },
-    district: {
-      type: String,
-      required: [true, "Please enter a district"],
-    },
-    longitude: {
-      type: Number,
-    },
-    latitude: {
-      type: Number,
+    portfolioImages: [String],
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    address: {
+      neighbourhood: {
+        type: String,
+        required: [true, "Please enter a neighbourhood "],
+      },
+      city: {
+        type: String,
+        required: [true, "Please enter an city"],
+      },
+      district: {
+        type: String,
+        required: [true, "Please enter a district"],
+      },
+      longitude: {
+        type: Number,
+      },
+      latitude: {
+        type: Number,
+      },
     },
   },
   {
