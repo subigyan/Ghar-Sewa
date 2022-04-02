@@ -7,6 +7,7 @@ export const searchServiceProviders = async (service, location, sort) => {
     params: {
       service,
       location,
+      sort,
     },
   });
   return response.data;

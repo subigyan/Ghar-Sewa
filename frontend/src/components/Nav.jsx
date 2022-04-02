@@ -80,7 +80,7 @@ const Nav = () => {
             <div>
               <Link to="/login">
                 <button
-                  className={`lg:ml-8 lg:my-0 my-2 font-semibold py-2 px-6 shadow shadow-orange-400 ${
+                  className={`lg:ml-8 lg:my-0 my-2 font-semibold py-2 px-6 shadow rounded shadow-orange-400 ${
                     !isTab && " hover:scale-105 transition ease-in duration-100"
                   }`}
                 >
@@ -89,7 +89,7 @@ const Nav = () => {
               </Link>
               <Link to="/register">
                 <button
-                  className={`bg-black_1 text-white  py-2 px-6 rounded lg:ml-8 hover:bg-gray-800 
+                  className={`bg-dark text-white  py-2 px-6 rounded lg:ml-8 hover:bg-gray-800 
                                  lg:w-auto w-32 lg:my-0 my-2 ${
                                    !isTab
                                      ? "hover:scale-105 transition ease-in duration-100"
