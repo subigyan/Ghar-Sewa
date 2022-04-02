@@ -63,6 +63,9 @@ const serviceProviderSchema = new mongoose.Schema(
         type: String,
         required: [true, "Please enter a district"],
       },
+      fullLocation: {
+        type: String,
+      },
       longitude: {
         type: Number,
       },

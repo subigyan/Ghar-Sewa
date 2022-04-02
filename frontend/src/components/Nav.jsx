@@ -16,7 +16,6 @@ const Nav = () => {
 
   const [isMobile, isTab] = useDeviceProvider();
 
-  console.log(isMobile, isTab);
   const [user, setUser] = useRecoilState(authState);
 
   let [open, setOpen] = useState(false);
@@ -24,12 +23,14 @@ const Nav = () => {
     <div className=" w-full fixed top-0 left-0 h-20 ">
       <div className="lg:flex items-center justify-between  py-4 lg:px-14 px-7">
         <div className="flex items-center justify-between">
-          <div
-            className="font-bold text-2xl cursor-pointer flex items-center  
+          <Link to="/">
+            <div
+              className="font-bold text-2xl cursor-pointer flex items-center  
                         text-gray-800"
-          >
-            Ghar Sewa
-          </div>
+            >
+              Ghar Sewa
+            </div>
+          </Link>
           <div
             onClick={() => setOpen(!open)}
             className="text-3xl -6 cursor-pointer lg:hidden"

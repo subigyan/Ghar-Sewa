@@ -38,32 +38,9 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     latitude,
   } = req.body;
 
-  // console.log(
-  //   name,
-  //   phoneNumber,
-  //   email,
-  //   password,
-  //   type,
-  //   businessEmail,
-  //   businessContactNumber,
-  //   description,
-  //   owner,
-  //   verified,
-  //   services,
-  //   neighbourhood,
-  //   city,
-  //   district,
-  //   longitude,
-  //   latitude
-  // );
-
-  // const address = {
-  //   neighbourhood,
-  //   city,
-  //   district,
-  // };
-
   console.log(address);
+  address.fullLocation =
+    address.neighbourhood + ", " + address.city + ", " + address.district;
 
   if (!name || !email || !password) {
     res.status(400);
@@ -221,44 +198,81 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
 
 const searchServiceProvider = asyncHandler(async (req, res) => {
   const name = req.query.name;
-  const services = req.query.services;
-  const neighbourhood = req.query.neighbourhood;
-  const city = req.query.city;
-  const district = req.query.district;
+  const service = req.query.service;
+  const location = req.query.location;
+  let locationArray = [];
+  if (location) {
+    locationArray = location.split(" ");
+  }
+  const sort = req.query.sort;
+  // console.log(neighbourhood);
 
-  console.log(neighbourhood);
+  const sortQuery = {};
+  if (sort === "-name") {
+    sortQuery.name = -1;
+  } else if (sort === "name") {
+    sortQuery.name = 1;
+  } else if (sort === "oldest") {
+    sortQuery.createdAt = 1;
+  } else if (sort === "newest") {
+    sortQuery.createdAt = -1;
+  } else {
+    sortQuery.reviews = -1;
+  }
+
+  const locationSplitOne = locationArray[0] || null;
+  const locationSplitTwo = locationArray[1] || null;
+  const locationSplitThree = locationArray[2] || null;
 
   const nameRegex = new RegExp(name, "gi");
-  const servicesRegex = new RegExp(services, "ig");
-  const neighbourhoodRegex = new RegExp(neighbourhood, "ig");
-  const cityRegex = new RegExp(city, "ig");
-  const districtRegex = new RegExp(district, "ig");
+  const serviceRegex = new RegExp(service, "ig");
+  // const neighbourhoodRegex = new RegExp(neighbourhood, "ig");
+  // const cityRegex = new RegExp(city, "ig");
+  // const districtRegex = new RegExp(district, "ig");
+  const locationRegex = new RegExp(location, "ig");
+  const locationSplitOneRegex = new RegExp(locationSplitOne, "ig");
+  const locationSplitTwoRegex = new RegExp(locationSplitTwo, "ig");
+  const locationSplitThreeRegex = new RegExp(locationSplitThree, "ig");
 
   const search = await ServiceProvider.find({
     $and: [
       {
-        services: { $regex: servicesRegex },
+        services: { $regex: serviceRegex },
       },
       { name: { $regex: nameRegex } },
       {
-        $and: [
-          {
-            $or: [
-              { "address.neighbourhood": { $regex: neighbourhoodRegex } },
-              { "address.city": { $regex: cityRegex } },
-            ],
-          },
-          { "address.district": { $regex: districtRegex } },
+        $or: [
+          { "address.neighbourhood": { $regex: locationSplitOneRegex } },
+          { "address.neighbourhood": { $regex: locationSplitTwoRegex } },
+          { "address.neighbourhood": { $regex: locationSplitThreeRegex } },
+          { "address.city": { $regex: locationSplitOneRegex } },
+          { "address.city": { $regex: locationSplitTwoRegex } },
+          { "address.city": { $regex: locationSplitThreeRegex } },
+          { "address.fullLocation": { $regex: locationRegex } },
         ],
       },
     ],
   })
-    .sort({ createdAt: -1 })
+    .sort(sortQuery)
     .populate("reviews");
 
   // const search = await ServiceProvider.find({
   //   $and: [
-  //     { services: { $regex: servicesRegex } },
+  //     {
+  //       service: { $regex: serviceRegex },
+  //     },
+  //     { name: { $regex: nameRegex } },
+  //     {
+  //       "address.fullLocation": { $regex: locationRegex },
+  //     },
+  //   ],
+  // })
+  //   .sort({ createdAt: -1 })
+  //   .populate("reviews");
+
+  // const search = await ServiceProvider.find({
+  //   $and: [
+  //     { service: { $regex: serviceRegex } },
   //     { name: { $regex: nameRegex } },
   //     {
   //       $or: [
@@ -270,12 +284,11 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
   // });
 
   // const search = await ServiceProvider.find({
-  //   services: { $regex: servicesRegex },
+  //   service: { $regex: serviceRegex },
   //   name: { $regex: nameRegex },
   //   $or: [{ "address.neighbourhood": { $regex: neighbourhoodRegex } }],
   // });
 
-  console.log(search.map((ser) => [ser.name, ser._id, ser.services, "okay"]));
   res.json({
     success: true,
     message: "Service Providers",
@@ -285,12 +298,13 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
 });
 
 const test = asyncHandler(async (req, res) => {
-  const test = await ServiceProvider.find({}).getReviewCount();
-
+  const search = await ServiceProvider.find({
+    "address.neighbourhood": "Kamalphkhari",
+  });
   res.json({
     success: true,
     message: "Service Providers",
-    data: test,
+    data: search,
   });
 });
 

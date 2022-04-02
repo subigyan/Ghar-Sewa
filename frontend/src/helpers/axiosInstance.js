@@ -21,6 +21,10 @@ console.log(baseURL, "baseURL");
 //   }`;
 // }
 
+const axiosInstance = axios.create({
+  baseURL: baseURL,
+});
+
 const customerAxiosInstance = axios.create({
   baseURL: baseURL,
   // headers: customerHeader,
@@ -32,3 +36,5 @@ const serviceProviderAxiosInatance = axios.create({
 });
 
 export { customerAxiosInstance, serviceProviderAxiosInatance };
+
+export default axiosInstance;

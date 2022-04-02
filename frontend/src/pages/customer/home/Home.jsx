@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BiLocationPlus } from "react-icons/bi";
 import { FaTools } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
@@ -15,53 +15,59 @@ import { GiVacuumCleaner } from "react-icons/gi";
 import { GiMechanicGarage } from "react-icons/gi";
 import { MdHandyman } from "react-icons/md";
 import { GiHandSaw } from "react-icons/gi";
+import { FaSpinner } from "react-icons/fa";
 
 const Home = () => {
   useEffect(() => {
     AOS.init({ duration: 2500 });
   }, []);
 
-  const serviceProviderCategories = [
-    {
-      name: "Plumber",
-      color: "#00bcd4",
-    },
-    {
-      name: "Electrician",
-      color: "#F4C837",
-    },
-    {
-      name: "Builder",
-      color: "#4caf50",
-    },
-    {
-      name: "Painter",
-      color: "#C56DFB",
-    },
-    {
-      name: "Carpenter",
-      color: "#FF6C00",
-    },
-    {
-      name: "Cleaner",
-      color: "#547DF9",
-    },
-    {
-      name: "Mechanic",
-      color: "#F05C51",
-    },
-    {
-      name: "Handyman",
-      color: "#09C097",
-    },
-  ];
+  // const serviceProviderCategories = [
+  //   {
+  //     name: "Plumber",
+  //     color: "#00bcd4",
+  //   },
+  //   {
+  //     name: "Electrician",
+  //     color: "#F4C837",
+  //   },
+  //   {
+  //     name: "Builder",
+  //     color: "#4caf50",
+  //   },
+  //   {
+  //     name: "Painter",
+  //     color: "#C56DFB",
+  //   },
+  //   {
+  //     name: "Carpenter",
+  //     color: "#FF6C00",
+  //   },
+  //   {
+  //     name: "Cleaner",
+  //     color: "#547DF9",
+  //   },
+  //   {
+  //     name: "Mechanic",
+  //     color: "#F05C51",
+  //   },
+  //   {
+  //     name: "Handyman",
+  //     color: "#09C097",
+  //   },
+  // ];
+
+  const [location, setLocation] = useState("");
+  const [serviceCategory, setServiceCategory] = useState("");
+
+  const [submited, setSubmited] = useState(false);
 
   return (
     <div className=" overflow-x-hidden">
       <Nav />
-      <div className="w-screen h-screen flex flex-col justify-center lg:items-start items-center  back px-4 pb-16 lg:pl-32 ">
+      <div className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-32 ">
         <h1
-          className="text-5xl font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px] w-[80%]  mt-10"
+          className="text-5xl font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]   mt-10"
           data-aos="fade-in"
         >
           <Typewriter
@@ -82,35 +88,49 @@ const Home = () => {
           />
         </h1>
 
-        <div
-          className=" h-14  lg:w-[800px] w-[80%] bg-white rounded-md flex items-center pl-2 shadow-2xl"
+        <form
+          className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md flex items-center pl-2 shadow-2xl"
           data-aos="fade-in"
+          action="search"
+          onSubmit={(e) => {
+            setSubmited(true);
+          }}
         >
-          <div className="flex items-center w-4/12  h-full py-2">
-            <BiLocationPlus className="text-2xl text-brown w-12" />
-            <input
-              className="h-full px-2 text-lg outline-none w-full"
-              type="text"
-              name=""
-              id=""
-              placeholder="Search Location"
-            />
-          </div>
-          <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
-          <div className="w-7/12  h-full flex items-center py-2">
+          <div className="flex items-center w-5/12  h-full py-2">
             <FaTools className="text-xl text-brown w-12" />
             <input
               className="h-full px-2 text-lg outline-none w-full"
               type="text"
-              name=""
-              id=""
-              placeholder="Search Service Type"
+              name="service"
+              id="type"
+              placeholder="Search Service Category"
+              required
+              value={serviceCategory}
+              onChange={(e) => setServiceCategory(e.target.value)}
+            />
+          </div>
+          <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
+          <div className="w-6/12  h-full flex items-center py-2">
+            <BiLocationPlus className="text-2xl text-brown w-12" />
+            <input
+              className="h-full px-2 text-lg outline-none w-full"
+              type="text"
+              name="location"
+              id="location"
+              placeholder="Search Location"
+              required
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
           </div>
           <button className="w-1/12 bg-[#0B1007] h-full ml-2 flex justify-center items-center rounded-r-md">
-            <FiSearch className="text-xl text-white " />
+            {submited ? (
+              <FaSpinner className="text-xl text-white animate-spin" />
+            ) : (
+              <FiSearch className="text-xl text-white" />
+            )}
           </button>
-        </div>
+        </form>
       </div>
       <div className="border-2  py-6 ">
         <h1 className="text-3xl font-semibold text-center">
@@ -122,7 +142,7 @@ const Home = () => {
           veritatis.
         </p>
 
-        <div className="flex justify-center mt-5 lg:px-32 flex-wrap">
+        <div className="flex justify-center mt-5 lg:px-24 flex-wrap ">
           <div
             className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 
           my-6  "

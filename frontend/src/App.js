@@ -22,7 +22,7 @@ function App() {
           <Route path="/business" element={<BusinessHome />}></Route>
           <Route path="business/login" element={<BusinessLogin />} />
           <Route path="business/register" element={<BusinessRegister />} />
-          <Route path="serviceProviders" element={<ServiceProviders />} />
+          <Route path="search" element={<ServiceProviders />} />
         </Routes>
       </Router>
       <ToastContainer />
