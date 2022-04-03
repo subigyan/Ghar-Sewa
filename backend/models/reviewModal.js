@@ -16,6 +16,10 @@ const reviewSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please enter a rating"],
     },
+    reviewHeadline: {
+      type: String,
+      required: [true, "Please enter a review headline"],
+    },
     review: {
       type: String,
       required: [true, "Please enter a review"],

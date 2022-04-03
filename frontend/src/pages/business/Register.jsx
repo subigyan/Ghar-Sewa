@@ -20,8 +20,9 @@ import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
 import { serviceProviderAuthState } from "../../atoms/authAtom";
-import { register } from "../../services/serviceProviderAuth";
+import { register } from "../../api/serviceProviderAuth";
 import { useRecoilState } from "recoil";
+import { Checkbox } from "@mui/material";
 
 const steps = [
   {
@@ -81,14 +82,14 @@ const Register = () => {
     businessEmail: Yup.string()
       .email("Invalid email")
       .required("Email is required"),
-    businessPhone: Yup.string()
+    businessContactNumber: Yup.string()
       .matches(
         phoneRegExp,
         "Phone number must be 10 characters long and start with 98"
       )
       .required("Phone number is required"),
     owner: Yup.string().max("30", "Name is too long"),
-    description: Yup.string().max("100", "Description is too long"),
+    description: Yup.string().max("1000", "Description is too long"),
     neighbourhood: Yup.string()
       .max("30", "Neighbourhood is too long")
       .required("Neighbourhood is required"),
@@ -174,7 +175,6 @@ const Register = () => {
             businessContactNumber,
             description,
             owner,
-            verified,
             neighbourhood,
             city,
             district,
@@ -182,6 +182,13 @@ const Register = () => {
             latitude,
           } = formik.values;
           console.log(JSON.stringify(formik.values));
+          const address = {
+            neighbourhood,
+            city,
+            district,
+            longitude,
+            latitude,
+          };
           const response = await register({
             name,
             phoneNumber,
@@ -192,12 +199,7 @@ const Register = () => {
             businessContactNumber,
             description,
             owner,
-            verified,
-            neighbourhood,
-            city,
-            district,
-            longitude,
-            latitude,
+            address,
           });
           console.log(response);
 
@@ -205,7 +207,7 @@ const Register = () => {
             setServiceProvider(response?.data?.token);
             console.log(response.data);
             toast.success(response.message);
-            toast.success("Business registered successfully");
+            // toast.success("Business registered successfully");
           }
         } catch (error) {
           toast.error(error.response.data.message);
@@ -260,6 +262,7 @@ const Register = () => {
                   <TextField
                     id="email"
                     label="Email Address"
+                    type="email"
                     variant="outlined"
                     style={{ marginBottom: "30px" }}
                     value={formik.values.email}
@@ -360,6 +363,7 @@ const Register = () => {
                   />
                   <TextField
                     id="businessEmail"
+                    type="email"
                     label={`Business Email Address`}
                     variant="outlined"
                     style={{ marginBottom: "30px" }}

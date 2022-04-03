@@ -14,13 +14,13 @@ const Nav = () => {
     { name: "For Business", link: "/business", unique: true },
   ];
 
-  const [isMobile, isTab] = useDeviceProvider();
+  const [, isTab] = useDeviceProvider();
 
   const [user, setUser] = useRecoilState(authState);
 
   let [open, setOpen] = useState(false);
   return (
-    <div className=" w-full fixed top-0 left-0 h-20 ">
+    <div className=" w-full fixed top-0 left-0 h-20 shadow-sm shadow-violet-400 bg-white">
       <div className="lg:flex items-center justify-between  py-4 lg:px-14 px-7">
         <div className="flex items-center justify-between">
           <Link to="/">

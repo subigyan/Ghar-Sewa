@@ -128,26 +128,27 @@ const loginCustomer = asyncHandler(async (req, res) => {
       success: false,
       message: "Customer not found",
     });
-  }
-  const match = await bcrypt.compare(password, customer.password);
-  if (match) {
-    res.status(200).json({
-      success: true,
-      message: "Login Successfull ",
-      data: {
-        id: customer._id,
-        name: customer.name,
-        email: customer.email,
-        // phoneNumber: customer.phoneNumber,
-        token: generateToken(customer._id),
-      },
-    });
   } else {
-    res.status(400).json({
-      success: false,
-      message: "Invalid Crendentials",
-    });
-    throw new Error("Invalid Crendentials");
+    const match = await bcrypt.compare(password, customer.password);
+    if (match) {
+      res.status(200).json({
+        success: true,
+        message: "Login Successfull ",
+        data: {
+          id: customer._id,
+          name: customer.name,
+          email: customer.email,
+          // phoneNumber: customer.phoneNumber,
+          token: generateToken(customer._id),
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Invalid Crendentials",
+      });
+      throw new Error("Invalid Crendentials");
+    }
   }
 });
 

@@ -25,13 +25,14 @@ const addReview = expressAsyncHandler(async (req, res) => {
 
   const foundCustomer = await Customer.findById(req.user.id.toString());
 
-  const { review, serviceProvider, rating } = req.body;
+  const { review, serviceProvider, rating, reviewHeadline } = req.body;
   console.log("user", foundCustomer);
   const newReview = await Review.create({
     customer: foundCustomer.id,
     review,
     serviceProvider,
     rating,
+    reviewHeadline,
   });
   const foundServiceProvider = await ServiceProvider.findById(serviceProvider);
   foundServiceProvider.reviews.push(newReview.id);
@@ -140,14 +141,14 @@ const deleteReview = expressAsyncHandler(async (req, res) => {
 // });
 
 const getAllReviews = expressAsyncHandler(async (req, res) => {
-  const review = await Review.find()
+  const reviews = await Review.find()
     .populate("customer")
     .populate("serviceProvider");
   res.status(200).json({
     success: true,
     message: "All reviews",
-    count: review.length,
-    data: review,
+    count: reviews.length,
+    data: reviews,
   });
 });
 

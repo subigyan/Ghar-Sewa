@@ -12,3 +12,8 @@ export const searchServiceProviders = async (service, location, sort) => {
   });
   return response.data;
 };
+
+export const getServiceProvider = async (id) => {
+  const response = await axios.get(`/serviceProviders/${id}`);
+  return response.data;
+};

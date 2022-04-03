@@ -122,26 +122,27 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
       success: false,
       message: "ServiceProvider not found",
     });
-  }
-  const match = await bcrypt.compare(password, serviceProvider.password);
-
-  if (match) {
-    res.status(200).json({
-      success: true,
-      message: "Login Successfull ",
-      data: {
-        id: serviceProvider._id,
-        name: serviceProvider.name,
-        email: serviceProvider.email,
-        token: generateToken(serviceProvider._id),
-      },
-    });
   } else {
-    res.status(400).json({
-      success: false,
-      message: "Invalid Crendentials",
-    });
-    throw new Error("Invalid Crendentials");
+    const match = await bcrypt.compare(password, serviceProvider.password);
+
+    if (match) {
+      res.status(200).json({
+        success: true,
+        message: "Login Successfull ",
+        data: {
+          id: serviceProvider._id,
+          name: serviceProvider.name,
+          email: serviceProvider.email,
+          token: generateToken(serviceProvider._id),
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Invalid Crendentials",
+      });
+      throw new Error("Invalid Crendentials");
+    }
   }
 });
 
@@ -197,9 +198,9 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
 });
 
 const searchServiceProvider = asyncHandler(async (req, res) => {
-  const name = req.query.name;
-  const service = req.query.service;
-  const location = req.query.location;
+  const name = req.query?.name?.trim();
+  const service = req.query?.service?.trim();
+  const location = req.query?.location?.trim();
   let locationArray = [];
   if (location) {
     locationArray = location.split(" ");

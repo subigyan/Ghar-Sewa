@@ -4,14 +4,12 @@ import Rating from "@mui/material/Rating";
 import { GrLocation } from "react-icons/gr";
 import { FiPhoneCall } from "react-icons/fi";
 import { Link, useSearchParams } from "react-router-dom";
-import { searchServiceProviders } from "../../services/serviceProviderSearch";
+import { searchServiceProviders } from "../../api/serviceProviderSearch";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { BiUser } from "react-icons/bi";
 import { MdPersonSearch } from "react-icons/md";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
@@ -29,17 +27,17 @@ const ServiceProviders = () => {
   const [star, setStars] = useState(0);
   const [nameFiltered, setNameFiltered] = useState([]);
   const [nameInput, setNameInput] = useState("");
-  const [clear, setClear] = useState(false);
-
-  const getServiceProvider = async () => {
-    const response = await searchServiceProviders(service, location, sort);
-    setServiceProviders(response.data);
-    setNameFiltered(response.data);
-  };
+  const [businessTypeFilter, setBusinessTypeFilter] = useState("");
+  const [starFilter, setStarFilter] = useState(0);
 
   useEffect(() => {
+    const getServiceProvider = async () => {
+      const response = await searchServiceProviders(service, location, sort);
+      setServiceProviders(response.data);
+      setNameFiltered(response.data);
+    };
     getServiceProvider();
-  }, [searchParams]);
+  }, [searchParams, service, location, sort]);
 
   // console.log(serviceProviders);
   const handleSortChange = (event) => {
@@ -67,31 +65,37 @@ const ServiceProviders = () => {
           serviceProvider.name
             .toLowerCase()
             .includes(event.target.value.toLowerCase()) &&
-          serviceProvider.type.includes(businessType) &&
-          overallRating >= star
+          serviceProvider.type.includes(businessTypeFilter) &&
+          overallRating >= starFilter
         );
       }
     );
     setNameFiltered(filteredServiceProviders);
   };
 
+  console.log("Star", star, starFilter);
+
   const filterData = () => {
+    setBusinessTypeFilter(businessType);
+    setStarFilter(star);
+    // console.log(businessTypeFilter, starFilter, "||", businessType, star);
     const filteredServiceProviders = serviceProviders.filter(
       (serviceProvider) => {
         let overallRating = 0;
         serviceProvider.reviews.forEach((review) => {
           overallRating += review.rating / serviceProvider.reviews.length;
         });
-        console.log(serviceProvider);
+        // console.log(serviceProvider);
         return (
           serviceProvider.type.includes(businessType) && overallRating >= star
         );
       }
     );
     setNameFiltered(filteredServiceProviders);
+    console.log(filteredServiceProviders);
   };
 
-  console.log(nameFiltered, serviceProviders);
+  // console.log(nameFiltered, serviceProviders);
 
   return (
     <>
@@ -185,16 +189,24 @@ const ServiceProviders = () => {
           </button>
         </div>
         <div className="md:w-9/12 w-full shadow-lg border border-gray-100">
-          <div className="flex  justify-between items-center py-5 lg:px-15 md:px-10 px-5">
-            <h1 className="text-3xl font-semibold capitalize">
-              Service Providers
-            </h1>
+          <div className="flex relative justify-between items-center py-8 lg:px-15 md:px-10 px-5">
+            <div className="">
+              <h1 className="text-3xl font-semibold capitalize">
+                {service.trim() === "" ? "Service Providers" : service}
+              </h1>
+              <span className="font-medium text-sm absolute bottom-2 text-gray-500 capitalize">
+                Filters:{" "}
+                {businessTypeFilter === "" ? "All" : businessTypeFilter}{" "}
+                Businesses || {starFilter} Stars and Above
+              </span>
+            </div>
             <div className="w-48">
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Sort</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  color="grey"
                   value={
                     sortOptions.includes(sort.toLowerCase())
                       ? sort
@@ -233,7 +245,7 @@ const ServiceProviders = () => {
             {nameFiltered.map((serviceProvider) => {
               return (
                 <ServiceProviderCard
-                  key={serviceProvider.id}
+                  key={serviceProvider._id}
                   {...serviceProvider}
                 />
               );
@@ -252,11 +264,13 @@ const ServiceProviderCard = ({
   reviews,
   description,
   businessContactNumber,
+  _id,
 }) => {
   let overallRating = 0;
   reviews.forEach((review) => {
     overallRating += review.rating / reviews.length;
   });
+
   let [searchParams, setSearchParams] = useSearchParams();
 
   const handleServiceClick = (service) => {
@@ -288,7 +302,11 @@ const ServiceProviderCard = ({
       <div className="w-full  sm:mt-0 mt-4 sm:pl-6 ">
         <div className="flex justify-between flex-wrap">
           <div>
-            <p className="text-2xl font-medium capitalize">{name}</p>
+            <Link to={`/serviceProvider/${_id}`}>
+              <p className="text-2xl font-medium capitalize hover:underline">
+                {name}
+              </p>
+            </Link>
             <div className="flex items-center ">
               <Rating
                 name="read-only"

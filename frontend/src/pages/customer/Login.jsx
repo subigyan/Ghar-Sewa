@@ -6,11 +6,10 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
-
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState from "../../atoms/authAtom";
-import { login } from "../../services/customerAuth";
+import { login } from "../../api/customerAuth";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
