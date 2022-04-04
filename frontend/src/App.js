@@ -10,6 +10,7 @@ import BusinessLogin from "./pages/business/Login.jsx";
 import BusinessRegister from "./pages/business/Register.jsx";
 import ServiceProviders from "./pages/customer/ServiceProviders.jsx";
 import ServiceProvider from "./pages/customer/ServiceProvider.jsx";
+import About from "./pages/customer/About.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="business/register" element={<BusinessRegister />} />
           <Route path="search" element={<ServiceProviders />} />
           <Route path="/serviceProvider/:id" element={<ServiceProvider />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
       <ToastContainer />

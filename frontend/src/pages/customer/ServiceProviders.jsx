@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import { MdPersonSearch } from "react-icons/md";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Footer from "../../components/Footer";
 
 const ServiceProviders = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,14 @@ const ServiceProviders = () => {
   const service = searchParams.get("service") || "";
   const sortBy = searchParams.get("sort") || "";
 
-  const sortOptions = ["popularity", "name", "-name", "newest", "oldest"];
+  const sortOptions = [
+    "popularity",
+    "all",
+    "name",
+    "-name",
+    "newest",
+    "oldest",
+  ];
 
   const [sort, setSort] = React.useState(sortBy);
   const [serviceProviders, setServiceProviders] = useState([]);
@@ -99,9 +107,9 @@ const ServiceProviders = () => {
 
   return (
     <>
-      <Nav />
+      <Nav fixed={false} />
 
-      <div className="max-w-screen flex mt-28 lg:px-14 px-7 font-roboto md:flex-row flex-col ">
+      <div className="max-w-screen flex  lg:px-14 px-7 font-roboto md:flex-row flex-col ">
         <div className="md:w-3/12 w-full min-w-[250px] border-2 py-5 px-2 gap-2 flex flex-col">
           <h3 className="text-xl font-semibold ml-1 text-gray-800">
             Search Service Provider
@@ -174,11 +182,11 @@ const ServiceProviders = () => {
               <MenuItem value={0}>
                 <em>Stars</em>
               </MenuItem>
-              <MenuItem value={1}>One Star and Higher</MenuItem>
-              <MenuItem value={2}>Two Stars and Higher</MenuItem>
-              <MenuItem value={3}>Three Stars and Higher</MenuItem>
-              <MenuItem value={4}>Four Stars and Higher</MenuItem>
-              <MenuItem value={5}>Five Stars</MenuItem>
+              <MenuItem value={0.5}>One Star and Higher</MenuItem>
+              <MenuItem value={1.5}>Two Stars and Higher</MenuItem>
+              <MenuItem value={2.5}>Three Stars and Higher</MenuItem>
+              <MenuItem value={3.5}>Four Stars and Higher</MenuItem>
+              <MenuItem value={4.5}>Five Stars</MenuItem>
             </Select>
           </FormControl>
           <button
@@ -208,14 +216,15 @@ const ServiceProviders = () => {
                   id="demo-simple-select"
                   color="grey"
                   value={
-                    sortOptions.includes(sort.toLowerCase())
-                      ? sort
-                      : "popularity"
+                    sortOptions.includes(sort.toLowerCase()) ? sort : "all"
                   }
                   label="Sort"
                   onChange={handleSortChange}
-                  defaultValue={"popularity"}
+                  defaultValue={"all"}
                 >
+                  <MenuItem value={"all"}>
+                    <em>All</em>
+                  </MenuItem>
                   <MenuItem value={"popularity"}>Popularity</MenuItem>
                   <MenuItem value={"name"}>Name (A-Z)</MenuItem>
                   <MenuItem value={"-name"}>Name (Z-A)</MenuItem>
@@ -253,6 +262,7 @@ const ServiceProviders = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
@@ -315,9 +325,9 @@ const ServiceProviderCard = ({
                 readOnly
                 className="my-0 "
               />
-              {/* <p className="text-gray-500 ml-2 text w-4 h-full  flex flex-center ">
+              <p className="text-gray-400 ml-1 text-sm font-bold  min-w-4 h-full  flex flex-center ">
                 {reviews.length}
-              </p> */}
+              </p>
             </div>
           </div>
           <div className="flex-col  sm:my-0 my-2 space-y-1 max-w-[300px] ">

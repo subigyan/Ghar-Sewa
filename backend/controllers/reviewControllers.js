@@ -17,18 +17,48 @@ const getReview = expressAsyncHandler(async (req, res) => {
   });
 });
 
+//@desc get service provider review
+//@route GET /api/reviews/serviceProvider/:id
+//@access Private
+
+const getProviderReview = expressAsyncHandler(async (req, res) => {
+  try {
+    const review = await Review.find({ serviceProvider: req.params.id })
+      .populate("customer")
+      .populate("serviceProvider");
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: "No reviews found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Service Provider Reviews",
+      count: review.length,
+      data: review,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      success: false,
+      message: "No reviews found",
+    });
+  }
+});
+
 //@desc add single review
 //@route GET /api/reviews/:id
 //@access Private
 const addReview = expressAsyncHandler(async (req, res) => {
   // console.log(req.user.id);
 
-  const foundCustomer = await Customer.findById(req.user.id.toString());
+  // const foundCustomer = await Customer.findById(req.user.id.toString());
 
-  const { review, serviceProvider, rating, reviewHeadline } = req.body;
-  console.log("user", foundCustomer);
+  const { review, serviceProvider, rating, reviewHeadline, customer } =
+    req.body;
+  // console.log("user", foundCustomer);
   const newReview = await Review.create({
-    customer: foundCustomer.id,
+    customer: customer,
     review,
     serviceProvider,
     rating,
@@ -169,4 +199,5 @@ module.exports = {
   updateReview,
   deleteReview,
   getAllReviews,
+  getProviderReview,
 };

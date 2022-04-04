@@ -7,14 +7,17 @@ const {
   updateReview,
   deleteReview,
   getAllReviews,
+  getProviderReview,
 } = require("../controllers/reviewControllers");
 
 const { protect } = require("../middlewares/authMiddleware");
 
-router.route("/").get(protect, getReview).post(protect, addReview);
+router.route("/").get(protect, getReview).post(addReview);
 
 router.route("/:id").put(protect, updateReview).delete(protect, deleteReview);
 
 router.get("/all", getAllReviews);
+
+router.get("/serviceProvider/:id", getProviderReview);
 
 module.exports = router;

@@ -16,6 +16,7 @@ import { GiMechanicGarage } from "react-icons/gi";
 import { MdHandyman } from "react-icons/md";
 import { GiHandSaw } from "react-icons/gi";
 import { FaSpinner } from "react-icons/fa";
+import Footer from "../../../components/Footer";
 
 const Home = () => {
   useEffect(() => {
@@ -89,14 +90,14 @@ const Home = () => {
         </h1>
 
         <form
-          className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md flex items-center pl-2 shadow-2xl"
+          className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md md:flex hidden  items-center pl-2 shadow-2xl"
           data-aos="fade-in"
           action="search"
           onSubmit={(e) => {
             setSubmited(true);
           }}
         >
-          <div className="flex items-center w-5/12  h-full py-2">
+          <div className="flex items-center w-5/12  h-full py-2 relative">
             <FaTools className="text-xl text-brown w-12" />
             <input
               className="h-full px-2 text-lg outline-none w-full"
@@ -107,7 +108,17 @@ const Home = () => {
               required
               value={serviceCategory}
               onChange={(e) => setServiceCategory(e.target.value)}
+              autoComplete="off"
+              list="browsers"
             />
+            {/* <div className="w-full h-5 top-full bg-green-500 absolute">
+              <div>Plumber</div>
+              <div>Plumber</div>
+              <div>Plumber</div>
+              <div>Plumber</div>
+              <div>Plumber</div>
+              <div>Plumber</div>
+            </div> */}
           </div>
           <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
           <div className="w-6/12  h-full flex items-center py-2">
@@ -118,7 +129,6 @@ const Home = () => {
               name="location"
               id="location"
               placeholder="Search Location"
-              required
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -128,6 +138,49 @@ const Home = () => {
               <FaSpinner className="text-xl text-white animate-spin" />
             ) : (
               <FiSearch className="text-xl text-white" />
+            )}
+          </button>
+        </form>
+        <form
+          className="mt-3 w-full px-8 md:hidden flex flex-col gap-4  "
+          data-aos="fade-in"
+          action="search"
+          onSubmit={(e) => {
+            setSubmited(true);
+          }}
+        >
+          <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
+            <FaTools className="text-xl text-brown w-12" />
+            <input
+              className="h-full px-2 text-lg outline-none w-full "
+              type="text"
+              name="service"
+              id="type"
+              placeholder="Search Service Category"
+              required
+              value={serviceCategory}
+              onChange={(e) => setServiceCategory(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
+            <BiLocationPlus className="text-2xl text-brown w-12" />
+            <input
+              className="h-full px-2 text-lg outline-none w-full"
+              type="text"
+              name="location"
+              id="location"
+              placeholder="Search Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <button className="w-full bg-[#0B1007] h-10  flex justify-center items-center rounded-r-md shadow-md">
+            {submited ? (
+              <FaSpinner className="text-xl text-white animate-spin" />
+            ) : (
+              <span className="text-xl text-white"> Search </span>
             )}
           </button>
         </form>
@@ -250,6 +303,7 @@ const Home = () => {
           </div>
         </div> */}
       </div>
+      <Footer />
     </div>
   );
 };

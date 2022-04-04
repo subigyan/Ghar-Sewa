@@ -9,6 +9,7 @@ const {
   updateServiceProvider,
   searchServiceProvider,
   test,
+  getOneServiceProvider,
 } = require("../controllers/serviceProviderControllers");
 const { route } = require("./customerRoutes");
 const { protect } = require("../middlewares/authMiddleware");
@@ -18,6 +19,7 @@ router.post("/register", registerServiceProvider);
 router.post("/login", loginServiceProvider);
 router.get("/me", protect, getMe);
 router.route("/:id").put(updateServiceProvider);
+router.get("/provider/:id", getOneServiceProvider);
 router.get("/search", searchServiceProvider);
 
 router.get("/test", test);

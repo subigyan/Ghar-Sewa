@@ -17,6 +17,29 @@ const getServiceProviders = asyncHandler(async (req, res) => {
   });
 });
 
+const getOneServiceProvider = asyncHandler(async (req, res) => {
+  try {
+    const serviceProvider = await ServiceProvider.findById(
+      req.params.id
+    ).populate("reviews");
+    if (!serviceProvider) {
+      return res.status(404).json({
+        success: false,
+        message: "Service provider not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Service provider found",
+      data: serviceProvider,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      success: false,
+      message: "Service provider not found",
+    });
+  }
+});
 //@desc Set service provider
 //@route POST /api/serviceProviders
 //@access Public
@@ -217,8 +240,11 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
     sortQuery.createdAt = 1;
   } else if (sort === "newest") {
     sortQuery.createdAt = -1;
-  } else {
-    sortQuery.reviews = -1;
+  }
+  let sizeQuery = {};
+  if (sort === "popularity") {
+    sizeQuery = { $where: "this.reviews.length >= 1" };
+    sortQuery.reviews = 1;
   }
 
   const locationSplitOne = locationArray[0] || null;
@@ -252,6 +278,7 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
           { "address.fullLocation": { $regex: locationRegex } },
         ],
       },
+      sizeQuery,
     ],
   })
     .sort(sortQuery)
@@ -310,6 +337,7 @@ const test = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getOneServiceProvider,
   registerServiceProvider,
   getServiceProviders,
   loginServiceProvider,
