@@ -21,7 +21,9 @@ import { serviceProviderAuthState } from "../../atoms/authAtom";
 import { register } from "../../api/serviceProviderAuth";
 import { useRecoilState } from "recoil";
 // import Map, { Marker } from "react-map-gl";
-import * as Map from "react-map-gl";
+import Map, { Marker } from "react-map-gl";
+import { MdLocationPin } from "react-icons/md";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const steps = [
   {
@@ -44,7 +46,20 @@ const Register = () => {
     serviceProviderAuthState
   );
 
-  const [activeStep, setActiveStep] = useState(3);
+  const [viewPort, setViewPort] = useState({
+    latitude: 27.70784546292888,
+    longitude: 85.3255410260927,
+    zoom: 16,
+    width: "500px",
+    height: "500px",
+  });
+
+  const [mapLatitude, setMapLatitude] = useState(27.70784546292888);
+  const [mapLongitude, setMapLongitude] = useState(85.3255410260927);
+
+  console.log(mapLatitude, mapLongitude);
+
+  const [activeStep, setActiveStep] = useState(2);
 
   const [businessType, setBusinessType] = useState("company");
 
@@ -63,7 +78,7 @@ const Register = () => {
     userPhone: Yup.string()
       .matches(
         phoneRegExp,
-        "Phone number must be 10 characters long and start with 98"
+        "Phone number must be 10 characters long and start with 98 or 97"
       )
       .required("Phone number is required"),
     password: Yup.string()
@@ -187,8 +202,8 @@ const Register = () => {
             neighbourhood,
             city,
             district,
-            longitude,
-            latitude,
+            latitude: mapLatitude,
+            longitude: mapLongitude,
           };
           const services = ["Plumbing test"];
           // console.log(businessType);
@@ -236,7 +251,7 @@ const Register = () => {
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(getPosition, function (error) {
-        if (error.code == error.PERMISSION_DENIED) {
+        if (error.code === error.PERMISSION_DENIED) {
           toast.error(
             "Location not found. Please allow the site to access your location."
           );
@@ -258,8 +273,8 @@ const Register = () => {
     <>
       <Nav isHome={false} />
       <div className="flex items-center justify-center mt-10">
-        <div className="lg:w-8/12 md:w-10/12  flex justify-between">
-          <div className="min-w-[300px] w-3/12 p-5 shadow-lg min-h-[400px]">
+        <div className="lg:w-8/12 md:w-11/12 w-full flex justify-between md:flex-row flex-col ">
+          <div className="min-w-[300px] md:w-3/12 p-5 shadow-lg  w-full shadow-slate-400">
             <Box sx={{ maxWidth: 400 }}>
               <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((step, index) => (
@@ -284,7 +299,7 @@ const Register = () => {
             </Box>
           </div>
           <form
-            className="px-5 w-8/12  py-8 border-2 rounded-md"
+            className="px-5 md:w-8/12  py-8 border-2 rounded-lg w-full shadow-md shadow-slate-400"
             onSubmit={formik.handleSubmit}
           >
             {activeStep === 0 ? (
@@ -480,7 +495,7 @@ const Register = () => {
             ) : (
               <>
                 <div className="flex justify-between">
-                  <h1 className="text-3xl">Address</h1>
+                  <h1 className="text-3xl  ">Address</h1>
                 </div>
                 <div className="mt-6  flex flex-col">
                   <TextField
@@ -520,7 +535,7 @@ const Register = () => {
                     label="District"
                     variant="outlined"
                     className="w-[full]"
-                    style={{ marginBottom: "30px" }}
+                    style={{ marginBottom: "20px" }}
                     value={formik.values.district}
                     onChange={formik.handleChange}
                     error={
@@ -531,7 +546,7 @@ const Register = () => {
                     }
                     onBlur={formik.handleBlur}
                   />
-                  <TextField
+                  {/* <TextField
                     id="longitude"
                     label="Longitude"
                     type="number"
@@ -582,8 +597,30 @@ const Register = () => {
                     >
                       Get My Location
                     </button>
+                  </div> */}
+                  <div className="w-full flex flex-col flex-center mb-6">
+                    <h2 className="mb-6 text-2xl font-medium">
+                      Point Your Location
+                    </h2>
+                    <div
+                      className={`w-full h-[300px] max-h-[80vh]  flex flex-center relative overflow-hidden rounded-lg ${
+                        activeStep !== 2 ? "hidden" : ""
+                      }`}
+                    >
+                      <Map
+                        {...viewPort}
+                        // style={{ width: 600, height: 400 }}
+                        mapStyle="mapbox://styles/mapbox/streets-v9"
+                        mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                        onMove={(viewPort) => {
+                          setMapLongitude(viewPort.viewState.longitude);
+                          setMapLatitude(viewPort.viewState.latitude);
+                          setViewPort(viewPort);
+                        }}
+                      ></Map>
+                      <MdLocationPin className="text-4xl text-red-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                    </div>
                   </div>
-                  <div></div>
                 </div>
               </>
             )}

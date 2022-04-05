@@ -15,8 +15,13 @@ import { toast } from "react-toastify";
 import { getServiceProviderReviews, postReview } from "../../api/review";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../atoms/authAtom";
-import Footer from "../../components/Footer";
 import AOS from "aos";
+import Map, { Marker } from "react-map-gl";
+import { MdLocationPin } from "react-icons/md";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { MdOutlineRateReview } from "react-icons/md";
+import { BiLogIn } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const ServiceProvider = () => {
   const [open, setOpen] = useState(false);
@@ -24,6 +29,7 @@ const ServiceProvider = () => {
   const handleClose = () => setOpen(false);
 
   const user = useRecoilValue(authState);
+  const navigate = useNavigate();
 
   console.log(user);
 
@@ -45,10 +51,23 @@ const ServiceProvider = () => {
 
   // post review
 
+  const [viewPort, setViewPort] = useState({
+    latitude: 0,
+    longitude: 0,
+    zoom: 14,
+    width: "800px",
+    height: "400px",
+  });
+
   useEffect(() => {
     getServiceProvider(id)
       .then((res) => {
         setServiceProvider(res.data);
+        setViewPort({
+          ...viewPort,
+          latitude: res?.data?.address?.latitude,
+          longitude: res?.data?.address?.longitude,
+        });
       })
       .catch((err) => toast.error("User Not Found"));
 
@@ -59,13 +78,12 @@ const ServiceProvider = () => {
       .catch((err) => console.log("No Reviews"));
   }, [id]);
 
-  // console.log(serviceProvider);
+  console.log(serviceProvider);
 
   let overallRating = 0;
   serviceProvider?.reviews.forEach((review) => {
     overallRating += review.rating / serviceProvider.reviews.length;
   });
-  console.log(overallRating);
 
   let date = new Date(serviceProvider?.createdAt);
 
@@ -151,12 +169,23 @@ const ServiceProvider = () => {
                   <h2 className="ml-3 text-">apple@gmail.com</h2>
                 </div>
                 <div className="flex flex-col border-t-2 py-4 gap-2 ">
-                  <button
-                    className="mt-2 py-2 bg-slate-800 text-gray-100 rounded"
-                    onClick={handleOpen}
-                  >
-                    Write a Review
-                  </button>
+                  {user ? (
+                    <button
+                      className="mt-2 py-2 bg-slate-800 text-gray-100 rounded flex flex-center"
+                      onClick={handleOpen}
+                    >
+                      Write a Review
+                      <MdOutlineRateReview className="ml-2 text-white" />
+                    </button>
+                  ) : (
+                    <button
+                      className="mt-2 py-2 bg-slate-800 text-gray-100 rounded flex flex-center"
+                      onClick={() => navigate("/login")}
+                    >
+                      Login to Review
+                      <BiLogIn className="ml-2 text-white" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -222,11 +251,30 @@ const ServiceProvider = () => {
                     className="h-40 rounded-md"
                   />
                 </div>
-                {serviceProvider.address.longitude &&
-                serviceProvider.address.latitude ? (
-                  <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
-                    Map
-                  </h2>
+                {serviceProvider?.address?.longitude &&
+                serviceProvider?.address?.latitude ? (
+                  <>
+                    <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
+                      Map
+                    </h2>
+                    <div className="w-full h-[350px]">
+                      <Map
+                        {...viewPort}
+                        mapStyle="mapbox://styles/mapbox/streets-v9"
+                        mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                        onMove={(viewPort) => {
+                          setViewPort(viewPort);
+                        }}
+                      >
+                        <Marker
+                          latitude={serviceProvider?.address?.latitude}
+                          longitude={serviceProvider?.address?.longitude}
+                        >
+                          <MdLocationPin className="text-4xl text-red-500 relative" />
+                        </Marker>
+                      </Map>
+                    </div>
+                  </>
                 ) : (
                   ""
                 )}
@@ -263,8 +311,14 @@ const ServiceProvider = () => {
               </h4>
               <div>
                 <div className="w-full flex flex-col gap-8 py-8">
+                  {reviews.length === 0 && (
+                    <div className="text-3xl font-smooch font-semibold text-center text-gray-400">
+                      No Reviews!! Be the first one to review this service
+                      provider.
+                    </div>
+                  )}
                   {reviews.map((review, index) => (
-                    <div>
+                    <div key={index}>
                       <div className="flex justify-between flex-wrap">
                         <div className="">
                           <div className="flex items-center">
