@@ -44,7 +44,7 @@ const Login = () => {
         const { email, password } = values;
         const response = await login({ email, password });
         if (response) {
-          console.log("token", response?.data?.token);
+          console.log("token", response?.data);
           setUser(response?.data);
           toast.success(response.message);
         }

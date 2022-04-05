@@ -4,8 +4,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Nav from "../../components/business/Nav";
 import TextField from "@mui/material/TextField";
@@ -22,7 +20,8 @@ import { toast } from "react-toastify";
 import { serviceProviderAuthState } from "../../atoms/authAtom";
 import { register } from "../../api/serviceProviderAuth";
 import { useRecoilState } from "recoil";
-import { Checkbox } from "@mui/material";
+// import Map, { Marker } from "react-map-gl";
+import * as Map from "react-map-gl";
 
 const steps = [
   {
@@ -45,14 +44,16 @@ const Register = () => {
     serviceProviderAuthState
   );
 
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(3);
 
   const [businessType, setBusinessType] = useState("company");
 
-  const handleChange = (event) => {
+  const handleSelectChange = (event) => {
     setBusinessType(event.target.value);
   };
 
+  // console.log(businessType);
+  //
   const [showPassword, setShowPassoword] = useState(false);
 
   const phoneRegExp = /^((98|97)|0)[0-9]{8}$/;
@@ -112,7 +113,7 @@ const Register = () => {
       email: "",
       userPhone: "",
       password: "",
-      businessType: businessType,
+      businessType: "company",
       name: "",
       businessEmail: "",
       businessContactNumber: "",
@@ -181,7 +182,7 @@ const Register = () => {
             longitude,
             latitude,
           } = formik.values;
-          console.log(JSON.stringify(formik.values));
+          console.log(formik.values, "Type:", type);
           const address = {
             neighbourhood,
             city,
@@ -189,6 +190,8 @@ const Register = () => {
             longitude,
             latitude,
           };
+          const services = ["Plumbing test"];
+          // console.log(businessType);
           const response = await register({
             name,
             phoneNumber,
@@ -200,13 +203,22 @@ const Register = () => {
             description,
             owner,
             address,
+            services,
           });
-          console.log(response);
 
           if (response) {
-            setServiceProvider(response?.data?.token);
-            console.log(response.data);
-            toast.success(response.message);
+            console.log("res", response);
+
+            // console.log(response.data);
+            // console.log(response);
+            if (response.success) {
+              setServiceProvider(response?.data);
+              toast.success(response.message);
+            } else {
+              toast.error(
+                "Error while registering. Email id is already registered."
+              );
+            }
             // toast.success("Business registered successfully");
           }
         } catch (error) {
@@ -220,6 +232,28 @@ const Register = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getPosition, function (error) {
+        if (error.code == error.PERMISSION_DENIED) {
+          toast.error(
+            "Location not found. Please allow the site to access your location."
+          );
+        }
+      });
+    } else {
+      toast.error("Geolocation is not supported by this browser");
+    }
+  }
+  function getPosition(position) {
+    console.log(position.coords.latitude, position.coords.longitude);
+    formik.values.latitude = position.coords.latitude;
+    formik.values.longitude = position.coords.longitude;
+    formik.setTouched({ ...formik, longitude: true });
+    toast.success("Location Obtained");
+  }
+
   return (
     <>
       <Nav isHome={false} />
@@ -260,6 +294,7 @@ const Register = () => {
                 </div>
                 <div className="mt-6  flex flex-col bg-white">
                   <TextField
+                    required
                     id="email"
                     label="Email Address"
                     type="email"
@@ -273,6 +308,7 @@ const Register = () => {
                     autoFocus
                   />
                   <TextField
+                    required
                     id="userPhone"
                     label="Contact Number"
                     type="number"
@@ -291,6 +327,7 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                   />
                   <TextField
+                    required
                     id="password"
                     name="password"
                     label="Password"
@@ -337,11 +374,14 @@ const Register = () => {
                       Business Type
                     </InputLabel>
                     <Select
-                      labelId="type"
-                      id="Type"
-                      value={businessType}
+                      name="businessType"
+                      id="businessType"
                       label="Business Type"
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        handleSelectChange(e);
+                      }}
+                      defaultValue={businessType || "company"}
                     >
                       <MenuItem value={"individual"}>Individual</MenuItem>
                       <MenuItem value={"company"}>Company</MenuItem>
@@ -349,6 +389,7 @@ const Register = () => {
                   </FormControl>
 
                   <TextField
+                    required
                     id="name"
                     label={`${
                       businessType === "company" ? "Business Name" : "Full Name"
@@ -362,6 +403,7 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                   />
                   <TextField
+                    required
                     id="businessEmail"
                     type="email"
                     label={`Business Email Address`}
@@ -380,6 +422,7 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                   />
                   <TextField
+                    required
                     id="businessContactNumber"
                     label={`Business Contact Number`}
                     variant="outlined"
@@ -398,6 +441,7 @@ const Register = () => {
                   />
                   {businessType === "company" && (
                     <TextField
+                      required
                       id="owner"
                       label={`Owner Name`}
                       variant="outlined"
@@ -413,6 +457,7 @@ const Register = () => {
                   )}
 
                   <TextField
+                    required
                     id="description"
                     label="Description"
                     variant="outlined"
@@ -439,6 +484,7 @@ const Register = () => {
                 </div>
                 <div className="mt-6  flex flex-col">
                   <TextField
+                    required
                     id="neighbourhood"
                     label="Neighbourhood"
                     variant="outlined"
@@ -456,6 +502,7 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                   />
                   <TextField
+                    required
                     id="city"
                     label="City"
                     variant="outlined"
@@ -468,6 +515,7 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                   />
                   <TextField
+                    required
                     id="district"
                     label="District"
                     variant="outlined"
@@ -509,7 +557,7 @@ const Register = () => {
                     id="latitude"
                     label="Latitude"
                     type="number"
-                    style={{ marginBottom: "30px" }}
+                    style={{ marginBottom: "10px" }}
                     InputProps={{
                       inputProps: {
                         max: 180,
@@ -526,6 +574,16 @@ const Register = () => {
                     }
                     onBlur={formik.handleBlur}
                   />
+                  <div className="flex justify-end mb-4 ">
+                    <button
+                      className="py-2 bg-violet-900 w-[150px] rounded text-white"
+                      onClick={() => getLocation()}
+                      type="button"
+                    >
+                      Get My Location
+                    </button>
+                  </div>
+                  <div></div>
                 </div>
               </>
             )}

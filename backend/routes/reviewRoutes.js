@@ -12,9 +12,11 @@ const {
 
 const { protect } = require("../middlewares/authMiddleware");
 
-router.route("/").get(protect, getReview).post(addReview);
+router.get("/customer/:id", getReview);
 
-router.route("/:id").put(protect, updateReview).delete(protect, deleteReview);
+router.route("/").post(addReview);
+
+router.route("/:id").put(updateReview).delete(deleteReview);
 
 router.get("/all", getAllReviews);
 

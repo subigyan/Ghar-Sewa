@@ -222,8 +222,14 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
 
 const searchServiceProvider = asyncHandler(async (req, res) => {
   const name = req.query?.name?.trim();
-  const service = req.query?.service?.trim();
+  let service = req.query?.service?.trim();
   const location = req.query?.location?.trim();
+
+  if (service?.slice(-1).toLowerCase() === "s") {
+    service = service.slice(0, -1);
+    console.log(true);
+  }
+
   let locationArray = [];
   if (location) {
     locationArray = location.split(" ");
@@ -232,6 +238,7 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
   // console.log(neighbourhood);
 
   const sortQuery = {};
+
   if (sort === "-name") {
     sortQuery.name = -1;
   } else if (sort === "name") {
@@ -240,12 +247,11 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
     sortQuery.createdAt = 1;
   } else if (sort === "newest") {
     sortQuery.createdAt = -1;
+  } else if (sort === "recent") {
+    sortQuery.reviews = -1;
   }
-  let sizeQuery = {};
-  if (sort === "popularity") {
-    sizeQuery = { $where: "this.reviews.length >= 1" };
-    sortQuery.reviews = 1;
-  }
+  // if (sort === "popularity") {
+  // }
 
   const locationSplitOne = locationArray[0] || null;
   const locationSplitTwo = locationArray[1] || null;
@@ -278,7 +284,6 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
           { "address.fullLocation": { $regex: locationRegex } },
         ],
       },
-      sizeQuery,
     ],
   })
     .sort(sortQuery)

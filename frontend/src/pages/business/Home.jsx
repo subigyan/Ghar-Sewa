@@ -196,8 +196,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-full min-h-48 p-4 text-center bg-[#1e1f4f] text-white flex flex-center flex-col z-50 mt-8 px-2">
-        <h2 className="text-2xl">Seize the Opportunity waiting for you</h2>
+      <div className="w-full min-h-48 py-8 text-center bg-[#1e1f4f] text-white flex flex-center flex-col z-50 mt-8 px-2">
+        <h2 className="text-2xl">Seize the opportunity waiting for you</h2>
         <p className="mt-4 text-gray-300">
           Revolutionize the way you do business with Ghar Sewa. It's free, easy,
           and only takes a few minutes.

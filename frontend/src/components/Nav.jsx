@@ -18,11 +18,8 @@ const Nav = ({ fixed }) => {
   const [, isTab] = useDeviceProvider();
 
   const [user, setUser] = useRecoilState(authState);
-  console.log(user);
 
   const [userHover, setUserHover] = useState(false);
-
-  console.log(userHover);
 
   let [open, setOpen] = useState(false);
   return (
@@ -77,9 +74,9 @@ const Nav = ({ fixed }) => {
           ))}
           {user ? (
             <>
-              <div className="lg:ml-8 relative">
+              <div className="lg:ml-8 relative z-50">
                 <div
-                  className="w-full bg-green-300 cursor-pointer"
+                  className="w-full  cursor-pointer"
                   onMouseEnter={() => {
                     setUserHover(true);
                   }}
@@ -99,12 +96,17 @@ const Nav = ({ fixed }) => {
                       setUserHover(false);
                     }}
                   >
-                    <div className=" text-indigo-900 hover:underline">
-                      My Reviews
-                    </div>
-                    <div className="text-indigo-900 hover:underline">
-                      My Quotations
-                    </div>
+                    <Link to="/reviews">
+                      <div className=" text-indigo-900 hover:underline">
+                        My Reviews
+                      </div>
+                    </Link>
+                    <Link to="/quotations">
+                      <div className="text-indigo-900 hover:underline">
+                        My Quotations
+                      </div>
+                    </Link>
+
                     <div
                       className="text-orange-600 hover:underline"
                       onClick={() => {

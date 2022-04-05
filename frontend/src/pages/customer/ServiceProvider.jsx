@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import { useParams } from "react-router-dom";
 import { getServiceProvider } from "../../api/serviceProviderSearch";
 import { toast } from "react-toastify";
-import { getReviews, postReview } from "../../api/review";
+import { getServiceProviderReviews, postReview } from "../../api/review";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../atoms/authAtom";
 import Footer from "../../components/Footer";
@@ -52,7 +52,7 @@ const ServiceProvider = () => {
       })
       .catch((err) => toast.error("User Not Found"));
 
-    getReviews(id)
+    getServiceProviderReviews(id)
       .then((res) => {
         setReviews(res.data);
       })
@@ -96,7 +96,7 @@ const ServiceProvider = () => {
           setServiceProvider(res.data);
         })
         .catch((err) => toast.error("User Not Found"));
-      getReviews(id)
+      getServiceProviderReviews(id)
         .then((res) => {
           setReviews(res.data);
           setOpen(false);
@@ -165,6 +165,7 @@ const ServiceProvider = () => {
                 <h1 className="text-5xl font-semibold capitalize">
                   {serviceProvider.name}
                 </h1>
+                {console.log(serviceProvider)}
                 <p className="text-xl font-semibold text-gray-500">
                   {serviceProvider.type === "individual"
                     ? "Individual Business"
@@ -390,7 +391,7 @@ const ServiceProvider = () => {
                   Review Form for Subi Plumbings
                 </h1>
                 <Rating
-                  name="half-rating"
+                  name="formRating"
                   value={reviewStars}
                   precision={0.5}
                   size="large"

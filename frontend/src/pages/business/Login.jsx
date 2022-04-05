@@ -57,7 +57,6 @@ const Register = () => {
 
         const response = await login({ email, password });
         if (response.data) {
-          console.log("token", response?.data?.token);
           setServiceProvider(response?.data);
           toast.success("Done");
           toast.success(response.message);

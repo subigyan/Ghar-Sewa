@@ -17,6 +17,7 @@ import { MdHandyman } from "react-icons/md";
 import { GiHandSaw } from "react-icons/gi";
 import { FaSpinner } from "react-icons/fa";
 import Footer from "../../../components/Footer";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   useEffect(() => {
@@ -104,7 +105,7 @@ const Home = () => {
               type="text"
               name="service"
               id="type"
-              placeholder="Search Service Category"
+              placeholder="plumber, electrician"
               required
               value={serviceCategory}
               onChange={(e) => setServiceCategory(e.target.value)}
@@ -195,60 +196,78 @@ const Home = () => {
           veritatis.
         </p>
 
-        <div className="flex justify-center mt-5 lg:px-24 flex-wrap ">
-          <div
-            className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 
-          my-6  "
-          >
-            <div className="h-32 w-32 rounded-full  bg-[#F05C51] flex flex-center shadow-md ">
-              <GiTap className="text-6xl text-white " />
+        <div className="flex md:justify-center mt-5 lg:px-24 md:flex-wrap overflow-x-scroll scrollbar-hide">
+          <Link to="/search?service=plumber">
+            <div
+              className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 
+          my-6 "
+            >
+              <div className="h-32 w-32 rounded-full  bg-[#F05C51] flex flex-center shadow-md ">
+                <GiTap className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Plumber</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Plumber</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#3AC0FF] flex flex-center shadow-md ">
-              <GiElectric className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=electrician">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#3AC0FF] flex flex-center shadow-md ">
+                <GiElectric className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">
+                Electircian
+              </p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">
-              Electircian
-            </p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#77DF40] flex flex-center shadow-md ">
-              <BiBuildingHouse className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=builder">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#77DF40] flex flex-center shadow-md ">
+                <BiBuildingHouse className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Builder</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Builder</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#F4C837] flex flex-center shadow-md ">
-              <AiOutlineFormatPainter className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=painter">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#F4C837] flex flex-center shadow-md ">
+                <AiOutlineFormatPainter className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Painter</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Painter</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#C56DFB] flex flex-center shadow-md ">
-              <GiHandSaw className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=painter">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#C56DFB] flex flex-center shadow-md ">
+                <GiHandSaw className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">
+                Carpenter
+              </p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Carpenter</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#FF6C00] flex flex-center shadow-md ">
-              <GiVacuumCleaner className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=cleaner">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#FF6C00] flex flex-center shadow-md ">
+                <GiVacuumCleaner className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Cleaner</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Cleaner</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#FF4081] flex flex-center shadow-md ">
-              <GiMechanicGarage className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=mechanic">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#FF4081] flex flex-center shadow-md ">
+                <GiMechanicGarage className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Mechanic</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Mechanic</p>
-          </div>
-          <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
-            <div className="h-32 w-32 rounded-full  bg-[#09C097] flex flex-center shadow-md ">
-              <MdHandyman className="text-6xl text-white " />
+          </Link>
+          <Link to="/search?service=handyman">
+            <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
+              <div className="h-32 w-32 rounded-full  bg-[#09C097] flex flex-center shadow-md ">
+                <MdHandyman className="text-6xl text-white " />
+              </div>
+              <p className="mt-2 text-lg font-medium text-gray-600">Handyman</p>
             </div>
-            <p className="mt-2 text-lg font-medium text-gray-600">Handyman</p>
-          </div>
+          </Link>
         </div>
         {/* <div className="flex justify-around mt-10 lg:px-32">
           <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer">

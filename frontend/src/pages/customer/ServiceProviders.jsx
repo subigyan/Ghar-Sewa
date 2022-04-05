@@ -20,14 +20,7 @@ const ServiceProviders = () => {
   const service = searchParams.get("service") || "";
   const sortBy = searchParams.get("sort") || "";
 
-  const sortOptions = [
-    "popularity",
-    "all",
-    "name",
-    "-name",
-    "newest",
-    "oldest",
-  ];
+  const sortOptions = ["recent", "all", "name", "-name", "newest", "oldest"];
 
   const [sort, setSort] = React.useState(sortBy);
   const [serviceProviders, setServiceProviders] = useState([]);
@@ -182,11 +175,11 @@ const ServiceProviders = () => {
               <MenuItem value={0}>
                 <em>Stars</em>
               </MenuItem>
-              <MenuItem value={0.5}>One Star and Higher</MenuItem>
-              <MenuItem value={1.5}>Two Stars and Higher</MenuItem>
-              <MenuItem value={2.5}>Three Stars and Higher</MenuItem>
-              <MenuItem value={3.5}>Four Stars and Higher</MenuItem>
-              <MenuItem value={4.5}>Five Stars</MenuItem>
+              <MenuItem value={0.51}>One Star and Higher</MenuItem>
+              <MenuItem value={1.51}>Two Stars and Higher</MenuItem>
+              <MenuItem value={2.51}>Three Stars and Higher</MenuItem>
+              <MenuItem value={3.51}>Four Stars and Higher</MenuItem>
+              <MenuItem value={4.51}>Five Stars</MenuItem>
             </Select>
           </FormControl>
           <button
@@ -205,7 +198,7 @@ const ServiceProviders = () => {
               <span className="font-medium text-sm absolute bottom-2 text-gray-500 capitalize">
                 Filters:{" "}
                 {businessTypeFilter === "" ? "All" : businessTypeFilter}{" "}
-                Businesses || {starFilter} Stars and Above
+                Businesses || {Math.round(starFilter)} Stars and Above
               </span>
             </div>
             <div className="w-48">
@@ -225,7 +218,7 @@ const ServiceProviders = () => {
                   <MenuItem value={"all"}>
                     <em>All</em>
                   </MenuItem>
-                  <MenuItem value={"popularity"}>Popularity</MenuItem>
+                  <MenuItem value={"recent"}>Recently Reviewed</MenuItem>
                   <MenuItem value={"name"}>Name (A-Z)</MenuItem>
                   <MenuItem value={"-name"}>Name (Z-A)</MenuItem>
                   <MenuItem value={"newest"}>Join Date (newest)</MenuItem>
@@ -251,7 +244,7 @@ const ServiceProviders = () => {
                     filterByName={false}
                   />
                 ))} */}
-            {nameFiltered.map((serviceProvider) => {
+            {nameFiltered?.map((serviceProvider) => {
               return (
                 <ServiceProviderCard
                   key={serviceProvider._id}
@@ -348,7 +341,7 @@ const ServiceProviderCard = ({
           </div>
         </div>
         <div className="w-full mt-2 flex sm:gap-2 gap-0 flex-wrap ">
-          {services.map((providerService, index) => (
+          {services?.map((providerService, index) => (
             <button
               key={index}
               className="text-gray-700 text-sm border py-1 px-2 rounded-lg border-gray-300 shadow-md capitalize hover:scale-105 transition-all duration-100"

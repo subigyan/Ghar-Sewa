@@ -6,6 +6,8 @@ const serviceProviderSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Please enter a name"],
+      lowercase: true,
+      trim: true,
     },
     phoneNumber: {
       type: Number,
