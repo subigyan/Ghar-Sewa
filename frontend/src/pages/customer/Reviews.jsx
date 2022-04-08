@@ -9,6 +9,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
 import { updateReview, deleteReview } from "../../api/review";
+import { toast } from "react-toastify";
 
 const Reviews = () => {
   const [user, setUser] = useRecoilState(authState);
@@ -41,13 +42,13 @@ const Reviews = () => {
   const updateUserReview = (id, review) => {
     updateReview(id, review)
       .then((res) => {
-        console.log(res);
         handleClose();
         getCustomerReviews(user.id)
           .then((res) => {
             setReviews(res.data);
           })
           .catch((err) => console.log(err));
+        toast.success("Review Updated");
       })
       .catch((err) => console.log(err));
   };
@@ -55,12 +56,12 @@ const Reviews = () => {
   const deleteUserReview = (id) => {
     deleteReview(id)
       .then((res) => {
-        console.log(res);
         getCustomerReviews(user.id)
           .then((res) => {
             setReviews(res.data);
           })
           .catch((err) => console.log(err));
+        toast.success("Review Deleted");
       })
       .catch((err) => console.log(err));
   };

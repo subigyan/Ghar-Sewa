@@ -9,7 +9,7 @@ import { Avatar } from "@mui/material";
 import { AiFillCloseSquare } from "react-icons/ai";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getServiceProvider } from "../../api/serviceProviderSearch";
 import { toast } from "react-toastify";
 import { getServiceProviderReviews, postReview } from "../../api/review";
@@ -22,6 +22,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { MdOutlineRateReview } from "react-icons/md";
 import { BiLogIn } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import ReviewCard from "../../components/ReviewCard";
 
 const ServiceProvider = () => {
   const [open, setOpen] = useState(false);
@@ -54,7 +55,7 @@ const ServiceProvider = () => {
   const [viewPort, setViewPort] = useState({
     latitude: 0,
     longitude: 0,
-    zoom: 14,
+    zoom: 16,
     width: "800px",
     height: "400px",
   });
@@ -153,20 +154,35 @@ const ServiceProvider = () => {
                 <div className="flex items-center ">
                   <GoPerson className="text-xl" />
                   <h2 className="ml-3 capitalize">
-                    {serviceProvider.owner && serviceProvider.name}
+                    {serviceProvider.owner || serviceProvider.name}
                   </h2>
                 </div>
                 <div className="flex items-center ">
                   <GrLocation className="text-xl" />
-                  <h2 className="ml-3 text-"> Sinamangal, Kathmandu</h2>
+                  <h2 className="ml-3 text-">
+                    {`${serviceProvider?.address?.neighbourhood},  ${
+                      serviceProvider?.address?.city?.toLowerCase() ===
+                      serviceProvider?.address?.district?.toLowerCase()
+                        ? serviceProvider?.address?.city
+                        : serviceProvider?.address?.city +
+                          ", " +
+                          serviceProvider?.address?.district
+                    }`}
+                  </h2>
                 </div>
                 <div className="flex items-center ">
                   <BsFillTelephoneFill className="text-xl" />
-                  <h2 className="ml-3 text-"> {12456}</h2>
+                  <Link to={`tel:${serviceProvider?.businessContactNumber}`}>
+                    <h2 className="ml-3 ">
+                      {serviceProvider?.businessContactNumber}
+                    </h2>
+                  </Link>
                 </div>
                 <div className="flex items-center ">
                   <GrMail className="text-xl" />
-                  <h2 className="ml-3 text-">apple@gmail.com</h2>
+                  <Link to={`mailto:${serviceProvider?.email}`}>
+                    <h2 className="ml-3 "> {serviceProvider?.email}</h2>
+                  </Link>
                 </div>
                 <div className="flex flex-col border-t-2 py-4 gap-2 ">
                   {user ? (
@@ -295,6 +311,7 @@ const ServiceProvider = () => {
                 </h4>
                 <Rating
                   readOnly
+                  value={overallRating}
                   defaultValue={overallRating}
                   size="large"
                   className="mt-2"
@@ -317,7 +334,7 @@ const ServiceProvider = () => {
                       provider.
                     </div>
                   )}
-                  {reviews.map((review, index) => (
+                  {/* {reviews?.map((review, index) => (
                     <div key={index}>
                       <div className="flex justify-between flex-wrap">
                         <div className="">
@@ -361,51 +378,10 @@ const ServiceProvider = () => {
                         <p className="mt-2">{review?.review}</p>
                       </div>
                     </div>
+                  ))} */}
+                  {reviews?.map((review, index) => (
+                    <ReviewCard review={review} key={index} />
                   ))}
-
-                  {/* <div>
-                    <div className="flex justify-between flex-wrap">
-                      <div className="">
-                        <div className="flex items-center">
-                          <Avatar
-                            sx={{ width: 45, height: 45 }}
-                            className="text-sm"
-                          >
-                            R
-                          </Avatar>
-                          <div className="ml-3">
-                            <p className=" text-slate-500 font-semibold">
-                              Ram Krishna Apple
-                            </p>
-                            <div>
-                              <Rating
-                                name="size-medium"
-                                value={2}
-                                readOnly
-                                size="small"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p className=" text-right font-semibold min-w-[150px] sm:w-auto w-full sm:mt-0 mt-2 text-slate-500">
-                        20th October 2021
-                      </p>
-                    </div>
-                    <div className="mt-2">
-                      <h2 className="text-lg font-semibold">Good Service</h2>
-                      <p className="mt-2">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Eaque dolorum odio nam, non saepe repellendus nemo
-                        similique veritatis cumque libero amet reiciendis
-                        incidunt, recusandae iste blanditiis in sapiente,
-                        corrupti voluptas deleniti quasi totam nisi? Natus
-                        facilis qui debitis, est rem, assumenda molestiae
-                        officia delectus quos voluptate eum, accusantium sit
-                        ipsam.
-                      </p>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -418,17 +394,6 @@ const ServiceProvider = () => {
               aria-describedby="modal-modal-description"
               data-aos="fade-in"
             >
-              {/* const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-}; */}
               <form
                 className="absolute top-1/2 left-1/2 min-w-[350px] w-[80%] bg-slate-100 -translate-x-1/2 -translate-y-1/2  sm:min-h-[80%] rounded sm:py-8 sm:px-10 p-4 flex flex-col"
                 onSubmit={(e) => {
@@ -505,3 +470,43 @@ const ServiceProvider = () => {
 };
 
 export default ServiceProvider;
+
+// const ReviewCard = ({ review }) => {
+//   return (
+//     <div>
+//       <div className="flex justify-between flex-wrap">
+//         <div className="">
+//           <div className="flex items-center">
+//             <Avatar sx={{ width: 45, height: 45 }} className="text-sm">
+//               {review?.customer?.name?.[0]}
+//             </Avatar>
+//             <div className="ml-3">
+//               <p className=" text-slate-500 font-semibold">
+//                 {review?.customer?.name}
+//               </p>
+//               <div>
+//                 <Rating
+//                   name="size-medium"
+//                   value={review.rating}
+//                   readOnly
+//                   size="small"
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//         <p className=" text-right font-semibold min-w-[150px] sm:w-auto w-full sm:mt-0 mt-2 text-slate-500">
+//           {new Date(review?.createdAt).toLocaleDateString("en-US", {
+//             year: "numeric",
+//             month: "long",
+//             day: "numeric",
+//           })}
+//         </p>
+//       </div>
+//       <div className="mt-2">
+//         <h2 className="text-lg font-semibold">{review?.reviewHeadline}</h2>
+//         <p className="mt-2">{review?.review}</p>
+//       </div>
+//     </div>
+//   );
+// };

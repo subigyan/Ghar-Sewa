@@ -28,3 +28,9 @@ export const login = async (user) => {
   }
   return response.data;
 };
+
+//update
+export const updateServiceProvider = async (id, user) => {
+  const response = await axios.put(API_URL + "/" + id, user);
+  return response.data;
+};

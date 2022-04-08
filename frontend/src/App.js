@@ -12,6 +12,10 @@ import ServiceProviders from "./pages/customer/ServiceProviders.jsx";
 import ServiceProvider from "./pages/customer/ServiceProvider.jsx";
 import About from "./pages/customer/About.jsx";
 import Reviews from "./pages/customer/Reviews.jsx";
+import BusinessDashboard from "./pages/business/dashboard/BusinessDashboard.jsx";
+import BusinessReviews from "./pages/business/dashboard/BusinessReviews.jsx";
+import BusinessInfo from "./pages/business/dashboard/BusinessInfo.jsx";
+import BusinessUpdate from "./pages/business/dashboard/BusinessUpdate.jsx";
 
 function App() {
   return (
@@ -19,6 +23,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/*" element={<div>Not found</div>} />
@@ -29,6 +34,19 @@ function App() {
           <Route path="/serviceProvider/:id" element={<ServiceProvider />} />
           <Route path="/about" element={<About />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/business/dashboard" element={<BusinessDashboard />} />
+          <Route
+            path="/business/dashboard/reviews"
+            element={<BusinessReviews />}
+          />
+          <Route
+            path="/business/dashboard/view-info"
+            element={<BusinessInfo />}
+          />
+          <Route
+            path="/business/dashboard/manage-info"
+            element={<BusinessUpdate />}
+          />
         </Routes>
       </Router>
       <ToastContainer />

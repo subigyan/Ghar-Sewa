@@ -21,9 +21,10 @@ import { serviceProviderAuthState } from "../../atoms/authAtom";
 import { register } from "../../api/serviceProviderAuth";
 import { useRecoilState } from "recoil";
 // import Map, { Marker } from "react-map-gl";
-import Map, { Marker } from "react-map-gl";
+import Map from "react-map-gl";
 import { MdLocationPin } from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const steps = [
   {
@@ -57,9 +58,9 @@ const Register = () => {
   const [mapLatitude, setMapLatitude] = useState(27.70784546292888);
   const [mapLongitude, setMapLongitude] = useState(85.3255410260927);
 
-  console.log(mapLatitude, mapLongitude);
+  // console.log(mapLatitude, mapLongitude);
 
-  const [activeStep, setActiveStep] = useState(2);
+  const [activeStep, setActiveStep] = useState(0);
 
   const [businessType, setBusinessType] = useState("company");
 
@@ -105,7 +106,10 @@ const Register = () => {
       )
       .required("Phone number is required"),
     owner: Yup.string().max("30", "Name is too long"),
-    description: Yup.string().max("1000", "Description is too long"),
+    description: Yup.string()
+      .min("50", "Description is too short")
+      .max("1000", "Description is too long")
+      .required("Description is required"),
     neighbourhood: Yup.string()
       .max("30", "Neighbourhood is too long")
       .required("Neighbourhood is required"),
@@ -139,6 +143,7 @@ const Register = () => {
       district: "",
       longitude: "",
       latitude: "",
+      services: [],
     },
     validationSchema: validationSchema,
     // onSubmit: (val) => console.log(val),
@@ -162,12 +167,18 @@ const Register = () => {
       if (
         formik.errors?.name ||
         formik.errors?.businessEmail ||
-        formik.errors?.businessContactNumber
+        formik.errors?.businessContactNumber ||
+        formik.errors?.description
       ) {
         toast.error("Please fill all the required business information fields");
         console.log("Error");
       } else {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        if (formik.values?.services?.length === 0) {
+          toast.error("Please select at least one service");
+          console.log("Error");
+        } else {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
       }
     }
 
@@ -196,6 +207,7 @@ const Register = () => {
             district,
             longitude,
             latitude,
+            services,
           } = formik.values;
           console.log(formik.values, "Type:", type);
           const address = {
@@ -205,7 +217,7 @@ const Register = () => {
             latitude: mapLatitude,
             longitude: mapLongitude,
           };
-          const services = ["Plumbing test"];
+
           // console.log(businessType);
           const response = await register({
             name,
@@ -243,7 +255,8 @@ const Register = () => {
     }
   };
 
-  // console.log(formik);
+  console.log(formik);
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -268,6 +281,41 @@ const Register = () => {
     formik.setTouched({ ...formik, longitude: true });
     toast.success("Location Obtained");
   }
+
+  const serviceCategories = [
+    {
+      service: "Plumbing",
+      occupation: "plumber",
+    },
+    {
+      service: "Electrical Repair",
+      occupation: "electrician",
+    },
+    {
+      service: "Construction",
+      occupation: "contractor",
+    },
+    {
+      service: "Painting",
+      occupation: "painter",
+    },
+    {
+      service: "Carpenting",
+      occupation: "carpenter",
+    },
+    {
+      service: "Cleaning",
+      occupation: "cleaner",
+    },
+    {
+      service: "Auto Repair",
+      occupation: "mechanic",
+    },
+    {
+      service: "Handyman Service",
+      occupation: "handyman",
+    },
+  ];
 
   return (
     <>
@@ -417,6 +465,22 @@ const Register = () => {
                     helperText={formik.touched.name && formik.errors.name}
                     onBlur={formik.handleBlur}
                   />
+                  {businessType === "company" && (
+                    <TextField
+                      required
+                      id="owner"
+                      label={`Owner Name`}
+                      variant="outlined"
+                      style={{ marginBottom: "30px" }}
+                      value={formik.values.owner}
+                      onChange={formik.handleChange}
+                      error={
+                        formik.touched.owner && Boolean(formik.errors.owner)
+                      }
+                      helperText={formik.touched.owner && formik.errors.owner}
+                      onBlur={formik.handleBlur}
+                    />
+                  )}
                   <TextField
                     required
                     id="businessEmail"
@@ -454,23 +518,31 @@ const Register = () => {
                     }
                     onBlur={formik.handleBlur}
                   />
-                  {businessType === "company" && (
-                    <TextField
-                      required
-                      id="owner"
-                      label={`Owner Name`}
-                      variant="outlined"
-                      style={{ marginBottom: "30px" }}
-                      value={formik.values.owner}
-                      onChange={formik.handleChange}
-                      error={
-                        formik.touched.owner && Boolean(formik.errors.owner)
-                      }
-                      helperText={formik.touched.owner && formik.errors.owner}
-                      onBlur={formik.handleBlur}
-                    />
-                  )}
-
+                  <div className="px-1">
+                    <h3 className="text-xl font-medium text-gray-600 mb-3">
+                      Select Services
+                    </h3>
+                    <div
+                      role="group"
+                      aria-labelledby="checkbox-group"
+                      className="flex justify-between w-full flex-wrap mb-7"
+                    >
+                      {serviceCategories?.map((service, index) => (
+                        <FormControlLabel
+                          key={index}
+                          control={
+                            <Checkbox
+                              name="services"
+                              onChange={formik.handleChange}
+                              style={{ color: "#303f9f" }}
+                            />
+                          }
+                          label={service.service}
+                          value={service.occupation}
+                        />
+                      ))}
+                    </div>
+                  </div>
                   <TextField
                     required
                     id="description"

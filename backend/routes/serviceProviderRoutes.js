@@ -18,7 +18,7 @@ router.get("/", getServiceProviders);
 router.post("/register", registerServiceProvider);
 router.post("/login", loginServiceProvider);
 router.get("/me", protect, getMe);
-router.route("/:id").put(updateServiceProvider);
+router.put("/:id", updateServiceProvider);
 router.get("/provider/:id", getOneServiceProvider);
 router.get("/search", searchServiceProvider);
 

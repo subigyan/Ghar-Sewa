@@ -7,6 +7,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./home.css";
 import Typewriter from "typewriter-effect";
+import axios from "axios";
 
 import { GiTap, GiElectric } from "react-icons/gi";
 import { BiBuildingHouse } from "react-icons/bi";
@@ -63,6 +64,20 @@ const Home = () => {
   const [serviceCategory, setServiceCategory] = useState("");
 
   const [submited, setSubmited] = useState(false);
+
+  const handleImageUpload = (e) => {
+    const files = e.target.files;
+    console.log(files);
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "subigyan_preset");
+
+    axios
+      .post("https://api.cloudinary.com/v1_1/subigyan/image/upload", data)
+      .then((response) => {
+        console.log(response.data.url);
+      });
+  };
 
   return (
     <div className=" overflow-x-hidden">
@@ -186,10 +201,11 @@ const Home = () => {
           </button>
         </form>
       </div>
-      <div className="border-2  py-6 ">
+      <div className="border-2  py-6 " id="browse">
         <h1 className="text-3xl font-semibold text-center">
           Browse Service Providers
         </h1>
+        <input type="file" onChange={handleImageUpload} />
         <p className=" text-center my-5">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea eaque
           pariatur sunt dolorum! Optio porro commodi quos tenetur! Earum,

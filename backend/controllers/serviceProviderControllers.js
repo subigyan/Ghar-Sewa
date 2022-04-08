@@ -196,10 +196,9 @@ const generateToken = (id) => {
 };
 
 const updateServiceProvider = asyncHandler(async (req, res) => {
+  console.log("req");
   const serviceProvider = await ServiceProvider.findById(req.params.id);
-
   // console.log(customer);
-
   if (!serviceProvider) {
     res.status(404).json({
       success: false,
@@ -217,6 +216,12 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
     success: true,
     message: "ServiceProvider updated successfully",
     data: updatedServiceProvider,
+  });
+});
+
+const update = asyncHandler(async (req, res) => {
+  res.json({
+    msh: "okag",
   });
 });
 
@@ -331,13 +336,10 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
 });
 
 const test = asyncHandler(async (req, res) => {
-  const search = await ServiceProvider.find({
-    "address.neighbourhood": "Kamalphkhari",
-  });
   res.json({
     success: true,
     message: "Service Providers",
-    data: search,
+    data: "search",
   });
 });
 

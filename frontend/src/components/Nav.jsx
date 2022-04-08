@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
@@ -9,10 +9,10 @@ import useDeviceProvider from "../hooks/useDeviceProvider";
 
 const Nav = ({ fixed }) => {
   let links = [
-    { name: "Home", link: "/" },
-    { name: "Discover Services", link: "/" },
-    { name: "About us", link: "/about" },
-    { name: "For Business", link: "/business", unique: true },
+    { name: "Home", link: "/", type: "page" },
+    { name: "Discover Services", link: "/#browse", type: "section" },
+    { name: "About us", link: "/about", type: "page" },
+    { name: "For Business", link: "/business", unique: true, type: "page" },
   ];
 
   const [, isTab] = useDeviceProvider();
@@ -22,11 +22,20 @@ const Nav = ({ fixed }) => {
   const [userHover, setUserHover] = useState(false);
 
   let [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      document
+        .querySelector(".nav")
+        .classList.toggle("scrolled", window.scrollY > 0);
+    });
+  }, []);
+
   return (
     <div
-      className={` w-full ${
+      className={`nav w-full ${
         fixed && "fixed"
-      } top-0 left-0 h-20 shadow-sm shadow-violet-400 bg-white z-50`}
+      } top-0 left-0 h-20 shadow-sm shadow-violet-400  z-50`}
     >
       <div className="lg:flex items-center justify-between  py-4 lg:px-14 px-7">
         <div className="flex items-center justify-between">
@@ -47,8 +56,8 @@ const Nav = ({ fixed }) => {
         </div>
 
         <ul
-          className={`flex lg:flex-row flex-col lg:items-center lg:pb-0 pb-2 absolute lg:static  lg:z-auto z-[-1] left-0 w-full lg:w-auto lg:pl-0  pl-7 transition-all duration-500  text-base ${
-            open ? "top-16 " : "-top-[400px] "
+          className={`flex lg:flex-row flex-col lg:items-center lg:pb-0 pb-2 absolute lg:static  lg:z-auto z-[-1] left-0 w-full lg:w-auto lg:pl-0  pl-7 transition-all duration-500  text-base  ${
+            open ? "top-20 bg-white " : "-top-[400px] "
           }`}
         >
           {links.map((link) => (
@@ -62,19 +71,30 @@ const Nav = ({ fixed }) => {
                   : ""
               } `}
             >
-              <Link
-                to={link.link}
-                className={`text-gray-800 hover:text-gray-400 duration-500  ${
-                  link.unique && "text-indigo-600 hover:text-blue-400 "
-                }`}
-              >
-                {link.name}
-              </Link>
+              {link.type === "page" ? (
+                <Link
+                  to={link.link}
+                  className={`text-gray-800 hover:text-gray-400 duration-500  ${
+                    link.unique && "text-indigo-600 hover:text-blue-400 "
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  href={link.link}
+                  className={`text-gray-800 hover:text-gray-400 duration-500  ${
+                    link.unique && "text-indigo-600 hover:text-blue-400 "
+                  }`}
+                >
+                  {link.name}
+                </a>
+              )}
             </li>
           ))}
           {user ? (
             <>
-              <div className="lg:ml-8 relative z-50">
+              <div className="lg:ml-8 relative z-50 lg:block hidden">
                 <div
                   className="w-full  cursor-pointer"
                   onMouseEnter={() => {
@@ -119,16 +139,35 @@ const Nav = ({ fixed }) => {
                   </div>
                 )}
               </div>
-              {/* <button
-                className="bg-dark text-white  py-2 px-6 rounded lg:ml-8 hover:bg-gray-800 
-                                duration-500 lg:w-auto w-32 lg:my-0 my-2"
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  setUser(null);
-                }}
-              >
-                Log Out
-              </button> */}
+              <li className={`lg:ml-8 lg:my-0 my-2 font-medium  lg:hidden `}>
+                <Link to="/reviews">
+                  <div className=" text-indigo-900 hover:underline">
+                    My Reviews
+                  </div>
+                </Link>
+              </li>
+              <li className={`lg:ml-8 lg:my-0 my-2 font-medium  lg:hidden `}>
+                <Link to="/quotations">
+                  <div className="text-indigo-900 hover:underline">
+                    My Quotations
+                  </div>
+                </Link>
+              </li>
+              <li className={`lg:ml-8 lg:my-0 my-2 font-medium  lg:hidden `}>
+                <Link to="/reviews">
+                  <div className=" text-indigo-900 hover:underline">
+                    <div
+                      className="text-orange-600 hover:underline"
+                      onClick={() => {
+                        localStorage.removeItem("user");
+                        setUser(null);
+                      }}
+                    >
+                      Logout
+                    </div>
+                  </div>
+                </Link>
+              </li>
             </>
           ) : (
             <div>

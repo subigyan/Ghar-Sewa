@@ -43,4 +43,8 @@ html {
   .underline-animation-unique:hover::after {
     width: 100%;
   }
+
+  .scrolled {
+    background-color: green;
+  }
 }
