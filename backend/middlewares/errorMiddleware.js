@@ -13,7 +13,7 @@ const errorHandle = (error, req, res, next) => {
     message: error.message,
     stack: process.env.NODE_ENV === "production" ? undefined : error.stack,
   });
-  cosnole.log(error);
+  console.log(error);
 };
 
 module.exports = errorHandle;

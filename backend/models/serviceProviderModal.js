@@ -52,6 +52,7 @@ const serviceProviderSchema = new mongoose.Schema(
     },
     portfolioImages: [String],
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    quotations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quotation" }],
     address: {
       neighbourhood: {
         type: String,

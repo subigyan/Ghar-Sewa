@@ -61,7 +61,6 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     latitude,
   } = req.body;
 
-  console.log(address);
   address.fullLocation =
     address.neighbourhood + ", " + address.city + ", " + address.district;
 
@@ -196,18 +195,25 @@ const generateToken = (id) => {
 };
 
 const updateServiceProvider = asyncHandler(async (req, res) => {
-  console.log("req");
   const serviceProvider = await ServiceProvider.findById(req.params.id);
   // console.log(customer);
+
+  const { address } = req.body;
+  if (address) {
+    address.fullLocation =
+      address.neighbourhood + ", " + address.city + ", " + address.district;
+  }
+
   if (!serviceProvider) {
     res.status(404).json({
       success: false,
       message: "Customer not found",
     });
   }
+  console.log(req.body);
   const updatedServiceProvider = await ServiceProvider.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    { ...req.body, address },
     {
       new: true,
     }
@@ -219,15 +225,9 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
   });
 });
 
-const update = asyncHandler(async (req, res) => {
-  res.json({
-    msh: "okag",
-  });
-});
-
 const searchServiceProvider = asyncHandler(async (req, res) => {
-  const name = req.query?.name?.trim();
-  let service = req.query?.service?.trim();
+  const name = req.query?.name?.trim().toLowerCase();
+  let service = req.query?.service?.trim().toLowerCase();
   const location = req.query?.location?.trim();
 
   if (service?.slice(-1).toLowerCase() === "s") {
@@ -272,22 +272,38 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
   const locationSplitTwoRegex = new RegExp(locationSplitTwo, "ig");
   const locationSplitThreeRegex = new RegExp(locationSplitThree, "ig");
 
+  let locationQuery = {};
+
+  if (location) {
+    locationQuery = {
+      $or: [
+        { "address.neighbourhood": { $regex: locationSplitOneRegex } },
+        { "address.neighbourhood": { $regex: locationSplitTwoRegex } },
+        { "address.neighbourhood": { $regex: locationSplitThreeRegex } },
+        { "address.city": { $regex: locationSplitOneRegex } },
+        { "address.city": { $regex: locationSplitTwoRegex } },
+        { "address.city": { $regex: locationSplitThreeRegex } },
+        { "address.fullLocation": { $regex: locationRegex } },
+      ],
+    };
+  }
+
   const search = await ServiceProvider.find({
     $and: [
       {
         services: { $regex: serviceRegex },
       },
-      { name: { $regex: nameRegex } },
       {
-        $or: [
-          { "address.neighbourhood": { $regex: locationSplitOneRegex } },
-          { "address.neighbourhood": { $regex: locationSplitTwoRegex } },
-          { "address.neighbourhood": { $regex: locationSplitThreeRegex } },
-          { "address.city": { $regex: locationSplitOneRegex } },
-          { "address.city": { $regex: locationSplitTwoRegex } },
-          { "address.city": { $regex: locationSplitThreeRegex } },
-          { "address.fullLocation": { $regex: locationRegex } },
-        ],
+        // $or: [
+        //   { "address.neighbourhood": { $regex: locationSplitOneRegex } },
+        //   { "address.neighbourhood": { $regex: locationSplitTwoRegex } },
+        //   { "address.neighbourhood": { $regex: locationSplitThreeRegex } },
+        //   { "address.city": { $regex: locationSplitOneRegex } },
+        //   { "address.city": { $regex: locationSplitTwoRegex } },
+        //   { "address.city": { $regex: locationSplitThreeRegex } },
+        //   { "address.fullLocation": { $regex: locationRegex } },
+        // ],
+        locationQuery,
       },
     ],
   })

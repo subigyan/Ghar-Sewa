@@ -18,10 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 const customerRoute = require("./routes/customerRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const serviceProviderRoutes = require("./routes/serviceProviderRoutes");
+const quotationRoutes = require("./routes/quotationRoutes");
 
 app.use("/api/customers", customerRoute);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/serviceProviders", serviceProviderRoutes);
+app.use("/api/quotations", quotationRoutes);
 
 app.use(errorHandler);
 

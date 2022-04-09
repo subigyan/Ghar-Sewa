@@ -142,6 +142,8 @@ const BusinessUpdate = () => {
       .min(-180, "Latitude cannot be less than -180"),
   });
 
+  console.log(viewPort.latitude);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -180,7 +182,8 @@ const BusinessUpdate = () => {
           latitude,
           services,
         } = formik.values;
-        console.log(formik.values, "Type:", type);
+        // console.log(formik.values, "Type:", type);
+
         const address = {
           neighbourhood,
           city,
@@ -189,6 +192,21 @@ const BusinessUpdate = () => {
           longitude: viewPort.longitude,
         };
 
+        // console.log(address, "----------");
+
+        console.log(
+          name,
+          phoneNumber,
+          // email,
+          // password,
+          type,
+          businessEmail,
+          businessContactNumber,
+          description,
+          owner,
+          address,
+          services
+        );
         // console.log(businessType);
         const response = await updateServiceProvider(user?.id, {
           name,
@@ -205,7 +223,7 @@ const BusinessUpdate = () => {
         });
 
         if (response) {
-          console.log("res", response);
+          // console.log("res", response);
 
           // console.log(response.data);
           // console.log(response);
@@ -229,8 +247,8 @@ const BusinessUpdate = () => {
         setServiceProvider(res.data);
         setViewPort({
           ...viewPort,
-          latitude: res?.data?.address?.latitude,
-          longitude: res?.data?.address?.longitude,
+          latitude: res?.data?.address?.latitude || 27.70784546292888,
+          longitude: res?.data?.address?.longitude || 85.3255410260927,
         });
         formik.setValues({
           email: res?.data?.email,
@@ -253,7 +271,7 @@ const BusinessUpdate = () => {
       .catch((err) => console.log("User Not Found"));
   }, [user.id]);
 
-  console.log(formik);
+  // console.log(formik);
 
   return (
     <div className="w-screen flex font-montserrat">
@@ -579,7 +597,8 @@ const BusinessUpdate = () => {
                     mapStyle="mapbox://styles/mapbox/streets-v9"
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     onMove={(viewPort) => {
-                      setViewPort(viewPort);
+                      console.log(viewPort);
+                      setViewPort(viewPort.viewState);
                     }}
                   ></Map>
                   <MdLocationPin className="text-4xl text-red-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />

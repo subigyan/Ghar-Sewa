@@ -95,7 +95,7 @@ const Reviews = () => {
                     </Avatar> */}
                         <div className="">
                           <p className=" font-semibold capitalize text-2xl">
-                            {review?.serviceProvider?.name}
+                            To: {review?.serviceProvider?.name}
                           </p>
                           <div>
                             <Rating

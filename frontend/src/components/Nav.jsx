@@ -108,7 +108,7 @@ const Nav = ({ fixed }) => {
                 </div>
                 {userHover && (
                   <div
-                    className="absolute w-40 shadow-lg border-2 bg-slate-100 rounded-l-lg rounded-b-lg right-4 cursor-pointer p-4 flex flex-col  gap-2 font-medium"
+                    className="absolute w-52 shadow-lg border-2 bg-slate-100 rounded-l-lg rounded-b-lg right-4 cursor-pointer p-4 flex flex-col  gap-2 font-medium"
                     onMouseEnter={() => {
                       setUserHover(true);
                     }}
@@ -123,7 +123,7 @@ const Nav = ({ fixed }) => {
                     </Link>
                     <Link to="/quotations">
                       <div className="text-indigo-900 hover:underline">
-                        My Quotations
+                        Quotation Requests
                       </div>
                     </Link>
 
@@ -149,7 +149,7 @@ const Nav = ({ fixed }) => {
               <li className={`lg:ml-8 lg:my-0 my-2 font-medium  lg:hidden `}>
                 <Link to="/quotations">
                   <div className="text-indigo-900 hover:underline">
-                    My Quotations
+                    Quotation Requests
                   </div>
                 </Link>
               </li>

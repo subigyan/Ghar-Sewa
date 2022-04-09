@@ -16,6 +16,8 @@ import BusinessDashboard from "./pages/business/dashboard/BusinessDashboard.jsx"
 import BusinessReviews from "./pages/business/dashboard/BusinessReviews.jsx";
 import BusinessInfo from "./pages/business/dashboard/BusinessInfo.jsx";
 import BusinessUpdate from "./pages/business/dashboard/BusinessUpdate.jsx";
+import Quotations from "./pages/customer/Quotations.jsx";
+import QuotationRequests from "./pages/business/dashboard/QuotationRequests.jsx";
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
           <Route path="/serviceProvider/:id" element={<ServiceProvider />} />
           <Route path="/about" element={<About />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/quotations" element={<Quotations />} />
           <Route path="/business/dashboard" element={<BusinessDashboard />} />
           <Route
             path="/business/dashboard/reviews"
@@ -46,6 +49,10 @@ function App() {
           <Route
             path="/business/dashboard/manage-info"
             element={<BusinessUpdate />}
+          />
+          <Route
+            path="/business/dashboard/requests"
+            element={<QuotationRequests />}
           />
         </Routes>
       </Router>
