@@ -18,6 +18,12 @@ import BusinessInfo from "./pages/business/dashboard/BusinessInfo.jsx";
 import BusinessUpdate from "./pages/business/dashboard/BusinessUpdate.jsx";
 import Quotations from "./pages/customer/Quotations.jsx";
 import QuotationRequests from "./pages/business/dashboard/QuotationRequests.jsx";
+import BusinessQuotations from "./pages/business/dashboard/BusinessQuotations.jsx";
+import BusinessImages from "./pages/business/dashboard/BusinessImages.jsx";
+import AdminDashboard from "./pages/admin/dashboard/AdminDashboard.jsx";
+import AdminCustomers from "./pages/admin/dashboard/AdminCustomers.jsx";
+import AdminServiceProvider from "./pages/admin/dashboard/AdminServiceProvider.jsx";
+import AdminReview from "./pages/admin/dashboard/AdminReview.jsx";
 
 function App() {
   return (
@@ -51,9 +57,27 @@ function App() {
             element={<BusinessUpdate />}
           />
           <Route
+            path="/business/dashboard/manage-images"
+            element={<BusinessImages />}
+          />
+          <Route
             path="/business/dashboard/requests"
             element={<QuotationRequests />}
           />
+          <Route
+            path="/business/dashboard/quotations"
+            element={<BusinessQuotations />}
+          />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/admin/dashboard/customers"
+            element={<AdminCustomers />}
+          />
+          <Route
+            path="/admin/dashboard/serviceProviders"
+            element={<AdminServiceProvider />}
+          />
+          <Route path="/admin/dashboard/reviews" element={<AdminReview />} />
         </Routes>
       </Router>
       <ToastContainer />

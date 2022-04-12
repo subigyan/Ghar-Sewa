@@ -9,7 +9,7 @@ import { MdVisibilityOff } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState from "../../atoms/authAtom";
-import { login } from "../../api/customerAuth";
+import { login } from "../../api/customer";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

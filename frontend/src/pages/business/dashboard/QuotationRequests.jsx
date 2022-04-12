@@ -8,9 +8,10 @@ import Select from "@mui/material/Select";
 import { useRecoilValue } from "recoil";
 import { serviceProviderAuthState } from "../../../atoms/authAtom";
 import { getServiceProvider } from "../../../api/serviceProviderSearch";
-import { searchQuotation } from "../../../api/quotation";
+import { searchQuotation, addQuote } from "../../../api/quotation";
 import { Avatar, Modal, TextField } from "@mui/material";
 import { AiFillCloseSquare } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const QuotationRequests = () => {
   const user = useRecoilValue(serviceProviderAuthState);
@@ -20,6 +21,14 @@ const QuotationRequests = () => {
 
   const [serviceOptions, setServiceOptions] = React.useState("");
   const [userServices, setUserServices] = React.useState([]);
+
+  const [currentCustomer, setCurrentCustomer] = useState("");
+
+  const [quoteId, setQuoteId] = useState("");
+
+  const [quote, setQuote] = useState("");
+
+  console.log(quoteId);
 
   const handleChange = (event) => {
     setServiceOptions(event.target.value);
@@ -46,8 +55,22 @@ const QuotationRequests = () => {
   }, [user.id]);
 
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
+
+  const addServiceQuote = () => {
+    addQuote({ id: quoteId, serviceProvider: user?.id, quote })
+      .then((res) => {
+        setOpen(false);
+        setQuote("");
+        setQuoteId("");
+        console.log(res);
+        toast.success("Quotation Posted");
+      })
+      .catch((err) => console.log("Error Adding Quote"));
+  };
 
   return (
     <div className="w-screen flex font-montserrat">
@@ -107,10 +130,14 @@ const QuotationRequests = () => {
                 </div>
                 <div className="flex justify-end mt-4">
                   <button
-                    className=" bg-indigo-900 px-2 py-2 text-white rounded-md"
-                    onClick={handleOpen}
+                    className=" bg-indigo-900 px-4 py-4 text-white rounded-md"
+                    onClick={() => {
+                      handleOpen();
+                      setCurrentCustomer(quotation?.customer?.name);
+                      setQuoteId(quotation?._id);
+                    }}
                   >
-                    Provide a Quote
+                    Provide a Quotation
                   </button>
                 </div>
               </div>
@@ -123,18 +150,19 @@ const QuotationRequests = () => {
           className="absolute top-1/2 left-1/2 min-w-[350px] w-[80%] bg-slate-100 -translate-x-1/2 -translate-y-1/2  sm:min-h-[70%] rounded sm:py-8 sm:px-10 p-4 flex flex-col"
           onSubmit={(e) => {
             e.preventDefault();
-            // updateQuotationRequest();
-            // window.location.reload();
+            addServiceQuote();
           }}
         >
           <AiFillCloseSquare
             className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer"
             onClick={handleClose}
           />
-          <h1 className=" text-3xl font-semibold mr-6">Quotation for</h1>
+          <h1 className=" text-3xl font-semibold mr-6">
+            Quotation for {currentCustomer}
+          </h1>
           <div className="mt-8 w-full">
             <TextField
-              label="Request Body"
+              label="Quotation"
               id="outlined-size-normal"
               color="grey"
               inputProps={{ style: { fontSize: 20 } }}
@@ -143,10 +171,10 @@ const QuotationRequests = () => {
               multiline
               fullWidth
               required
-              // value={updateQBody}
-              // onChange={(event) => {
-              //   setUpdateQBody(event.target.value);
-              // }}
+              value={quote}
+              onChange={(event) => {
+                setQuote(event.target.value);
+              }}
             />
           </div>
           <button className="mt-6 py-4 bg-slate-800 text-gray-100 rounded text-xl">

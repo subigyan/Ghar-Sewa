@@ -105,23 +105,6 @@ const deleteQuotation = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const getCustomerQuotations = expressAsyncHandler(async (req, res) => {
-  const customer = await Customer.findById(req.params.id);
-  if (!customer) {
-    return res.status(404).json({
-      success: false,
-      message: "Customer not found",
-    });
-  }
-  const quotations = await Quotation.find({ customer: customer.id });
-  res.status(200).json({
-    success: true,
-    message: "Customer Quotations",
-    count: quotations.length,
-    data: quotations,
-  });
-});
-
 //@desc get all quotations
 //@route GET /api/quotations/all
 //@access Public
@@ -135,6 +118,29 @@ const getAllQuotations = expressAsyncHandler(async (req, res) => {
   });
 });
 
+//@desc get quotaion by customer
+//@route GET /api/quotations/service/:id
+//@access Public
+
+const getCustomerQuotations = expressAsyncHandler(async (req, res) => {
+  const customer = await Customer.findById(req.params.id);
+  if (!customer) {
+    return res.status(404).json({
+      success: false,
+      message: "Customer not found",
+    });
+  }
+  const quotations = await Quotation.find({ customer: customer.id }).populate(
+    "quotations.serviceProvider"
+  );
+  res.status(200).json({
+    success: true,
+    message: "Customer Quotations",
+    count: quotations.length,
+    data: quotations,
+  });
+});
+
 //@desc get quotaion by quotation service
 //@route GET /api/quotations/service/:id
 //@access Public
@@ -143,11 +149,113 @@ const getQuotationByService = expressAsyncHandler(async (req, res) => {
   const quotations = await Quotation.find({ service: service }).populate(
     "customer"
   );
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: "Quotations by service",
     count: quotations.length,
     data: quotations,
+  });
+});
+
+//@desc add quote
+//@route POST /api/quotations/addquote
+//@access Public
+
+const addQuote = expressAsyncHandler(async (req, res) => {
+  const { serviceProvider, quote } = req.body;
+  const fountQuotation = await Quotation.findById(req.params.id);
+  if (!fountQuotation) {
+    return res.status(404).json({
+      success: false,
+      message: "Quotation not found",
+    });
+  }
+  fountQuotation.quotations.push({ serviceProvider, quote });
+  await fountQuotation.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Quotation added",
+    data: fountQuotation,
+  });
+});
+
+//@desc get quotation by servcie provider
+//@route GET /api/quotations/serviceprovider/:id
+//@access Public
+
+const getQuotationByServiceProvider = expressAsyncHandler(async (req, res) => {
+  const serviceProvider = await ServiceProvider.findById(req.params.id);
+  if (!serviceProvider) {
+    return res.status(404).json({
+      success: false,
+      message: "Service Provider not found",
+    });
+  }
+  const quotations = await Quotation.find({
+    "quotations.serviceProvider": serviceProvider.id,
+  }).populate("customer");
+  res.status(200).json({
+    success: true,
+    message: "Quotations by service provider",
+    count: quotations.length,
+    data: quotations,
+  });
+});
+
+//@desc edit service provider quote
+//@route PUT /api/quotations/editquote/:id
+//@access Public
+
+const editServiceProviderQuote = expressAsyncHandler(async (req, res) => {
+  const { quote } = req.body;
+  const fountQuotation = await Quotation.findOne({
+    "quotations._id": req.params.id,
+  });
+  if (!fountQuotation) {
+    return res.status(404).json({
+      success: false,
+      message: "Quotation not found",
+    });
+  }
+  const editedQuotes = fountQuotation?.quotations?.map((userQuotes) => {
+    if (userQuotes._id.toString() === req.params.id) {
+      userQuotes.quote = quote;
+    }
+    return userQuotes;
+  });
+  fountQuotation.quotations = editedQuotes;
+  await fountQuotation.save();
+  return res.status(200).json({
+    success: true,
+    message: "Quotation edited",
+    data: fountQuotation,
+  });
+});
+
+//@desc delete service provider quote
+//@route DELETE /api/quotations/deletequote/:id
+//@access Public
+
+const deleteServiceProviderQuote = expressAsyncHandler(async (req, res) => {
+  const fountQuotation = await Quotation.findOne({
+    "quotations._id": req.params.id,
+  });
+  if (!fountQuotation) {
+    return res.status(404).json({
+      success: false,
+      message: "Quotation not found",
+    });
+  }
+  const editedQuotes = fountQuotation?.quotations?.filter(
+    (userQuotes) => userQuotes._id.toString() !== req.params.id
+  );
+  fountQuotation.quotations = editedQuotes;
+  await fountQuotation.save();
+  return res.status(200).json({
+    success: true,
+    message: "Quotation deleted",
+    data: fountQuotation,
   });
 });
 
@@ -159,4 +267,8 @@ module.exports = {
   getCustomerQuotations,
   getAllQuotations,
   getQuotationByService,
+  addQuote,
+  getQuotationByServiceProvider,
+  editServiceProviderQuote,
+  deleteServiceProviderQuote,
 };

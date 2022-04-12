@@ -6,9 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import InputAdornment from "@mui/material/InputAdornment";
-import { MdVisibility } from "react-icons/md";
-import { MdVisibilityOff } from "react-icons/md";
+
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 // import Map, { Marker } from "react-map-gl";
@@ -20,7 +18,7 @@ import Sidebar from "../../../components/business/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { serviceProviderAuthState } from "../../../atoms/authAtom";
 import { getServiceProvider } from "../../../api/serviceProviderSearch";
-import { updateServiceProvider } from "../../../api/serviceProviderAuth";
+import { updateServiceProvider } from "../../../api/serviceProvider";
 
 const BusinessUpdate = () => {
   const theme = createTheme({

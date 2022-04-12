@@ -24,11 +24,14 @@ const quotationSchema = new mongoose.Schema(
     },
     quotations: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ServiceProvider",
-        reply: {
+        serviceProvider: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "ServiceProvider",
+          required: [true, "Please enter a service provider"],
+        },
+        quote: {
           type: String,
-          required: [true, "Please enter a reply"],
+          required: [true, "Please enter a quote"],
         },
       },
     ],

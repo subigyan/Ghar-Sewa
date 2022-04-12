@@ -3,12 +3,26 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const ServiceProvider = require("../models/serviceProviderModal");
+const Review = require("../models/reviewModal");
 
 //@desc Get all service providers
 //@route GET /api/serviceProviders
 //@access Public
 const getServiceProviders = asyncHandler(async (req, res) => {
-  const serviceProviders = await ServiceProvider.find();
+  const name = req.query.name;
+  const sort = req.query.sort;
+
+  const sortQuery = {};
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  }
+
+  const nameRegex = new RegExp(name, "gi");
+  const serviceProviders = await ServiceProvider.find({
+    name: { $regex: nameRegex },
+  }).sort(sortQuery);
   res.status(200).json({
     success: true,
     message: "All service providers",
@@ -351,6 +365,33 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
   });
 });
 
+//@desc delete service provider
+//@route DELETE /api/serviceProvider/:id
+//@access Public
+
+const deleteServiceProvider = asyncHandler(async (req, res) => {
+  const serviceProvider = await ServiceProvider.findById(req.params.id);
+
+  if (!serviceProvider) {
+    res.status(404).json({
+      success: false,
+      message: "ServiceProvider not found",
+    });
+  }
+  const deletedServiceProvider = await ServiceProvider.findByIdAndDelete(
+    req.params.id
+  );
+  await Review.deleteMany({
+    serviceProvider: req.params.id,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "ServiceProvider deleted successfully",
+    data: deletedServiceProvider,
+  });
+});
+
 const test = asyncHandler(async (req, res) => {
   res.json({
     success: true,
@@ -367,5 +408,6 @@ module.exports = {
   getMe,
   updateServiceProvider,
   searchServiceProvider,
+  deleteServiceProvider,
   test,
 };

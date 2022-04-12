@@ -19,3 +19,17 @@ export const login = async (user) => {
   }
   return response.data;
 };
+
+export const getCustomers = async (name) => {
+  const response = await axios.get(API_URL, {
+    params: {
+      name,
+    },
+  });
+  return response.data;
+};
+
+export const deleteCustomer = async (id) => {
+  const response = await axios.delete(API_URL + "/" + id);
+  return response.data;
+};

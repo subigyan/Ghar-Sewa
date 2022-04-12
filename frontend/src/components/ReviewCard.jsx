@@ -21,6 +21,7 @@ const ReviewCard = ({ review }) => {
                   value={review.rating}
                   readOnly
                   size="small"
+                  precision={0.5}
                 />
               </div>
             </div>

@@ -34,3 +34,20 @@ export const updateServiceProvider = async (id, user) => {
   const response = await axios.put(API_URL + "/" + id, user);
   return response.data;
 };
+
+//get serviceProviders
+export const getServiceProviders = async (name, sort) => {
+  const response = await axios.get(API_URL, {
+    params: {
+      name,
+      sort,
+    },
+  });
+  return response.data;
+};
+
+//delete ServiceProvider
+export const deleteServiceProvider = async (id) => {
+  const response = await axios.delete(API_URL + "/" + id);
+  return response.data;
+};

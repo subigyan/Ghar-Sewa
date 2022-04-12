@@ -18,7 +18,7 @@ import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
 import { serviceProviderAuthState } from "../../atoms/authAtom";
-import { register } from "../../api/serviceProviderAuth";
+import { register } from "../../api/serviceProvider";
 import { useRecoilState } from "recoil";
 // import Map, { Marker } from "react-map-gl";
 import Map from "react-map-gl";
@@ -60,7 +60,7 @@ const Register = () => {
 
   // console.log(mapLatitude, mapLongitude);
 
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(1);
 
   const [businessType, setBusinessType] = useState("company");
 
@@ -93,6 +93,7 @@ const Register = () => {
     //   .oneOf([Yup.ref("password"), null], "Passwords must match")
     //   .required("Confirm Password is required"),
     businessType: Yup.string().required("Business type is required"),
+
     name: Yup.string()
       .max("50", "Name is too long")
       .required("Name is required"),
@@ -105,6 +106,10 @@ const Register = () => {
         "Phone number must be 10 characters long and start with 98"
       )
       .required("Phone number is required"),
+    experience: Yup.string()
+      .matches(/^[0-9]*$/, "Invalid experience")
+      .max("2", "Experience must be within 0 to 99 years")
+      .required("Experience is required"),
     owner: Yup.string().max("30", "Name is too long"),
     description: Yup.string()
       .min("50", "Description is too short")
@@ -125,6 +130,7 @@ const Register = () => {
     latitude: Yup.number()
       .max(180, "Latitude cannot exceed 180")
       .min(-180, "Latitude cannot be less than -180"),
+    services: Yup.array().required("Services are required"),
   });
 
   const formik = useFormik({
@@ -134,6 +140,7 @@ const Register = () => {
       password: "",
       businessType: "company",
       name: "",
+      experience: "",
       businessEmail: "",
       businessContactNumber: "",
       owner: "",
@@ -149,6 +156,7 @@ const Register = () => {
     // onSubmit: (val) => console.log(val),
   });
 
+  console.log(formik);
   const handleNext = async () => {
     if (activeStep === 0) {
       if (
@@ -168,7 +176,8 @@ const Register = () => {
         formik.errors?.name ||
         formik.errors?.businessEmail ||
         formik.errors?.businessContactNumber ||
-        formik.errors?.description
+        formik.errors?.description ||
+        formik.errors?.experience
       ) {
         toast.error("Please fill all the required business information fields");
         console.log("Error");
@@ -208,6 +217,7 @@ const Register = () => {
             longitude,
             latitude,
             services,
+            experience,
           } = formik.values;
           console.log(formik.values, "Type:", type);
           const address = {
@@ -231,6 +241,7 @@ const Register = () => {
             owner,
             address,
             services,
+            experience,
           });
 
           if (response) {
@@ -243,7 +254,7 @@ const Register = () => {
               toast.success(response.message);
             } else {
               toast.error(
-                "Error while registering. Email id is already registered."
+                "Error while registering. Business Email id is already registered."
               );
             }
             // toast.success("Business registered successfully");
@@ -432,6 +443,9 @@ const Register = () => {
                   <h1 className="text-3xl">Business Information</h1>
                 </div>
                 <div className="mt-6  flex flex-col">
+                  <div>
+                    <div></div>
+                  </div>
                   <FormControl fullWidth style={{ marginBottom: "30px" }}>
                     <InputLabel id="demo-simple-select-label">
                       Business Type
@@ -481,6 +495,24 @@ const Register = () => {
                       onBlur={formik.handleBlur}
                     />
                   )}
+                  <TextField
+                    required
+                    id="experience"
+                    label={`Experience`}
+                    variant="outlined"
+                    type="number"
+                    style={{ marginBottom: "30px" }}
+                    value={formik.values.experience}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.experience &&
+                      Boolean(formik.errors.experience)
+                    }
+                    helperText={
+                      formik.touched.experience && formik.errors.experience
+                    }
+                    onBlur={formik.handleBlur}
+                  />
                   <TextField
                     required
                     id="businessEmail"
@@ -535,6 +567,9 @@ const Register = () => {
                               name="services"
                               onChange={formik.handleChange}
                               style={{ color: "#303f9f" }}
+                              checked={formik.values.services.includes(
+                                service.occupation
+                              )}
                             />
                           }
                           label={service.service}

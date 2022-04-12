@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
-import { register } from "../../api/customerAuth";
+import { register } from "../../api/customer";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import authState from "../../atoms/authAtom";

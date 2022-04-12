@@ -39,9 +39,31 @@ const getReview = expressAsyncHandler(async (req, res) => {
 
 const getProviderReview = expressAsyncHandler(async (req, res) => {
   try {
-    const review = await Review.find({ serviceProvider: req.params.id })
+    const text = req.query.text;
+    const textRegex = new RegExp(text, "i");
+    const sort = req.query.sort;
+
+    const sortQuery = {};
+    if (sort === "new") {
+      sortQuery.createdAt = -1;
+    } else if (sort === "old") {
+      sortQuery.createdAt = 1;
+    } else if (sort === "rating") {
+      sortQuery.rating = 1;
+    } else if (sort === "-rating") {
+      sortQuery.rating = -1;
+    }
+
+    const review = await Review.find({
+      serviceProvider: req.params.id,
+      $or: [
+        { review: { $regex: textRegex } },
+        { reviewHeadline: { $regex: textRegex } },
+      ],
+    })
       .populate("customer")
-      .populate("serviceProvider");
+      .populate("serviceProvider")
+      .sort(sortQuery);
     if (!review) {
       return res.status(404).json({
         success: false,
@@ -81,6 +103,15 @@ const addReview = expressAsyncHandler(async (req, res) => {
     reviewHeadline,
   });
   const foundServiceProvider = await ServiceProvider.findById(serviceProvider);
+  const foundCustomer = await Customer.findById(customer);
+
+  if (!foundServiceProvider || !foundCustomer) {
+    return res.status(404).json({
+      success: false,
+      message: "Service Provider or Customer not found",
+    });
+  }
+
   foundServiceProvider.reviews.push(newReview.id);
   await foundServiceProvider.save();
   // console.log(req.user.id, foundCustomer.reviews);
@@ -183,9 +214,30 @@ const deleteReview = expressAsyncHandler(async (req, res) => {
 // });
 
 const getAllReviews = expressAsyncHandler(async (req, res) => {
-  const reviews = await Review.find()
+  const text = req.query.text;
+  const textRegex = new RegExp(text, "i");
+  const sort = req.query.sort;
+
+  const sortQuery = {};
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  } else if (sort === "rating") {
+    sortQuery.rating = 1;
+  } else if (sort === "-rating") {
+    sortQuery.rating = -1;
+  }
+
+  const reviews = await Review.find({
+    $or: [
+      { review: { $regex: textRegex } },
+      { reviewHeadline: { $regex: textRegex } },
+    ],
+  })
     .populate("customer")
-    .populate("serviceProvider");
+    .populate("serviceProvider")
+    .sort(sortQuery);
   res.status(200).json({
     success: true,
     message: "All reviews",
@@ -205,6 +257,67 @@ const getAllReviews = expressAsyncHandler(async (req, res) => {
 //     data: review,
 //   });
 
+const getReviewStats = expressAsyncHandler(async (req, res) => {
+  const reviews = await Review.find({ serviceProvider: req.params.id });
+
+  const reviewStats = {
+    averageRating:
+      Math.round(
+        (reviews.reduce((acc, review) => acc + review.rating, 0) /
+          reviews.length) *
+          2
+      ) / 2,
+    totalReviews: reviews.length,
+    positiveReviews: reviews.filter((review) => review.rating > 3).length,
+    negativeReviews: reviews.filter((review) => review.rating < 3).length,
+    positivePercentage:
+      (reviews.filter((review) => review.rating >= 2.5).length /
+        reviews.length) *
+      100,
+    negativePercentage:
+      (reviews.filter((review) => review.rating < 2.5).length /
+        reviews.length) *
+      100,
+    ratingStats: [
+      {
+        name: "Zero Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 0)
+          .length,
+      },
+      {
+        name: "One Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 1)
+          .length,
+      },
+      {
+        name: "Two Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 2)
+          .length,
+      },
+      {
+        name: "Three Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 3)
+          .length,
+      },
+      {
+        name: "Four Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 4)
+          .length,
+      },
+      {
+        name: "Five Star",
+        count: reviews.filter((review) => Math.round(review.rating) === 5)
+          .length,
+      },
+    ],
+  };
+  res.status(200).json({
+    success: true,
+    message: "Review stats",
+    data: reviewStats,
+  });
+});
+
 module.exports = {
   getReview,
   addReview,
@@ -212,4 +325,5 @@ module.exports = {
   deleteReview,
   getAllReviews,
   getProviderReview,
+  getReviewStats,
 };

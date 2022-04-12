@@ -5,6 +5,10 @@ const POST_QUOTATION_URL = "/quotations";
 const UPDATE_QUOTATION_URL = "/quotations/";
 const DELETE_QUOTATION_URL = "/quotations/";
 const SEARCH_QUOTATION_URL = "/quotations/search";
+const ADD_QUOTE_URL = "/quotations/addQuote/";
+const SERVICEPPROVIDER_QUOTATION_URL = "/quotations/serviceprovider/";
+const EDIT_SERVICEPROVIDER_QUOTE_URL = "/quotations/editquote/";
+const DELETE_SERVICEPROVIDER_QUOTE_URL = "/quotations/deletequote/";
 
 export const getCustomerQuotations = async (id) => {
   const response = await axios.get(`${CUSTOMER_QUOTATION_URL}${id}`);
@@ -46,5 +50,34 @@ export const searchQuotation = async (service) => {
       service,
     },
   });
+  return response.data;
+};
+
+export const addQuote = async (quoteInfo) => {
+  const { id, serviceProvider, quote } = quoteInfo;
+  console.log(quoteInfo);
+  const response = await axios.post(`${ADD_QUOTE_URL}${id}`, {
+    serviceProvider,
+    quote,
+  });
+  return response.data;
+};
+
+export const getServiceProviderQuotes = async (id) => {
+  const response = await axios.get(`${SERVICEPPROVIDER_QUOTATION_URL}${id}`);
+  return response.data;
+};
+
+export const editServiceProviderQuote = async (id, quote) => {
+  const response = await axios.put(`${EDIT_SERVICEPROVIDER_QUOTE_URL}${id}`, {
+    quote,
+  });
+  return response.data;
+};
+
+export const deleteServiceProviderQuote = async (id) => {
+  const response = await axios.delete(
+    `${DELETE_SERVICEPROVIDER_QUOTE_URL}${id}`
+  );
   return response.data;
 };

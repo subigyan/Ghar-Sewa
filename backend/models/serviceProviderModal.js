@@ -50,6 +50,10 @@ const serviceProviderSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
+    experience: {
+      type: Number,
+      default: 0,
+    },
     portfolioImages: [String],
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
     quotations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quotation" }],

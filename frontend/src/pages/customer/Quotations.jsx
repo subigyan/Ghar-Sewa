@@ -161,7 +161,9 @@ const Quotations = () => {
       <Nav fixed={false} />
       <div className="lg:px-32 px-7 flex flex-col  max-w-screen  mt-8 text-slate-700 font-roboto">
         <div className="flex justify-between items-center">
-          <h1 className=" font-bold sm:text-5xl text-4xl">My Quotation</h1>
+          <h1 className=" font-bold sm:text-5xl text-4xl">
+            My Quotation Requests
+          </h1>
           <MdOutlineAddCircleOutline
             className="text-5xl text-green-800 cursor-pointer"
             onClick={handleOpen}
@@ -235,7 +237,28 @@ const Quotations = () => {
                     <p className="text-lg font-medium text-slate-700">
                       Received Quotations:
                     </p>
-                    <div className="ml-4 mt-4 flex flex-col gap-4">
+                    {quotation?.quotations.map((quotation, index) => (
+                      <div className="ml-4 mt-4 flex flex-col gap-4">
+                        <div className="border-l-4 px-2">
+                          <div>
+                            {console.log(quotation)}
+                            <div className="flex font-medium items-center text-lg">
+                              <Avatar
+                                size="small"
+                                sx={{ width: 25, height: 25 }}
+                              >
+                                {quotation?.serviceProvider?.name?.[0].toUpperCase()}
+                              </Avatar>
+                              <p className="ml-2 capitalize">
+                                {quotation?.serviceProvider?.name}
+                              </p>
+                            </div>
+                            <p className="px-1 mt-2">{quotation?.quote}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {/* <div className="ml-4 mt-4 flex flex-col gap-4">
                       <div className="border-l-4 px-2">
                         <div>
                           <div className="flex font-medium items-center text-lg">
@@ -256,7 +279,7 @@ const Quotations = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )

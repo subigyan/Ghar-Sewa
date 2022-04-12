@@ -3,13 +3,18 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Customer = require("../models/customerModal");
+const Review = require("../models/reviewModal");
 
 //@desc Get all customers
 //@route GET /api/customers
 //@access Private
 const getCustomers = asyncHandler(async (req, res) => {
-  const customers = await Customer.find();
-  res.status(200).json({
+  const name = req.query.name;
+  const nameRegex = new RegExp(name, "gi");
+  const customers = await Customer.find({
+    name: { $regex: nameRegex },
+  });
+  return res.status(200).json({
     success: true,
     message: "All customers",
     count: customers.length,
@@ -31,7 +36,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
   //check if customer already exists
   const customerExist = await Customer.findOne({ email });
   if (customerExist) {
-    res.status(400);
+    return res.status(400);
     throw new Error("Customer Already Exists");
   }
 
@@ -47,7 +52,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
   if (customer) {
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Customer Created successfully",
       data: {
@@ -101,15 +106,15 @@ const deleteCustomer = asyncHandler(async (req, res) => {
   const customer = await Customer.findById(req.params.id);
 
   if (!customer) {
-    res.status(404).json({
+    return res.status(404).json({
       success: false,
       message: "Customer not found",
     });
   }
 
   const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
-
-  res.status(200).json({
+  await Review.deleteMany({ customer: req.params.id });
+  return res.status(200).json({
     success: true,
     message: `Customer deleted Successfully`,
     data: deletedCustomer,

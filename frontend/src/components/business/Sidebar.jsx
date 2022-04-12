@@ -4,6 +4,7 @@ import {
   BsPersonSquare,
   BsChatSquareQuote,
   BsChatRightText,
+  BsImages,
 } from "react-icons/bs";
 import { MdOutlineRateReview } from "react-icons/md";
 import { FiChevronDown } from "react-icons/fi";
@@ -11,14 +12,18 @@ import { VscPreview } from "react-icons/vsc";
 import { BiEdit } from "react-icons/bi";
 import { RiQuestionnaireLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { FiLogOut } from "react-icons/fi";
 
 const Sidebar = ({ active }) => {
   const [showInfo, setShowInfo] = useState(
-    active === "viewInfo" || active === "manageInfo"
+    active === "viewInfo" || active === "manageInfo" || active === "image"
   );
-  const [showQuotation, setShowQuotation] = useState(false);
+  const [showQuotation, setShowQuotation] = useState(
+    active === "requests" || active === "myQuotations"
+  );
+
   return (
-    <div className="min-w-[325px] h-screen bg-admin_dark text-admin_light py-6 px-8 overflow-y-scroll scrollbar-hide">
+    <div className="min-w-[325px] h-screen bg-admin_dark text-admin_light py-6 px-8 overflow-y-scroll scrollbar-hide flex flex-col justify-between  ">
       <div>
         <h1 className="text-5xl text-center font-semibold font-smooch ">
           Ghar Sewa
@@ -26,10 +31,16 @@ const Sidebar = ({ active }) => {
         <div className="border-t-2 border-gray-700  rounded-lg my-6"></div>
         <p className="text-gray-600 font-semibold text-sm">MENU</p>
         <div className="flex flex-col gap-3 mt-4">
-          <div className="flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500">
-            <RiDashboardLine className="text-xl" />
-            <h2 className="text-xl ml-3">Dashboard</h2>
-          </div>
+          <Link to="/business/dashboard">
+            <div
+              className={`flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500 ${
+                active === "dashboard" && "bg-[#8B8D93]/[.5]"
+              }`}
+            >
+              <RiDashboardLine className="text-xl" />
+              <h2 className="text-xl ml-3">Dashboard</h2>
+            </div>
+          </Link>
           <div className="border-t border-gray-800  rounded-lg "></div>
           <div>
             <div
@@ -70,6 +81,16 @@ const Sidebar = ({ active }) => {
                     <h2 className="text-xl ml-3">Manage Info</h2>
                   </div>
                 </Link>
+                <Link to="/business/dashboard/manage-images">
+                  <div
+                    className={`flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500 ${
+                      active === "image" && "bg-[#8B8D93]/[.5]"
+                    }`}
+                  >
+                    <BsImages className="text-xl" />
+                    <h2 className="text-xl ml-3">Manage Images</h2>
+                  </div>
+                </Link>
               </div>
             )}
           </div>
@@ -106,18 +127,34 @@ const Sidebar = ({ active }) => {
           {showQuotation && (
             <div>
               <div className="ml-8 flex flex-col gap-1 pt-1">
-                <div className="flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500">
-                  <RiQuestionnaireLine className="text-xl" />
-                  <h2 className="text-xl ml-3">Requests</h2>
-                </div>
-                <div className="flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500">
-                  <BsChatRightText className="text-xl" />
-                  <h2 className="text-xl ml-3">My Quotations</h2>
-                </div>
+                <Link to="/business/dashboard/requests">
+                  <div
+                    className={`flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500 ${
+                      active === "requests" && "bg-[#8B8D93]/[.5]"
+                    }`}
+                  >
+                    <RiQuestionnaireLine className="text-xl" />
+                    <h2 className="text-xl ml-3">Requests</h2>
+                  </div>
+                </Link>
+                <Link to="/business/dashboard/quotations">
+                  <div
+                    className={`flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500 ${
+                      active === "myQuotations" && "bg-[#8B8D93]/[.5]"
+                    }`}
+                  >
+                    <BsChatRightText className="text-xl" />
+                    <h2 className="text-xl ml-3">My Quotations</h2>
+                  </div>
+                </Link>
               </div>
             </div>
           )}
         </div>
+      </div>
+      <div className="flex p-3 mx-3 items-center rounded-lg bg-[#353637] hover:text-red-500 cursor-pointer mt-4">
+        <FiLogOut className="text-2xl cursor-pointer" />
+        <p className="text-lg font-semibold ml-2 ">Logout</p>
       </div>
     </div>
   );

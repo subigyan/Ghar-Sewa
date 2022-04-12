@@ -23,6 +23,11 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { BiLogIn } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import ReviewCard from "../../components/ReviewCard";
+import { FiImage } from "react-icons/fi";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const ServiceProvider = () => {
   const [open, setOpen] = useState(false);
@@ -32,7 +37,7 @@ const ServiceProvider = () => {
   const user = useRecoilValue(authState);
   const navigate = useNavigate();
 
-  console.log(user);
+  // console.log(user);
 
   // console.log(user);
 
@@ -79,7 +84,7 @@ const ServiceProvider = () => {
       .catch((err) => console.log("No Reviews"));
   }, [id]);
 
-  console.log(serviceProvider);
+  // console.log(serviceProvider);
 
   let overallRating = 0;
   serviceProvider?.reviews.forEach((review) => {
@@ -106,7 +111,6 @@ const ServiceProvider = () => {
       customer: user.id,
     });
     if (response.success) {
-      console.log(response);
       setReviewStars(0);
       setReviewHeadline("");
       setReviewBody("");
@@ -127,6 +131,17 @@ const ServiceProvider = () => {
     }
   };
 
+  const [sort, setSort] = useState("");
+
+  const handleChange = (event) => {
+    setSort(event.target.value);
+    getServiceProviderReviews(id, "", event.target.value)
+      .then((res) => {
+        setReviews(res.data);
+      })
+      .catch((err) => console.log("No Service Providers"));
+  };
+
   return (
     <>
       <Nav fixed={false} />
@@ -136,11 +151,21 @@ const ServiceProvider = () => {
           <div className="flex md:flex-row flex-col justify-between">
             <div className="md:w-3/12 w-full min-w-[250px]  py-5 px-2 gap-4 flex flex-col text-lg">
               <div className="flex flex-center">
-                <img
-                  src="https://picsum.photos/200"
-                  alt="logo"
-                  className="md:w-full md:max-h-max max-h-80 sm:w-8/12 w-full  border-8 border-slate-300"
-                />
+                {serviceProvider?.profileImage ? (
+                  <img
+                    src={serviceProvider?.profileImage}
+                    alt="logo"
+                    className="md:w-full md:max-h-max max-h-80 sm:w-8/12 w-full  border-8 border-slate-300"
+                  />
+                ) : (
+                  <div
+                    className="md:w-full md:max-h-max max-h-80 sm:w-8/12 w-full  border-8 border-slate-300 flex flex-center
+                   h-80"
+                  >
+                    <p className="text-3xl">No Image</p>
+                    <FiImage className="text-5xl" />
+                  </div>
+                )}
               </div>
               <h2 className="text-lg">
                 <span className="font-bold">Registered On:</span>{" "}
@@ -210,7 +235,7 @@ const ServiceProvider = () => {
                 <h1 className="text-5xl font-semibold capitalize">
                   {serviceProvider.name}
                 </h1>
-                {console.log(serviceProvider)}
+
                 <p className="text-xl font-semibold text-gray-500">
                   {serviceProvider.type === "individual"
                     ? "Individual Business"
@@ -327,6 +352,25 @@ const ServiceProvider = () => {
                 Reviews
               </h4>
               <div>
+                <div className="flex justify-end">
+                  <FormControl className="w-44">
+                    <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={sort}
+                      label="Sort"
+                      onChange={handleChange}
+                      defaultValue={""}
+                    >
+                      <MenuItem value={""}>None</MenuItem>
+                      <MenuItem value={"new"}>Newest</MenuItem>
+                      <MenuItem value={"old"}>Oldest</MenuItem>
+                      <MenuItem value={"rating"}>Rating(Low to High)</MenuItem>
+                      <MenuItem value={"-rating"}>Rating(High to Low)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
                 <div className="w-full flex flex-col gap-8 py-8">
                   {reviews.length === 0 && (
                     <div className="text-3xl font-smooch font-semibold text-center text-gray-400">

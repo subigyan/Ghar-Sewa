@@ -77,7 +77,11 @@ const Home = () => {
       </div>
       <div className="flex flex-col flex-center py-4">
         <h2 className="text-xl font-medium text-center px-4">
-          Use Ghar Sewa Business to take your business to a new level.
+          Use{" "}
+          <span className="text-indigo-800 font-semibold">
+            Ghar Sewa for Business{" "}
+          </span>{" "}
+          to take your business to a new level.
         </h2>
 
         <a href="#features">

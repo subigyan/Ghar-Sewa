@@ -8,6 +8,7 @@ const {
   deleteReview,
   getAllReviews,
   getProviderReview,
+  getReviewStats,
 } = require("../controllers/reviewControllers");
 
 const { protect } = require("../middlewares/authMiddleware");
@@ -21,5 +22,7 @@ router.route("/:id").put(updateReview).delete(deleteReview);
 router.get("/all", getAllReviews);
 
 router.get("/serviceProvider/:id", getProviderReview);
+
+router.get("/stats/:id", getReviewStats);
 
 module.exports = router;

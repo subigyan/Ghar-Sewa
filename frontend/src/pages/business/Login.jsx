@@ -10,7 +10,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState, { serviceProviderAuthState } from "../../atoms/authAtom";
-import { login } from "../../api/serviceProviderAuth";
+import { login } from "../../api/serviceProvider";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {

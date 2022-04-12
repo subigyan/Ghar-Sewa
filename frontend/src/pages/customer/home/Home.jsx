@@ -23,61 +23,23 @@ import { Link } from "react-router-dom";
 const Home = () => {
   useEffect(() => {
     AOS.init({ duration: 2500 });
+    var Tawk_API = Tawk_API || {},
+      Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = "https://embed.tawk.to/62526c337b967b117989b739/1g08vdag5";
+      s1.charset = "UTF-8";
+      s1.setAttribute("crossorigin", "*");
+      s0.parentNode.insertBefore(s1, s0);
+    })();
   }, []);
-
-  // const serviceProviderCategories = [
-  //   {
-  //     name: "Plumber",
-  //     color: "#00bcd4",
-  //   },
-  //   {
-  //     name: "Electrician",
-  //     color: "#F4C837",
-  //   },
-  //   {
-  //     name: "Builder",
-  //     color: "#4caf50",
-  //   },
-  //   {
-  //     name: "Painter",
-  //     color: "#C56DFB",
-  //   },
-  //   {
-  //     name: "Carpenter",
-  //     color: "#FF6C00",
-  //   },
-  //   {
-  //     name: "Cleaner",
-  //     color: "#547DF9",
-  //   },
-  //   {
-  //     name: "Mechanic",
-  //     color: "#F05C51",
-  //   },
-  //   {
-  //     name: "Handyman",
-  //     color: "#09C097",
-  //   },
-  // ];
 
   const [location, setLocation] = useState("");
   const [serviceCategory, setServiceCategory] = useState("");
 
   const [submited, setSubmited] = useState(false);
-
-  const handleImageUpload = (e) => {
-    const files = e.target.files;
-    console.log(files);
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "subigyan_preset");
-
-    axios
-      .post("https://api.cloudinary.com/v1_1/subigyan/image/upload", data)
-      .then((response) => {
-        console.log(response.data.url);
-      });
-  };
 
   return (
     <div className=" overflow-x-hidden">
@@ -205,7 +167,7 @@ const Home = () => {
         <h1 className="text-3xl font-semibold text-center">
           Browse Service Providers
         </h1>
-        <input type="file" onChange={handleImageUpload} />
+
         <p className=" text-center my-5">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea eaque
           pariatur sunt dolorum! Optio porro commodi quos tenetur! Earum,
