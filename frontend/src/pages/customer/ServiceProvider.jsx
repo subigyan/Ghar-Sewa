@@ -34,6 +34,10 @@ const ServiceProvider = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [openImage, setOpenImage] = useState(false);
+  const handleOpenImage = () => setOpenImage(true);
+  const handleCloseImage = () => setOpenImage(false);
+
   const user = useRecoilValue(authState);
   const navigate = useNavigate();
 
@@ -48,6 +52,7 @@ const ServiceProvider = () => {
 
   const [reviewHeadline, setReviewHeadline] = useState("");
   const [reviewBody, setReviewBody] = useState("");
+  const [currentImage, setCurrentImage] = useState("");
 
   // console.log(reviewHeadline, reviewBody, reviewStars);
 
@@ -257,41 +262,29 @@ const ServiceProvider = () => {
                     </div>
                   ))}
                 </div>
-                <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
-                  Gallery
-                </h2>
-                <div className="flex my-4 gap-x-3 gap-y-4  max-h-[300px] overflow-x-scroll">
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                </div>
+                {serviceProvider?.portfolioImages.filter((image) => image)
+                  .length > 0 ? (
+                  <>
+                    <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
+                      Portfolio Gallery
+                    </h2>
+                    <div className="flex my-4 gap-x-3 gap-y-4  max-h-[350px] overflow-x-scroll cursor-pointer">
+                      {serviceProvider?.portfolioImages.map((image, index) => (
+                        <img
+                          src={image || "https://via.placeholder.com/300"}
+                          alt="my work"
+                          className="h-52 rounded-md"
+                          onClick={() => {
+                            setCurrentImage(image);
+                            setOpenImage(true);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
                 {serviceProvider?.address?.longitude &&
                 serviceProvider?.address?.latitude ? (
                   <>
@@ -501,6 +494,23 @@ const ServiceProvider = () => {
                   Submit
                 </button>
               </form>
+            </Modal>
+            <Modal
+              open={openImage}
+              onClose={handleCloseImage}
+              data-aos="fade-in"
+            >
+              <div className="absolute top-1/2 left-1/2 bg-slate-100 -translate-x-1/2 -translate-y-1/2 rounded  p-2 flex flex-col">
+                <AiFillCloseSquare
+                  className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer bg-white"
+                  onClick={handleCloseImage}
+                />
+                <img
+                  src={currentImage}
+                  alt="portfolio"
+                  className="w-full max-h-[70vh]"
+                />
+              </div>
             </Modal>
           </div>
         </div>

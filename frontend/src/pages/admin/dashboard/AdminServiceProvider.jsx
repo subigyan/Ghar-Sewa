@@ -98,6 +98,22 @@ const AdminServiceProvider = () => {
       })
       .catch((err) => console.log("No Service Providers"));
   };
+  const removeVerification = (id) => {
+    updateServiceProvider(id, {
+      verified: false,
+    })
+      .then((res) => {
+        getServiceProviders(sName, sort)
+          .then((res) => {
+            setServiceProviders(res.data);
+          })
+          .catch((err) => console.log("No Service Providers"));
+        toast.success("Successfully removed verfication status", {
+          theme: "dark",
+        });
+      })
+      .catch((err) => console.log("No Service Providers"));
+  };
 
   return (
     <div className="w-screen flex font-montserrat">
@@ -172,9 +188,10 @@ const AdminServiceProvider = () => {
                           setCurrentServiceProvider(serviceProvider);
                           setViewPort({
                             ...viewPort,
-                            latitude: serviceProvider.address.latitude,
-                            longitude: serviceProvider.address.longitude,
+                            latitude: serviceProvider?.address?.latitude,
+                            longitude: serviceProvider?.address?.longitude,
                           });
+                          console.log(viewPort);
                           handleOpen();
                         }}
                       >
@@ -208,7 +225,7 @@ const AdminServiceProvider = () => {
                           day: "numeric",
                         })}
                       </td>
-                      <td className="px-4 py-4 text-right flex flex-col gap-2">
+                      <td className="pr-2 py-4 text-right flex flex-col gap-2 ">
                         <span
                           className="font-medium text-red-600 cursor-pointer  hover:underline"
                           onClick={() =>
@@ -218,8 +235,13 @@ const AdminServiceProvider = () => {
                           Delete
                         </span>
                         {serviceProvider.verified ? (
-                          <span className=" text-sky-600 font-semibold whitespace-nowrap">
-                            Verified User
+                          <span
+                            className=" text-orange-500 font-semibold whitespace-nowrap cursor-pointer  hover:underline"
+                            onClick={() =>
+                              removeVerification(serviceProvider._id)
+                            }
+                          >
+                            Remove Verifica tion Status
                           </span>
                         ) : (
                           <span
@@ -228,7 +250,7 @@ const AdminServiceProvider = () => {
                               provideVerification(serviceProvider._id)
                             }
                           >
-                            Provide Verification
+                            Provide Verification Status
                           </span>
                         )}
                       </td>
@@ -344,16 +366,28 @@ const AdminServiceProvider = () => {
                     </div>
                   ))}
                 </div>
-                <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
-                  Gallery
-                </h2>
-                <div className="flex my-4 gap-x-3 gap-y-4  max-h-[300px] overflow-x-scroll">
-                  <img
-                    src="https://picsum.photos/200"
-                    alt=""
-                    className="h-40 rounded-md"
-                  />
-                </div>
+                {currentServiceProvider?.portfolioImages?.filter(
+                  (image) => image
+                ).length > 0 ? (
+                  <>
+                    <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
+                      Portfolio Gallery
+                    </h2>
+                    <div className="flex my-4 gap-x-3 gap-y-4  max-h-[350px] overflow-x-scroll">
+                      {currentServiceProvider?.portfolioImages.map(
+                        (image, index) => (
+                          <img
+                            src={image || "https://via.placeholder.com/300"}
+                            alt="my work"
+                            className="h-52 rounded-md"
+                          />
+                        )
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
                 {currentServiceProvider?.address?.longitude &&
                 currentServiceProvider?.address?.latitude ? (
                   <>
@@ -366,7 +400,7 @@ const AdminServiceProvider = () => {
                         mapStyle="mapbox://styles/mapbox/streets-v9"
                         mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                         onMove={(viewPort) => {
-                          setViewPort(viewPort);
+                          setViewPort(viewPort.viewState);
                         }}
                       >
                         <Marker

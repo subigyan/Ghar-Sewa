@@ -19,6 +19,7 @@ const BusinessImages = () => {
     "",
     "",
     "",
+    "",
   ]);
   const [serviceProvider, setServiceProvider] = React.useState([]);
 
@@ -172,7 +173,7 @@ const BusinessImages = () => {
           <div>
             <h2 className="text-2xl font-medium">Portfolio Image</h2>
             <div className="flex justify-start gap-6 flex-wrap">
-              {["", "", "", "", ""].map((image, index) => {
+              {["", "", "", "", "", ""].map((image, index) => {
                 return (
                   <div className="border-2  w-fit p-5 rounded-lg mt-6 flex justify-between items-end">
                     <div className="bg-gray-500 rounded-lg w-36 h-36 flex flex-center overflow-hidden">

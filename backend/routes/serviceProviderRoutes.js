@@ -11,6 +11,7 @@ const {
   test,
   getOneServiceProvider,
   deleteServiceProvider,
+  getServiceProvidersStats,
 } = require("../controllers/serviceProviderControllers");
 const { route } = require("./customerRoutes");
 const { protect } = require("../middlewares/authMiddleware");
@@ -23,6 +24,7 @@ router.put("/:id", updateServiceProvider);
 router.get("/provider/:id", getOneServiceProvider);
 router.get("/search", searchServiceProvider);
 router.delete("/:id", deleteServiceProvider);
+router.get("/stats", getServiceProvidersStats);
 
 router.get("/test", test);
 

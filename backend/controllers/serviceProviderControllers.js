@@ -392,6 +392,87 @@ const deleteServiceProvider = asyncHandler(async (req, res) => {
   });
 });
 
+const getServiceProvidersStats = asyncHandler(async (req, res) => {
+  const serviceProviders = await ServiceProvider.find();
+  let plumberCount = 0;
+  let electricianCount = 0;
+  let builderCount = 0;
+  let painterCount = 0;
+  let carpenterCount = 0;
+  let cleanerCount = 0;
+  let mechanicCount = 0;
+  let handymandCount = 0;
+  serviceProviders.forEach((serviceProvider) => {
+    if (serviceProvider.services.includes("plumber")) {
+      plumberCount++;
+    }
+    if (serviceProvider.services.includes("electrician")) {
+      electricianCount++;
+    }
+    if (serviceProvider.services.includes("builder")) {
+      builderCount++;
+    }
+    if (serviceProvider.services.includes("painter")) {
+      painterCount++;
+    }
+    if (serviceProvider.services.includes("carpenter")) {
+      carpenterCount++;
+    }
+    if (serviceProvider.services.includes("cleaner")) {
+      cleanerCount++;
+    }
+    if (serviceProvider.services.includes("mechanic")) {
+      mechanicCount++;
+    }
+    if (serviceProvider.services.includes("handyman")) {
+      handymandCount++;
+    }
+  });
+  const serviceProvidersStats = {
+    totalServiceProviders: serviceProviders.length,
+    serviceTypeCOunt: [
+      {
+        serviceType: "Plumber",
+        count: plumberCount,
+      },
+      {
+        serviceType: "Electrician",
+        count: electricianCount,
+      },
+      {
+        serviceType: "Builder",
+        count: builderCount,
+      },
+      {
+        serviceType: "Painter",
+        count: painterCount,
+      },
+      {
+        serviceType: "Carpenter",
+        count: carpenterCount,
+      },
+      {
+        serviceType: "Cleaner",
+        count: cleanerCount,
+      },
+      {
+        serviceType: "Mechanic",
+        count: mechanicCount,
+      },
+      {
+        serviceType: "Handyman",
+        count: handymandCount,
+      },
+    ],
+  };
+
+  res.status(200).json({
+    success: true,
+    message: "ServiceProviders Stats",
+    data: serviceProvidersStats,
+  });
+});
+
 const test = asyncHandler(async (req, res) => {
   res.json({
     success: true,
@@ -409,5 +490,6 @@ module.exports = {
   updateServiceProvider,
   searchServiceProvider,
   deleteServiceProvider,
+  getServiceProvidersStats,
   test,
 };

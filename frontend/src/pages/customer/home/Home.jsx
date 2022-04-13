@@ -165,13 +165,13 @@ const Home = () => {
       </div>
       <div className="border-2  py-6 " id="browse">
         <h1 className="text-3xl font-semibold text-center">
-          Browse Service Providers
+          Discover Service Providers
         </h1>
 
         <p className=" text-center my-5">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea eaque
-          pariatur sunt dolorum! Optio porro commodi quos tenetur! Earum,
-          veritatis.
+          Browse through our eight specific service categories to find the
+          perfect service provider for your household repair and maintenance
+          work.
         </p>
 
         <div className="flex md:justify-center mt-5 lg:px-24 md:flex-wrap overflow-x-scroll scrollbar-hide">

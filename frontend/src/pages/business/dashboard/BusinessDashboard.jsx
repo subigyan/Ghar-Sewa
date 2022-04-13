@@ -25,6 +25,8 @@ const BusinessDashboard = () => {
       .catch((err) => console.log("No Service Providers"));
   }, []);
 
+  console.log(serviceProvider);
+
   const [reviewStats, setReviewStats] = useState({
     averageRating: 0,
     negativePercentage: 0,
@@ -74,16 +76,16 @@ const BusinessDashboard = () => {
 
   const data = [
     {
-      name: "Positive Reviews",
+      name: "Positive Review",
       value: reviewStats.positiveReviews,
     },
     {
-      name: "Negative Reviews",
+      name: "Negative Review",
       value: reviewStats.negativeReviews,
     },
   ];
 
-  const COLORS = ["#0088FE", "#00C49F"];
+  const COLORS = ["#FFB72B", "#4D96FF"];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -128,7 +130,7 @@ const BusinessDashboard = () => {
               </h1>
             </div>
           </div>
-          <div className="w-[30%]  rounded-2xl bg-green-100  shadow-lg p-4">
+          <div className="w-[30%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-violet-900">
             <div className="flex items-center">
               <div className=" rounded-lg p-1">
                 <MdOutlineRateReview className="text-6xl" />
@@ -138,14 +140,14 @@ const BusinessDashboard = () => {
               </h1>
             </div>
           </div>
-          <div className="w-[30%]  rounded-2xl  bg-sky-100 shadow-lg p-4">
+          <div className="w-[30%] rounded-2xl border shadow-lg p-4 border-l-8 border-l-cyan-900">
             {serviceProvider?.verified ? (
               <>
                 <div className="flex items-center">
                   <div className=" rounded-lg p-1">
                     <GoVerified className="text-6xl" />
                   </div>
-                  <h1 className="ml-4 text-4xl font-semibold">Vefied</h1>
+                  <h1 className="ml-4 text-4xl font-semibold">Verified</h1>
                 </div>
               </>
             ) : (
@@ -154,7 +156,7 @@ const BusinessDashboard = () => {
                   <div className=" rounded-lg p-1">
                     <GoVerified className="text-6xl" />
                   </div>
-                  <h1 className="ml-4 text-4xl font-semibold"> Not Vefied</h1>
+                  <h1 className="ml-4 text-4xl font-semibold"> Not Verified</h1>
                 </div>
                 <p
                   className="flex justify-end text-sm font-medium underline text-violet-900 cursor-pointer"
@@ -162,27 +164,26 @@ const BusinessDashboard = () => {
                     handleOpen();
                   }}
                 >
-                  Request Verification
+                  How it Works
                 </p>
               </>
             )}
           </div>
         </div>
 
-        <div className="w-full mt-8 flex justify-around flex-wrap">
-          <div className="capitalize w-5/12 min-w-[500px]">
+        <div className="w-full mt-12 flex justify-around flex-wrap">
+          <div className="capitalize w-[55%] min-w-[500px] shadow-xl">
             <h2 className="text-2xl font-semibold my-4 text-center">
               Ratings Received by the business
             </h2>
-            <div className="">
+            <div className="-ml-4">
               <BarChart
-                width={580}
+                width={600}
                 height={320}
                 data={reviewStats?.ratingStats}
                 margin={{
                   top: 20,
-                  right: 30,
-                  left: -40,
+                  right: 40,
                   bottom: 5,
                 }}
               >
@@ -194,12 +195,12 @@ const BusinessDashboard = () => {
               </BarChart>
             </div>
           </div>
-          <div className="capitalize w-5/12 min-w-[500px]">
+          <div className="capitalize w-[35%] min-w-[480px] shadow-xl">
             <h2 className="text-2xl font-semibold mt-4 text-center ">
-              Ratings Received by the business
+              Review Sentiment
             </h2>
 
-            <div className="z-50 -mt-14">
+            <div className="-mt-14">
               <PieChart width={500} height={400}>
                 <Pie
                   dataKey="value"
@@ -242,9 +243,7 @@ const BusinessDashboard = () => {
             className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer"
             onClick={handleClose}
           />
-          <h1 className="text-3xl font-semibold mr-6">
-            Request for Verification
-          </h1>
+          <h1 className="text-3xl font-semibold mr-6">Verification Request</h1>
           <p className="text-lg mt-2">
             We at Ghar Sewa review you business information within 48 hours of
             your registration. In case you have not been yet verified, it may be

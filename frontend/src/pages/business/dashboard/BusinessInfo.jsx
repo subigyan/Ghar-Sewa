@@ -10,6 +10,7 @@ import { GoPerson } from "react-icons/go";
 import { GrLocation, GrMail } from "react-icons/gr";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { FiImage } from "react-icons/fi";
 
 const BusinessInfo = () => {
   const user = useRecoilValue(serviceProviderAuthState);
@@ -45,11 +46,18 @@ const BusinessInfo = () => {
         <div className="flex  flex-col justify-between">
           <div className=" w-full min-w-[250px]   px-2 gap-4 flex flex-col text-lg">
             <div className="flex flex-wrap">
-              <img
-                src="https://picsum.photos/200"
-                alt="logo"
-                className=" h-[280px] rounded-lg  object-contain  border-8 border-slate-300"
-              />
+              {serviceProvider?.profileImage ? (
+                <img
+                  src={serviceProvider?.profileImage}
+                  alt="logo"
+                  className="h-[280px] rounded-lg  object-contain  border-8 border-slate-300 min-w-[200px]"
+                />
+              ) : (
+                <div className="h-[280px] rounded-lg  object-contain  border-8 border-slate-300 min-w-[250px] flex flex-center">
+                  <p className="text-3xl">No Image</p>
+                  <FiImage className="text-5xl" />
+                </div>
+              )}
               <div className="7/12 pl-8">
                 <h1 className="text-5xl font-semibold capitalize">
                   {serviceProvider.name}
@@ -127,41 +135,25 @@ const BusinessInfo = () => {
                   </div>
                 ))}
               </div>
-              <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
-                Gallery
-              </h2>
-              <div className="flex my-4 gap-x-3 gap-y-4  max-h-[300px] overflow-x-scroll">
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-                <img
-                  src="https://picsum.photos/200"
-                  alt=""
-                  className="h-40 rounded-md"
-                />
-              </div>
+              {serviceProvider?.portfolioImages.filter((image) => image)
+                .length > 0 ? (
+                <>
+                  <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">
+                    Portfolio Gallery
+                  </h2>
+                  <div className="flex my-4 gap-x-3 gap-y-4  max-h-[350px] overflow-x-scroll">
+                    {serviceProvider?.portfolioImages.map((image, index) => (
+                      <img
+                        src={image || "https://via.placeholder.com/300"}
+                        alt="my work"
+                        className="h-52 rounded-md"
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
               {serviceProvider?.address?.longitude &&
               serviceProvider?.address?.latitude ? (
                 <>

@@ -3,6 +3,7 @@
 import { serviceProviderAxiosInatance as axios } from "../helpers/axiosInstance";
 
 const API_URL = "/serviceProviders";
+const STATS = "/serviceProviders/stats";
 
 //register
 export const register = async (user) => {
@@ -49,5 +50,10 @@ export const getServiceProviders = async (name, sort) => {
 //delete ServiceProvider
 export const deleteServiceProvider = async (id) => {
   const response = await axios.delete(API_URL + "/" + id);
+  return response.data;
+};
+
+export const getStats = async () => {
+  const response = await axios.get(STATS);
   return response.data;
 };
