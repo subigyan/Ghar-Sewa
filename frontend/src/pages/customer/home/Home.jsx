@@ -46,7 +46,7 @@ const Home = () => {
       <Nav />
       <div className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-32 ">
         <h1
-          className="text-5xl font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]   mt-10"
+          className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  mt-10"
           data-aos="fade-in"
         >
           <Typewriter
@@ -59,9 +59,8 @@ const Home = () => {
             onInit={(typewriter) => {
               // typewriter.pauseFor(300)
               typewriter
-                .typeString("Discover Household  Service Providers Near You")
+                .typeString("Discover Household Service Providers Near You")
                 .pauseFor(2000)
-
                 .start();
             }}
           />

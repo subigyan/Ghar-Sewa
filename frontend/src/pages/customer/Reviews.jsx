@@ -17,6 +17,12 @@ const Reviews = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  });
+
+  useEffect(() => {
     if (user?.id) {
       getCustomerReviews(user.id)
         .then((res) => {

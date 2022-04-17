@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
 import { GoPerson } from "react-icons/go";
-import { GrLocation } from "react-icons/gr";
+import { GrLocation, GrMail } from "react-icons/gr";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import { GrMail } from "react-icons/gr";
+import { FaBusinessTime } from "react-icons/fa";
 import { Rating } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { AiFillCloseSquare } from "react-icons/ai";
@@ -17,7 +17,7 @@ import { useRecoilValue } from "recoil";
 import { authState } from "../../atoms/authAtom";
 import AOS from "aos";
 import Map, { Marker } from "react-map-gl";
-import { MdLocationPin } from "react-icons/md";
+import { MdLocationPin, MdVerifiedUser } from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MdOutlineRateReview } from "react-icons/md";
 import { BiLogIn } from "react-icons/bi";
@@ -214,6 +214,13 @@ const ServiceProvider = () => {
                     <h2 className="ml-3 "> {serviceProvider?.email}</h2>
                   </Link>
                 </div>
+                <div className="flex items-center ">
+                  <FaBusinessTime className="text-xl" />
+                  <h2 className="ml-3 ">
+                    {serviceProvider?.experience} Years Experience
+                  </h2>
+                </div>
+
                 <div className="flex flex-col border-t-2 py-4 gap-2 ">
                   {user ? (
                     <button
@@ -237,9 +244,14 @@ const ServiceProvider = () => {
             </div>
             <div className="md:w-9/12 w-full min-w-[250px]  py-5  gap-2 flex flex-col md:px-16 px-2  ">
               <div className=" md:text-left text-center">
-                <h1 className="text-5xl font-semibold capitalize">
-                  {serviceProvider.name}
-                </h1>
+                <div className="flex items-center gap-2  ">
+                  <h1 className="text-5xl font-semibold capitalize">
+                    {serviceProvider.name}
+                  </h1>
+                  {serviceProvider?.verified && (
+                    <MdVerifiedUser className="text-3xl text-blue-700" />
+                  )}
+                </div>
 
                 <p className="text-xl font-semibold text-gray-500">
                   {serviceProvider.type === "individual"

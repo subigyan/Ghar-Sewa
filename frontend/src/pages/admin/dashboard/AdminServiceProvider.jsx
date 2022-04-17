@@ -17,10 +17,15 @@ import { GrLocation, GrMail } from "react-icons/gr";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Map, { Marker } from "react-map-gl";
-import { MdLocationPin, MdOutlineRateReview } from "react-icons/md";
+import {
+  MdLocationPin,
+  MdOutlineRateReview,
+  MdVerifiedUser,
+} from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { FiImage } from "react-icons/fi";
 import { updateServiceProvider } from "../../../api/serviceProvider";
+import { FaBusinessTime } from "react-icons/fa";
 
 const AdminServiceProvider = () => {
   const [serviceProviders, setServiceProviders] = useState([]);
@@ -241,7 +246,7 @@ const AdminServiceProvider = () => {
                               removeVerification(serviceProvider._id)
                             }
                           >
-                            Remove Verifica tion Status
+                            Remove Verification Status
                           </span>
                         ) : (
                           <span
@@ -285,9 +290,14 @@ const AdminServiceProvider = () => {
                 )}
 
                 <div className="7/12 pl-8">
-                  <h1 className="text-5xl font-semibold capitalize">
-                    {currentServiceProvider.name}
-                  </h1>
+                  <div className="flex items-center gap-2  ">
+                    <h1 className="text-5xl font-semibold capitalize">
+                      {currentServiceProvider.name}
+                    </h1>
+                    {currentServiceProvider?.verified && (
+                      <MdVerifiedUser className="text-3xl text-blue-700" />
+                    )}
+                  </div>
 
                   <p className="text-xl font-semibold text-gray-500 mb-4">
                     {currentServiceProvider.type === "individual"
@@ -343,6 +353,12 @@ const AdminServiceProvider = () => {
                           {currentServiceProvider?.email}
                         </h2>
                       </Link>
+                    </div>
+                    <div className="flex items-center ">
+                      <FaBusinessTime className="text-xl" />
+                      <h2 className="ml-3 ">
+                        {currentServiceProvider?.experience} Years Experience
+                      </h2>
                     </div>
                   </div>
                 </div>

@@ -47,7 +47,7 @@ const BusinessUpdate = () => {
   const phoneRegExp = /^((98|97)|0)[0-9]{8}$/;
 
   const [showPassword, setShowPassoword] = useState(false);
-  const [businessType, setBusinessType] = useState("company");
+  const [businessType, setBusinessType] = useState("");
 
   const handleSelectChange = (event) => {
     setBusinessType(event.target.value);
@@ -89,7 +89,7 @@ const BusinessUpdate = () => {
   ];
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    email: Yup.string().email("Invalid email"),
     userPhone: Yup.string()
       .matches(
         phoneRegExp,
@@ -102,9 +102,10 @@ const BusinessUpdate = () => {
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
         "Most contain minimum eight characters, at least one letter and one number"
       ),
-    // confirmPassword: Yup.string()
-    //   .oneOf([Yup.ref("password"), null], "Passwords must match")
-    //   .required("Confirm Password is required"),
+    experience: Yup.string()
+      .matches(/^[0-9]*$/, "Invalid experience")
+      .max("2", "Experience must be within 0 to 99 years")
+      .required("Experience is required"),
     businessType: Yup.string().required("Business type is required"),
     name: Yup.string()
       .max("50", "Name is too long")
@@ -147,9 +148,10 @@ const BusinessUpdate = () => {
       email: "",
       userPhone: "",
       password: "",
-      businessType: "company",
+      businessType: "",
       name: "",
       businessEmail: "",
+      experience: "",
       businessContactNumber: "",
       owner: "",
       description: "",
@@ -163,7 +165,7 @@ const BusinessUpdate = () => {
     validationSchema: validationSchema,
     onSubmit: async () => {
       try {
-        const {
+        let {
           name,
           userPhone: phoneNumber,
           email,
@@ -176,6 +178,7 @@ const BusinessUpdate = () => {
           neighbourhood,
           city,
           district,
+          experience,
           longitude,
           latitude,
           services,
@@ -203,8 +206,12 @@ const BusinessUpdate = () => {
           description,
           owner,
           address,
-          services
+          services,
+          experience
         );
+        if (type === "individual") {
+          owner = "";
+        }
         // console.log(businessType);
         const response = await updateServiceProvider(user?.id, {
           name,
@@ -218,6 +225,7 @@ const BusinessUpdate = () => {
           owner,
           address,
           services,
+          experience,
         });
 
         if (response) {
@@ -248,6 +256,9 @@ const BusinessUpdate = () => {
           latitude: res?.data?.address?.latitude || 27.70784546292888,
           longitude: res?.data?.address?.longitude || 85.3255410260927,
         });
+
+        console.log("type", res?.data?.type);
+        setBusinessType(res?.data?.type);
         formik.setValues({
           email: res?.data?.email,
           userPhone: res?.data?.phoneNumber,
@@ -264,6 +275,7 @@ const BusinessUpdate = () => {
           longitude: "",
           latitude: "",
           services: res?.data?.services || [],
+          experience: res?.data?.experience || "",
         });
       })
       .catch((err) => console.log("User Not Found"));
@@ -362,7 +374,7 @@ const BusinessUpdate = () => {
                     formik.handleChange(e);
                     handleSelectChange(e);
                   }}
-                  defaultValue={businessType || "company"}
+                  value={formik.values.businessType}
                 >
                   <MenuItem value={"individual"}>Individual</MenuItem>
                   <MenuItem value={"company"}>Company</MenuItem>
@@ -383,6 +395,7 @@ const BusinessUpdate = () => {
                 helperText={formik.touched.name && formik.errors.name}
                 onBlur={formik.handleBlur}
               />
+
               {businessType === "company" && (
                 <TextField
                   required
@@ -397,6 +410,23 @@ const BusinessUpdate = () => {
                   onBlur={formik.handleBlur}
                 />
               )}
+              <TextField
+                required
+                id="experience"
+                label={`Experience`}
+                variant="outlined"
+                type="number"
+                style={{ marginBottom: "30px" }}
+                value={formik.values.experience}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.experience && Boolean(formik.errors.experience)
+                }
+                helperText={
+                  formik.touched.experience && formik.errors.experience
+                }
+                onBlur={formik.handleBlur}
+              />
               <TextField
                 required
                 id="businessEmail"

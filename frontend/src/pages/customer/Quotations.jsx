@@ -24,6 +24,24 @@ const Quotations = () => {
   const [user, setUser] = useRecoilState(authState);
   const [quotations, setQuotations] = useState([]);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  });
+  useEffect(() => {
+    if (user?.id) {
+      getCustomerQuotations(user.id)
+        .then((res) => {
+          setQuotations(res.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      navigate("/");
+    }
+  }, [user?.id]);
+
   const [quotationService, setQuotationService] = React.useState("plumber");
   const [quotationHeadline, setQuotationHeadline] = useState("");
   const [quotationBody, setQuotationBody] = useState("");
@@ -48,20 +66,6 @@ const Quotations = () => {
   const [updateQService, setUpdateQService] = React.useState("plumber");
 
   console.log(updateQBody);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user?.id) {
-      getCustomerQuotations(user.id)
-        .then((res) => {
-          setQuotations(res.data);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      navigate("/");
-    }
-  }, [user?.id]);
 
   const addQuotation = () => {
     postQuotation({
@@ -159,7 +163,7 @@ const Quotations = () => {
   return (
     <div>
       <Nav fixed={false} />
-      <div className="lg:px-32 px-7 flex flex-col  max-w-screen  mt-8 text-slate-700 font-roboto">
+      <div className="lg:px-32 px-7 flex flex-col  max-w-screen  mt-8 text-slate-700 font-roboto break-words">
         <div className="flex justify-between items-center">
           <h1 className=" font-bold sm:text-5xl text-4xl">
             My Quotation Requests
@@ -171,7 +175,7 @@ const Quotations = () => {
         </div>
         {quotations.length === 0 ? (
           <div className="flex flex-center font-smooch  w-full h-[full]   mt-8 text-slate-700  ">
-            <h1 className="text-4xl">No Reviews Found</h1>
+            <h1 className="text-4xl">No Quotations Found</h1>
           </div>
         ) : (
           ""
@@ -210,7 +214,7 @@ const Quotations = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-4 text-slate-700">
+                  <div className="mt-4 text-slate-700 ">
                     <p className="mt-2">{quotation?.requestBody}</p>
                   </div>
 
@@ -241,7 +245,6 @@ const Quotations = () => {
                       <div className="ml-4 mt-4 flex flex-col gap-4">
                         <div className="border-l-4 px-2">
                           <div>
-                            {console.log(quotation)}
                             <div className="flex font-medium items-center text-lg">
                               <Avatar
                                 size="small"

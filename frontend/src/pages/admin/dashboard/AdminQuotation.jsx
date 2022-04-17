@@ -8,72 +8,50 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../../components/business/Sidebar";
+
 import {
-  getServiceProviderQuotes,
   editServiceProviderQuote,
   deleteServiceProviderQuote,
+  getAllQuotations,
+  deleteQuotation,
 } from "../../../api/quotation";
 import { useRecoilValue } from "recoil";
 import { serviceProviderAuthState } from "../../../atoms/authAtom";
 import { BiEdit } from "react-icons/bi";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdDelete } from "react-icons/md";
 import { AiFillCloseSquare } from "react-icons/ai";
 import { toast } from "react-toastify";
+import Sidebar from "../../../components/admin/Sidebar";
 
-const BusinessQuotations = () => {
+const AdminQuotation = () => {
   const [quotations, setQuotations] = useState([]);
-  const user = useRecoilValue(serviceProviderAuthState);
 
   useEffect(() => {
-    getServiceProviderQuotes(user?.id)
+    getAllQuotations()
       .then((res) => {
         setQuotations(res.data);
       })
       .catch((err) => console.log("No Quotations"));
-  }, [user.id]);
+  }, []);
 
   console.log(quotations);
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
-  const [currentCustomer, setCurrentCustomer] = useState("");
-
-  const [quoteId, setQuoteId] = useState("");
-
-  const [quote, setQuote] = useState("");
-
-  const editSPQuote = () => {
-    editServiceProviderQuote(quoteId, quote)
-      .then((res) => {
-        getServiceProviderQuotes(user?.id)
-          .then((res) => {
-            setQuotations(res.data);
-          })
-          .catch((err) => console.log("No Quotations"));
-        handleClose();
-        toast.success("Quote Updated");
-      })
-      .catch((err) => {
-        toast.error("Quote Not Updated");
-      });
-  };
 
   const deleteSPQuote = (id) => {
     deleteServiceProviderQuote(id)
       .then((res) => {
-        getServiceProviderQuotes(user?.id)
+        getAllQuotations()
           .then((res) => {
             setQuotations(res.data);
           })
           .catch((err) => console.log("No Quotations"));
-        toast.success("Quote Deleted");
+        toast.success("Quote Deleted", {
+          theme: "dark",
+        });
       })
       .catch((err) => {
-        toast.error("Quote Not Deleted");
+        toast.error("Quote Not Deleted", {
+          theme: "dark",
+        });
       });
   };
 
@@ -82,7 +60,7 @@ const BusinessQuotations = () => {
 
   const handleChange = (event) => {
     setSort(event.target.value);
-    getServiceProviderQuotes(user?.id, text, event.target.value)
+    getAllQuotations(text, event.target.value)
       .then((res) => {
         setQuotations(res.data);
       })
@@ -91,23 +69,42 @@ const BusinessQuotations = () => {
 
   const getQuotationByText = (event) => {
     setText(event.target.value);
-    getServiceProviderQuotes(user?.id, event.target.value, sort)
+    getAllQuotations(event.target.value, sort)
       .then((res) => {
         setQuotations(res.data);
       })
       .catch((err) => console.log("No Service Providers"));
   };
 
+  const deleteQuotationRequest = (id) => {
+    deleteQuotation(id)
+      .then((res) => {
+        getAllQuotations()
+          .then((res) => {
+            setQuotations(res.data);
+          })
+          .catch((err) => console.log(err));
+        toast.success("Quotation Request Deleted", {
+          theme: "dark",
+        });
+      })
+      .catch((err) =>
+        toast.error(`Error: ${err?.response?.data?.message}`, {
+          theme: "dark",
+        })
+      );
+  };
+
   return (
     <div className="w-screen flex font-montserrat">
-      <Sidebar active={"myQuotations"} />
+      <Sidebar active={"quotations"} />
       <div className="w-full max-h-screen overflow-y-scroll py-8 px-8  font-poppins ">
         <h1 className="text-3xl font-semibold">Quotations</h1>
         <div className="flex justify-between mt-6">
           <input
             type={"text"}
             className="w-60 border-2 border-gray-300 rounded-lg p-2"
-            placeholder="Search by text"
+            placeholder="Search by text "
             onChange={getQuotationByText}
           />
           <FormControl className="w-44">
@@ -126,12 +123,11 @@ const BusinessQuotations = () => {
             </Select>
           </FormControl>
         </div>
-
         <div className="mt-4 flex flex-col gap-4">
           {quotations.length === 0 ? (
             <div className="flex justify-center">
               <h1 className="text-5xl font-semibold font-smooch text-gray-600 capitalize">
-                You haven't made any quotations yet
+                No Quotation Requests
               </h1>
             </div>
           ) : (
@@ -144,6 +140,7 @@ const BusinessQuotations = () => {
                   className="border-2 rounded-md shadow-md px-8 py-6"
                   key={index}
                 >
+                  {console.log(quotations)}
                   <div className="flex justify-between flex-wrap">
                     <div className="w-full">
                       <div className="flex items-center">
@@ -178,6 +175,14 @@ const BusinessQuotations = () => {
                   <div className="mt-4 text-slate-700">
                     <p className="mt-2">{quotation?.requestBody}</p>
                   </div>
+                  <div className="flex justify-end">
+                    <MdDelete
+                      className="text-3xl text-red-600 ml-2 cursor-pointer"
+                      onClick={() => {
+                        deleteQuotationRequest(quotation?._id);
+                      }}
+                    />
+                  </div>
 
                   {/* <div className="flex  font-semibold justify-end">
                   <BiEdit
@@ -200,84 +205,44 @@ const BusinessQuotations = () => {
 
                   <div className="border-t-2 mt-5 py-2">
                     <p className="text-lg font-medium text-slate-700">
-                      My Quotations:
+                      Received Quotations:
                     </p>
-                    {quotation?.quotations.map(
-                      (receivedQuotes, index) =>
-                        receivedQuotes.serviceProvider === user?.id && (
-                          <div className="ml-4 mt-4 flex flex-col gap-4">
-                            <div className="border-x-4 border-x-neutral-500 border-2 px-4 py-4">
-                              <div>
-                                <p>{receivedQuotes?.quote}</p>
-                              </div>
-                              <div className="flex  font-semibold justify-end">
-                                <BiEdit
-                                  className="text-3xl text-green-600 cursor-pointer"
-                                  onClick={() => {
-                                    handleOpen();
-                                    setCurrentCustomer(
-                                      quotation?.customer?.name
-                                    );
-                                    setQuoteId(receivedQuotes?._id);
-                                    setQuote(receivedQuotes?.quote);
-                                  }}
-                                />
-                                <MdDeleteOutline
-                                  className="text-3xl text-red-600 ml-2 cursor-pointer"
-                                  onClick={() => {
-                                    deleteSPQuote(receivedQuotes?._id);
-                                  }}
-                                />
-                              </div>
-                            </div>
+                    {quotation?.quotations.map((receivedQuotes, index) => (
+                      <div
+                        className="ml-4 mt-4 flex flex-col gap-4"
+                        key={index}
+                      >
+                        <div className="border-x-4 border-x-neutral-500 border-2 px-4 py-4">
+                          <div className="flex font-medium items-center text-lg">
+                            <Avatar size="small" sx={{ width: 25, height: 25 }}>
+                              {receivedQuotes?.serviceProvider?.name?.[0].toUpperCase()}
+                            </Avatar>
+                            <p className="ml-2 capitalize">
+                              {receivedQuotes?.serviceProvider?.name}
+                            </p>
                           </div>
-                        )
-                    )}
+                          <div className="mt-2">
+                            <p>{receivedQuotes?.quote}</p>
+                          </div>
+                          <div className="flex  font-semibold justify-end">
+                            <MdDeleteOutline
+                              className="text-3xl text-red-600 ml-2 cursor-pointer"
+                              onClick={() => {
+                                deleteSPQuote(receivedQuotes?._id);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )
           )}
         </div>
       </div>
-      <Modal open={open} onClose={handleClose}>
-        <form
-          className="absolute top-1/2 left-1/2 min-w-[350px] w-[80%] bg-slate-100 -translate-x-1/2 -translate-y-1/2  sm:min-h-[70%] rounded sm:py-8 sm:px-10 p-4 flex flex-col"
-          onSubmit={(e) => {
-            e.preventDefault();
-            editSPQuote();
-          }}
-        >
-          <AiFillCloseSquare
-            className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer"
-            onClick={handleClose}
-          />
-          <h1 className=" text-3xl font-semibold mr-6">
-            Edit Quotation for {currentCustomer}
-          </h1>
-          <div className="mt-8 w-full">
-            <TextField
-              label="Quotation"
-              id="outlined-size-normal"
-              color="grey"
-              inputProps={{ style: { fontSize: 20 } }}
-              InputLabelProps={{ style: { fontSize: 20 } }}
-              rows={10}
-              multiline
-              fullWidth
-              required
-              value={quote}
-              onChange={(event) => {
-                setQuote(event.target.value);
-              }}
-            />
-          </div>
-          <button className="mt-6 py-4 bg-slate-800 text-gray-100 rounded text-xl">
-            Post
-          </button>
-        </form>
-      </Modal>
     </div>
   );
 };
 
-export default BusinessQuotations;
+export default AdminQuotation;

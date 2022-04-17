@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
 import Rating from "@mui/material/Rating";
 import { GrLocation } from "react-icons/gr";
-import { FiPhoneCall } from "react-icons/fi";
+import { FiImage, FiPhoneCall } from "react-icons/fi";
 import { Link, useSearchParams } from "react-router-dom";
 import { searchServiceProviders } from "../../api/serviceProviderSearch";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { MdPersonSearch } from "react-icons/md";
+import { MdPersonSearch, MdVerifiedUser } from "react-icons/md";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Footer from "../../components/Footer";
+import { FcSearch } from "react-icons/fc";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const ServiceProviders = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -98,6 +101,21 @@ const ServiceProviders = () => {
 
   // console.log(nameFiltered, serviceProviders);
 
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const usersPerPage = 10;
+  const pagesVisited = (pageNumber - 1) * usersPerPage;
+
+  const displayUsers = nameFiltered
+    .slice(pagesVisited, pagesVisited + usersPerPage)
+    .map((serviceProvider) => {
+      return (
+        <>
+          <ServiceProviderCard key={serviceProvider._id} {...serviceProvider} />
+        </>
+      );
+    });
+
   return (
     <>
       <Nav fixed={false} />
@@ -116,10 +134,13 @@ const ServiceProviders = () => {
               type="text"
               name="service"
               id="type"
-              placeholder="Search Service Name "
+              placeholder="Search"
               required
               value={nameInput}
-              onChange={filterByName}
+              onChange={(e) => {
+                filterByName(e);
+                setPageNumber(1);
+              }}
             />
           </div>
           <h3 className="text-xl font-semibold ml-1 text-gray-800 sm:mt-6 mt-3">
@@ -189,13 +210,13 @@ const ServiceProviders = () => {
             Apply
           </button>
         </div>
-        <div className="md:w-9/12 w-full shadow-lg border border-gray-100">
-          <div className="flex relative justify-between items-center py-8 lg:px-15 md:px-10 px-5">
+        <div className="md:w-9/12 w-full shadow-lg border-gray-100">
+          <div className="flex relative justify-between items-center pt-8 pb-10  md:px-10 px-5">
             <div className="">
               <h1 className="text-3xl font-semibold capitalize">
                 {service.trim() === "" ? "Service Providers" : service}
               </h1>
-              <span className="font-medium text-sm absolute bottom-2 text-gray-500 capitalize">
+              <span className="font-medium text-sm absolute bottom-3 text-gray-500 capitalize">
                 Filters:{" "}
                 {businessTypeFilter === "" ? "All" : businessTypeFilter}{" "}
                 Businesses || {Math.round(starFilter)} Stars and Above
@@ -227,7 +248,11 @@ const ServiceProviders = () => {
               </FormControl>
             </div>
           </div>
-          <div className="bg-slate-100 min-h-[500px] flex flex-col ] py-8 lg:px-15 md:px-10 sm:px-5 space-y-5">
+          <div className="bg-slate-100 min-h-[500px] flex flex-col ] py-8  md:px-10 sm:px-5 space-y-5 relative">
+            <span className="font-medium text-sm absolute top-2  md:right-12 right-5  text-gray-500 capitalize">
+              Service Providers: {pageNumber - 1} - {pageNumber * usersPerPage}{" "}
+              of {nameFiltered.length}
+            </span>
             {/* {nameFiltered.length > 0
               ? nameFiltered.map((serviceProvider) => {
                   return (
@@ -244,14 +269,44 @@ const ServiceProviders = () => {
                     filterByName={false}
                   />
                 ))} */}
-            {nameFiltered?.map((serviceProvider) => {
+            {nameFiltered.length === 0 ? (
+              <div className="w-full h-full flex flex-center">
+                <FcSearch className="text-8xl" />
+                <p className="text-5xl font-smooch text-gray-600">
+                  No Result Found
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
+            {/* {nameFiltered?.map((serviceProvider) => {
               return (
                 <ServiceProviderCard
                   key={serviceProvider._id}
                   {...serviceProvider}
                 />
               );
-            })}
+            })} */}
+            {displayUsers}
+            {nameFiltered.length > 0 && (
+              <div className="mt-8 flex flex-center">
+                <Stack spacing={2}>
+                  <Pagination
+                    count={
+                      nameFiltered.length > 0
+                        ? Math.ceil(nameFiltered.length / 10)
+                        : 1
+                    }
+                    variant="outlined"
+                    color="primary"
+                    page={pageNumber}
+                    onChange={(e, val) => {
+                      setPageNumber(val);
+                    }}
+                  />
+                </Stack>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -268,6 +323,8 @@ const ServiceProviderCard = ({
   description,
   businessContactNumber,
   _id,
+  verified,
+  profileImage,
 }) => {
   let overallRating = 0;
   reviews.forEach((review) => {
@@ -285,11 +342,26 @@ const ServiceProviderCard = ({
   return (
     <div className="min-h-52 w-full bg-white rounded-lg  flex sm:flex-row   flex-col p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-200 ">
       <div className="flex justify-center ">
-        <img
+        {/* <img
           src="https://picsum.photos/200"
           alt="service provider"
           className="sm:w-44 w-full max:h-auto h-44 object-center  md:min-w-[10rem]   rounded-md "
-        />
+        /> */}
+        {profileImage ? (
+          <img
+            src={profileImage}
+            alt="logo"
+            className="sm:w-44 w-full max:h-auto h-44 object-center md:min-w-[10rem] rounded-md"
+          />
+        ) : (
+          <div
+            className="sm:w-44 w-full max:h-auto h-44 object-center md:min-w-[10rem] rounded-md flex flex-center
+                   border-2 border-slate-400"
+          >
+            <p className="text-2xl">No Image</p>
+            <FiImage className="text-3xl" />
+          </div>
+        )}
         {/* <div className="sm:hidden text-righ">
         <div className=" flex h-min items-center ">
           <GrLocation className="text-gray-600 text-xl " />
@@ -305,11 +377,15 @@ const ServiceProviderCard = ({
       <div className="w-full  sm:mt-0 mt-4 sm:pl-6 ">
         <div className="flex justify-between flex-wrap">
           <div>
-            <Link to={`/serviceProvider/${_id}`}>
-              <p className="text-2xl font-medium capitalize hover:underline">
-                {name}
-              </p>
-            </Link>
+            <div className="flex items-center gap-1  ">
+              <Link to={`/serviceProvider/${_id}`}>
+                <p className="text-2xl font-medium capitalize hover:underline">
+                  {name}
+                </p>
+              </Link>
+
+              {verified && <MdVerifiedUser className="text-xl text-blue-700" />}
+            </div>
             <div className="flex items-center ">
               <Rating
                 name="read-only"

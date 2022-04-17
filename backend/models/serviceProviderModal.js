@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Review = require("./reviewModal");
 
 const serviceProviderSchema = new mongoose.Schema(
   {

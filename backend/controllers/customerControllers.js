@@ -59,7 +59,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
         id: customer._id,
         name: customer.name,
         email: customer.email,
-        // phoneNumber: customer.phoneNumber,
+
         token: generateToken(customer._id),
       },
     });
@@ -129,14 +129,14 @@ const loginCustomer = asyncHandler(async (req, res) => {
   const customer = await Customer.findOne({ email });
 
   if (!customer) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: "Customer not found",
     });
   } else {
     const match = await bcrypt.compare(password, customer.password);
     if (match) {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "Login Successfull ",
         data: {
@@ -148,7 +148,7 @@ const loginCustomer = asyncHandler(async (req, res) => {
         },
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid Crendentials",
       });

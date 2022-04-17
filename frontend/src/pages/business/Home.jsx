@@ -26,7 +26,7 @@ import Footer from "../../components/Footer";
 
 const Home = () => {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 700, once: true });
   }, []);
   const [, isTab] = useDeviceProvider();
 
@@ -61,7 +61,7 @@ const Home = () => {
               Already have an account?
               <Link to="/business/login">
                 <span className="underline ml-2 cursor-pointer">
-                  Sign in here
+                  Go to Dashboard
                   <BsArrowRightSquare className="inline-block ml-1" />
                 </span>
               </Link>

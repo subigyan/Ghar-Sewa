@@ -25,6 +25,7 @@ import AdminCustomers from "./pages/admin/dashboard/AdminCustomers.jsx";
 import AdminServiceProvider from "./pages/admin/dashboard/AdminServiceProvider.jsx";
 import AdminReview from "./pages/admin/dashboard/AdminReview.jsx";
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminQuotation from "./pages/admin/dashboard/AdminQuotation.jsx";
 
 function App() {
   return (
@@ -80,6 +81,10 @@ function App() {
           />
           <Route path="/admin/dashboard/reviews" element={<AdminReview />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard/quotations"
+            element={<AdminQuotation />}
+          />
         </Routes>
       </Router>
       <ToastContainer />

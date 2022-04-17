@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiDashboardLine } from "react-icons/ri";
 
 import { MdOutlineRateReview, MdOutlinePeopleAlt } from "react-icons/md";
@@ -8,13 +8,27 @@ import { CgToolbox } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 
+import { adminAuthState } from "../../atoms/authAtom";
+import { useRecoilState } from "recoil";
+
+import { useNavigate } from "react-router-dom";
+import { BsChatSquareQuote } from "react-icons/bs";
+
 const Sidebar = ({ active }) => {
-  const [showInfo, setShowInfo] = useState(
-    active === "viewInfo" || active === "manageInfo" || active === "image"
-  );
-  const [showQuotation, setShowQuotation] = useState(
-    active === "requests" || active === "myQuotations"
-  );
+  const [admin, setAdmin] = useRecoilState(adminAuthState);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("admin");
+    setAdmin(null);
+    navigate("/admin/login");
+  };
+
+  useEffect(() => {
+    if (!admin) {
+      navigate("/admin/login");
+    }
+  }, []);
 
   return (
     <div className="min-w-[325px] h-screen bg-admin_dark text-admin_light py-6 px-8 overflow-y-scroll scrollbar-hide flex flex-col justify-between  ">
@@ -69,11 +83,27 @@ const Sidebar = ({ active }) => {
               <h2 className="text-xl ml-3">Reviews</h2>
             </div>
           </Link>
+          <div className="border-t border-gray-800  rounded-lg "></div>
+          <Link to="/admin/dashboard/quotations">
+            <div
+              className={`flex items-center px-3 py-2 cursor-pointer hover:bg-[#8B8D93]/[.5]  rounded-lg transition-all duration-500 ${
+                active === "quotations" && "bg-[#8B8D93]/[.5]"
+              }`}
+            >
+              <BsChatSquareQuote className="text-xl" />
+              <h2 className="text-xl ml-3">Quotations</h2>
+            </div>
+          </Link>
         </div>
       </div>
-      <div className="flex p-3 mx-3 items-center rounded-lg bg-[#353637] hover:text-red-500 cursor-pointer mt-4">
+      <div
+        className="flex p-3 mx-3 items-center rounded-lg bg-[#353637] hover:text-red-500 cursor-pointer mt-4"
+        onClick={() => {
+          logout();
+        }}
+      >
         <FiLogOut className="text-2xl cursor-pointer" />
-        <p className="text-lg font-semibold ml-2 ">Logout</p>
+        <p className="text-lg font-semibold ml-2">Logout</p>
       </div>
     </div>
   );

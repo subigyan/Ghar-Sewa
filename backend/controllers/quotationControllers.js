@@ -109,7 +109,29 @@ const deleteQuotation = expressAsyncHandler(async (req, res) => {
 //@route GET /api/quotations/all
 //@access Public
 const getAllQuotations = expressAsyncHandler(async (req, res) => {
-  const quotations = await Quotation.find();
+  const text = req.query.text;
+  const textRegex = new RegExp(text, "i");
+  const sort = req.query.sort;
+
+  const sortQuery = {};
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  }
+
+  const quotations = await Quotation.find({
+    $or: [
+      { requestHeadline: { $regex: textRegex } },
+      { requestBody: { $regex: textRegex } },
+      { service: { $regex: textRegex } },
+      { "quotations.quote": { $regex: textRegex } },
+    ],
+  })
+    .populate("customer")
+    .populate("quotations.serviceProvider")
+    .sort(sortQuery);
+
   res.status(200).json({
     success: true,
     message: "All Quotations",
@@ -186,6 +208,18 @@ const addQuote = expressAsyncHandler(async (req, res) => {
 
 const getQuotationByServiceProvider = expressAsyncHandler(async (req, res) => {
   const serviceProvider = await ServiceProvider.findById(req.params.id);
+
+  const text = req.query.text;
+  const textRegex = new RegExp(text, "i");
+  const sort = req.query.sort;
+
+  const sortQuery = {};
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  }
+
   if (!serviceProvider) {
     return res.status(404).json({
       success: false,
@@ -194,7 +228,15 @@ const getQuotationByServiceProvider = expressAsyncHandler(async (req, res) => {
   }
   const quotations = await Quotation.find({
     "quotations.serviceProvider": serviceProvider.id,
-  }).populate("customer");
+    $or: [
+      { requestHeadline: { $regex: textRegex } },
+      { requestBody: { $regex: textRegex } },
+      { service: { $regex: textRegex } },
+      { "quotations.quote": { $regex: textRegex } },
+    ],
+  })
+    .populate("customer")
+    .sort(sortQuery);
   res.status(200).json({
     success: true,
     message: "Quotations by service provider",

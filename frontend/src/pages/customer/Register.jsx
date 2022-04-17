@@ -8,18 +8,21 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 import { register } from "../../api/customer";
-import axios from "axios";
+
 import { useRecoilState } from "recoil";
 import authState from "../../atoms/authAtom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../components/BackButton";
+import registerImg from "../../assets/images/register.png";
+import logo from "../../assets/images/logo.png";
 
 const Register = () => {
   let navigate = useNavigate();
   const [user, setUser] = useRecoilState(authState);
 
   useEffect(() => {
-    AOS.init({ duration: 1500 });
+    AOS.init({ duration: 700 });
     if (user) {
       navigate("/");
     }
@@ -58,17 +61,18 @@ const Register = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      // const response = await register({ name, email, password });
+      console.log("xx");
       try {
         const { name, email, password } = values;
         const response = await register({ name, email, password });
-        console.log(response);
+        console.log(response, "res");
         if (response) {
           setUser(response?.data);
           toast.success(response.message);
         }
       } catch (err) {
+        console.log("xxzz");
+        console.log(err);
         toast.error(err.response.data.message);
       }
 
@@ -78,22 +82,33 @@ const Register = () => {
 
   return (
     <div className="w-screen h-screen  flex  justify-center items-center">
-      <div className="md:flex w-1/2 hidden bg-[#B2D0A9] h-full  justify-center flex-col items-center ">
-        <h1>Welcome</h1>
-        {/* <img src={img} alt="" className="w-[80%]" /> */}
+      <BackButton />
+      <div className="absolute h-screen left-0 -z-10 w-8/12 rounded-r-full bg-[#3B3B3B] md:block hidden "></div>
+      <div className="absolute h-1/2 top-0 left-0 -z-10 w-8/12 rounded-r-full bg-[#3B3B3B] md:hidden block"></div>
+      <div className="absolute h-1/2 bottom-0 right-0 -z-10 w-8/12 rounded-l-full bg-[#3B3B3B] md:hidden block"></div>
+      <div className="md:flex w-5/12 hidden  h-full  justify-center flex-col items-center ">
+        <img
+          src={registerImg}
+          alt="register"
+          className="w-[90%] min-w-[350px]  ml-20"
+          data-aos="zoom-in"
+          data-aos-duration="700"
+        />
       </div>
-      <div className="md:w-1/2 flex justify-center items-center p-2">
+      <div className="md:w-7/12 flex justify-center items-center p-2">
         <div
-          className="md:w-[500px] w-[350px] shadow-2xl rounded-md p-4 flex flex-col justify-center"
+          className="md:w-[500px] w-[350px] shadow-2xl rounded-md p-4  flex flex-col justify-center  z-50 bg-white"
           data-aos="fade-left"
+          data-aos-duration="700"
         >
+          <div className="w-full flex items-center justify-center ">
+            <img src={logo} alt="" className="w-[250px] bg-white mb-4" />
+          </div>
           <h1 className="text-3xl font-semibold">Sign Up</h1>
           <form
             className="flex flex-col w-full items-center justify-between mt-8 min-h-[280px] space-y-3"
             onSubmit={formik.handleSubmit}
           >
-            {/* {console.log(formik.touched.email)} */}
-
             <TextField
               id="name"
               name="name"
@@ -218,12 +233,15 @@ const Register = () => {
               />
               <p className="ml-5">I agree with the terms and conditions.</p>
             </div> */}
-            <button className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4">
+            <button
+              className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4"
+              type="submit"
+            >
               Sign Up
             </button>
           </form>
           <p className="mt-5 text-center">
-            Already Have an account?{" "}
+            Already have an account?{" "}
             <a className="bg-blue text-blue-400" href="/login">
               Log in
             </a>

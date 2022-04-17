@@ -86,7 +86,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="w-screen flex font-montserrat">
-      <Sidebar active={"viewInfo"} />
+      <Sidebar active={"dashboard"} />
       <div className="w-full max-h-screen overflow-y-scroll overflow-x-hidden py-8 px-8  font-poppins ">
         <h1 className="text-4xl font-semibold">Dashboard</h1>
         <div className="flex w-full mt-8 justify-between">

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const ServiceProvider = require("../models/serviceProviderModal");
 const Review = require("../models/reviewModal");
+const Quotation = require("../models/quotationModel");
 
 //@desc Get all service providers
 //@route GET /api/serviceProviders
@@ -71,8 +72,8 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     verified,
     services,
     address,
-    longitude,
-    latitude,
+
+    experience,
   } = req.body;
 
   address.fullLocation =
@@ -117,12 +118,8 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     owner,
     verified,
     services,
-    // neighbourhood,
-    // city,
-    // district,
+    experience,
     address,
-    longitude,
-    latitude,
     password: hashedPassword,
   });
 
@@ -154,7 +151,7 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
   const serviceProvider = await ServiceProvider.findOne({ email });
 
   if (!serviceProvider) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: "ServiceProvider not found",
     });
@@ -162,7 +159,7 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
     const match = await bcrypt.compare(password, serviceProvider.password);
 
     if (match) {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "Login Successfull ",
         data: {
@@ -173,7 +170,7 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
         },
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid Crendentials",
       });
@@ -276,7 +273,6 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
   const locationSplitTwo = locationArray[1] || null;
   const locationSplitThree = locationArray[2] || null;
 
-  const nameRegex = new RegExp(name, "gi");
   const serviceRegex = new RegExp(service, "ig");
   // const neighbourhoodRegex = new RegExp(neighbourhood, "ig");
   // const cityRegex = new RegExp(city, "ig");
@@ -381,8 +377,13 @@ const deleteServiceProvider = asyncHandler(async (req, res) => {
   const deletedServiceProvider = await ServiceProvider.findByIdAndDelete(
     req.params.id
   );
+
   await Review.deleteMany({
     serviceProvider: req.params.id,
+  });
+
+  await Quotation.deleteMany({
+    "quotations.serviceProvider": req.params.id,
   });
 
   res.status(200).json({

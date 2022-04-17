@@ -35,6 +35,6 @@ const serviceProviderAxiosInatance = axios.create({
   // headers: sericeProviderHeader,
 });
 
-export { customerAxiosInstance, serviceProviderAxiosInatance };
+export { customerAxiosInstance, serviceProviderAxiosInatance, axiosInstance };
 
 export default axiosInstance;

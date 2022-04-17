@@ -19,11 +19,13 @@ const customerRoute = require("./routes/customerRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const serviceProviderRoutes = require("./routes/serviceProviderRoutes");
 const quotationRoutes = require("./routes/quotationRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 app.use("/api/customers", customerRoute);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/serviceProviders", serviceProviderRoutes);
 app.use("/api/quotations", quotationRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(errorHandler);
 

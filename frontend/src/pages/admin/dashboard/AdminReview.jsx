@@ -90,6 +90,15 @@ const AdminReview = () => {
               </Select>
             </FormControl>
           </div>
+          {reviews.length === 0 ? (
+            <div className="flex justify-center">
+              <h1 className="text-5xl font-semibold font-smooch text-gray-600 capitalize">
+                No Reviews
+              </h1>
+            </div>
+          ) : (
+            ""
+          )}
           {reviews?.map((review, index) => (
             <div key={index} className="p-5 shadow-xl border rounded-lg">
               <div>

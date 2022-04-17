@@ -9,6 +9,7 @@ const ADD_QUOTE_URL = "/quotations/addQuote/";
 const SERVICEPPROVIDER_QUOTATION_URL = "/quotations/serviceprovider/";
 const EDIT_SERVICEPROVIDER_QUOTE_URL = "/quotations/editquote/";
 const DELETE_SERVICEPROVIDER_QUOTE_URL = "/quotations/deletequote/";
+const ALL_QUOTATIONS_URL = "/quotations/all";
 
 export const getCustomerQuotations = async (id) => {
   const response = await axios.get(`${CUSTOMER_QUOTATION_URL}${id}`);
@@ -39,11 +40,6 @@ export const deleteQuotation = async (id) => {
   return response.data;
 };
 
-export const getAllQuotations = async () => {
-  const response = await axios.get(`${CUSTOMER_QUOTATION_URL}`);
-  return response.data;
-};
-
 export const searchQuotation = async (service) => {
   const response = await axios.get(`${SEARCH_QUOTATION_URL}`, {
     params: {
@@ -63,8 +59,13 @@ export const addQuote = async (quoteInfo) => {
   return response.data;
 };
 
-export const getServiceProviderQuotes = async (id) => {
-  const response = await axios.get(`${SERVICEPPROVIDER_QUOTATION_URL}${id}`);
+export const getServiceProviderQuotes = async (id, text, sort) => {
+  const response = await axios.get(`${SERVICEPPROVIDER_QUOTATION_URL}${id}`, {
+    params: {
+      text,
+      sort,
+    },
+  });
   return response.data;
 };
 
@@ -79,5 +80,15 @@ export const deleteServiceProviderQuote = async (id) => {
   const response = await axios.delete(
     `${DELETE_SERVICEPROVIDER_QUOTE_URL}${id}`
   );
+  return response.data;
+};
+
+export const getAllQuotations = async (text, name) => {
+  const response = await axios.get(`${ALL_QUOTATIONS_URL}`, {
+    params: {
+      text,
+      name,
+    },
+  });
   return response.data;
 };

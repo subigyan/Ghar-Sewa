@@ -78,26 +78,37 @@ const QuotationRequests = () => {
       <div className="w-full max-h-screen overflow-y-scroll py-8 px-8  font-poppins ">
         <h1 className="text-3xl font-semibold">Quotation Requests</h1>
 
-        <div className="w-full flex justify-end">
-          <FormControl className="w-36">
-            <InputLabel id="demo-simple-select-label">Filter</InputLabel>
-            <Select
-              value={serviceOptions}
-              onChange={handleChange}
-              defaultValue={10}
-              label={"10"}
-            >
-              {userServices?.map((service) => {
-                return (
-                  <MenuItem value={service} className="capitalize">
-                    {service}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </div>
         <div className="mt-4 flex flex-col gap-6">
+          <div className="w-full flex justify-end">
+            <FormControl className="w-36">
+              <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+              <Select
+                value={serviceOptions}
+                onChange={handleChange}
+                defaultValue={10}
+                label={"10"}
+              >
+                {userServices?.map((service) => {
+                  return (
+                    <MenuItem value={service} className="capitalize">
+                      {service}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
+
+          {quotationRequests.length === 0 ? (
+            <div className="flex justify-center">
+              <h1 className="text-5xl font-semibold font-smooch text-gray-600 capitalize">
+                No Quotation Requests for {serviceOptions}
+              </h1>
+            </div>
+          ) : (
+            ""
+          )}
+
           {quotationRequests.map((quotation) => {
             return (
               <div className="border-2 p-4 rounded-md shadow-md">

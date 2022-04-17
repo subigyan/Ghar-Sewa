@@ -25,6 +25,7 @@ import Map from "react-map-gl";
 import { MdLocationPin } from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Checkbox, FormControlLabel } from "@mui/material";
+import BackButton from "../../components/BackButton";
 
 const steps = [
   {
@@ -60,7 +61,7 @@ const Register = () => {
 
   // console.log(mapLatitude, mapLongitude);
 
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
 
   const [businessType, setBusinessType] = useState("company");
 
@@ -201,7 +202,7 @@ const Register = () => {
       } else {
         // alert(JSON.stringify(formik.values));
         try {
-          const {
+          let {
             name,
             userPhone: phoneNumber,
             email,
@@ -227,6 +228,9 @@ const Register = () => {
             latitude: mapLatitude,
             longitude: mapLongitude,
           };
+          if (type === "individual") {
+            owner = "";
+          }
 
           // console.log(businessType);
           const response = await register({
@@ -331,6 +335,7 @@ const Register = () => {
   return (
     <>
       <Nav isHome={false} />
+      <BackButton />
       <div className="flex items-center justify-center mt-10">
         <div className="lg:w-8/12 md:w-11/12 w-full flex justify-between md:flex-row flex-col ">
           <div className="min-w-[300px] md:w-3/12 p-5 shadow-lg  w-full shadow-slate-400">

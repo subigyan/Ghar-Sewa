@@ -11,9 +11,11 @@ import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import authState, { serviceProviderAuthState } from "../../atoms/authAtom";
 import { login } from "../../api/serviceProvider";
+import logo from "../../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../components/BackButton";
 
-const Register = () => {
+const BusinessLogin = () => {
   const [showPassword, setShowPassoword] = useState(false);
   // const [user, setUser] = useRecoilState(authState);
 
@@ -33,11 +35,11 @@ const Register = () => {
       ),
   });
 
-  // useEffect(() => {
-  //   if (serviceProvider) {
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (serviceProvider) {
+      navigate("/business/dashboard");
+    }
+  });
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -58,94 +60,104 @@ const Register = () => {
         const response = await login({ email, password });
         if (response.data) {
           setServiceProvider(response?.data);
-          toast.success("Done");
-          toast.success(response.message);
+          toast.success(response.message, {
+            theme: "dark",
+          });
+          navigate("/business/dashboard");
         }
         console.log(response);
       } catch (err) {
-        console.log(err.response.data.message);
-        toast.error(err.response.data.message);
+        toast.error(err.response.data.message, {
+          theme: "dark",
+        });
       }
     },
   });
   return (
-    <div className="w-screen h-screen  flex ">
-      <div className="w-full flex justify-center  p-2">
-        <div
-          className="md:w-[500px] w-[400px] shadow-2xl border border-gray-100 rounded-md p-4 flex flex-col justify-center  
-          py-8 h-[400px] mt-20"
-        >
-          <h1 className="text-3xl font-Medium text-center font-semibold">
-            Login
-          </h1>
-          <form
-            className="flex flex-col w-full items-center justify-between mt-8 min-h-[180px] space-y-3"
-            onSubmit={formik.handleSubmit}
+    <div className="w-screen h-screen  flex font-roboto">
+      <BackButton />
+      <div className="w-full flex justify-center items-center p-2 bg-[#3B3B3B]/20">
+        <div className="flex w-9/12 shadow-2xl h-[70%]">
+          <div
+            className="w-6/12  border border-gray-100 rounded-l-xl p-8 flex flex-col justify-center
+        min-h-[400px]  bg-white"
           >
-            <TextField
-              id="email"
-              name="email"
-              label="Email"
-              type="email"
-              variant="outlined"
-              size="small"
-              color="grey"
-              className="w-full"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-              onBlur={formik.handleBlur}
-            />
-            <TextField
-              id="password"
-              name="password"
-              label="Password"
-              type={`${showPassword ? "text" : "password"}`}
-              variant="outlined"
-              size="small"
-              color="grey"
-              // className="w-full border rounded-sm"
-              fullWidth
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              onBlur={formik.handleBlur}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="start"
-                    onClick={() => setShowPassoword(!showPassword)}
-                    className="cursor-pointer"
-                  >
-                    {showPassword ? (
-                      <MdVisibility size={25} />
-                    ) : (
-                      <MdVisibilityOff size={25} />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <button
-              className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4"
-              type="submit"
+            <h1 className="text-5xl font-Medium  font-semibold text-gray-700">
+              Service Provider Login
+            </h1>
+            <p className="text-lg mt-2 text-gray-600">
+              Sign in to your account
+            </p>
+            <form
+              className="flex flex-col w-full items-center justify-between mt-8 min-h-[180px] gap-4"
+              onSubmit={formik.handleSubmit}
             >
-              Login
-            </button>
-          </form>
-          <p className="mt-5 text-center">
-            Dont Have an account?{" "}
-            <span className="bg-blue text-blue-400 ">
-              <Link to="/register">Register</Link>
-            </span>
-          </p>
+              <TextField
+                id="email"
+                name="email"
+                label="Email"
+                type="email"
+                variant="outlined"
+                size="small"
+                color="grey"
+                className="w-full"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                onBlur={formik.handleBlur}
+              />
+
+              <TextField
+                id="password"
+                name="password"
+                label="Password"
+                type={`${showPassword ? "text" : "password"}`}
+                variant="outlined"
+                size="small"
+                color="grey"
+                fullWidth
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                onBlur={formik.handleBlur}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="start"
+                      onClick={() => setShowPassoword(!showPassword)}
+                      className="cursor-pointer"
+                    >
+                      {showPassword ? (
+                        <MdVisibility size={25} />
+                      ) : (
+                        <MdVisibilityOff size={25} />
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <div className="flex justify-end w-full">
+                <button
+                  className=" py-2 w-4/12  border-gray-400 rounded outline-none bg-slate-700 text-white text-xl"
+                  type="submit"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="w-6/12 bg-[#3B3B3B] flex flex-center rounded-r-xl">
+            <img src={logo} alt="logo" className="w-80 bg-white" />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default BusinessLogin;

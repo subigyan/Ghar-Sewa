@@ -18,11 +18,19 @@ const BusinessDashboard = () => {
   const [serviceProvider, setServiceProvider] = useState([]);
 
   useEffect(() => {
-    getServiceProvider(user.id)
-      .then((res) => {
-        setServiceProvider(res.data);
-      })
-      .catch((err) => console.log("No Service Providers"));
+    if (user) {
+      getServiceProvider(user?.id)
+        .then((res) => {
+          setServiceProvider(res.data);
+        })
+        .catch((err) => console.log("No Service Providers"));
+
+      getReviewStats(user?.id)
+        .then((res) => {
+          setReviewStats(res.data);
+        })
+        .catch((err) => console.log("No Reviews"));
+    }
   }, []);
 
   console.log(serviceProvider);
@@ -59,13 +67,6 @@ const BusinessDashboard = () => {
     ],
   });
 
-  useEffect(() => {
-    getReviewStats(user?.id)
-      .then((res) => {
-        setReviewStats(res.data);
-      })
-      .catch((err) => console.log("No Reviews"));
-  }, []);
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -126,7 +127,7 @@ const BusinessDashboard = () => {
                 <AiFillStar className="text-6xl" />
               </div>
               <h1 className="ml-4 text-4xl font-semibold">
-                {reviewStats.averageRating} Stars
+                {reviewStats.averageRating || 0} Stars
               </h1>
             </div>
           </div>
@@ -200,40 +201,48 @@ const BusinessDashboard = () => {
               Review Sentiment
             </h2>
 
-            <div className="-mt-14">
-              <PieChart width={500} height={400}>
-                <Pie
-                  dataKey="value"
-                  data={data}
-                  cx={200}
-                  cy={200}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend
-                  wrapperStyle={{
-                    top: 300,
-                    left: 320,
-                    lineHeight: "24px",
-                  }}
-                  iconSize={10}
-                  width={400}
-                  height={140}
-                  layout="vertical"
-                  verticalAlign="middle"
-                />
-              </PieChart>
-            </div>
+            {reviewStats?.totalReviews > 0 ? (
+              <div className="-mt-14">
+                <PieChart width={500} height={400}>
+                  <Pie
+                    dataKey="value"
+                    data={data}
+                    cx={200}
+                    cy={200}
+                    outerRadius={120}
+                    fill="#8884d8"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend
+                    wrapperStyle={{
+                      top: 300,
+                      left: 320,
+                      lineHeight: "24px",
+                    }}
+                    iconSize={10}
+                    width={400}
+                    height={140}
+                    layout="vertical"
+                    verticalAlign="middle"
+                  />
+                </PieChart>
+              </div>
+            ) : (
+              <div>
+                <h1 className="text-center text-4xl font-semibold text-gray-500 font-smooch mt-28">
+                  No Reviews Yet
+                </h1>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,13 +4,18 @@ import { useRecoilValue } from "recoil";
 import { serviceProviderAuthState } from "../../../atoms/authAtom";
 import { getServiceProvider } from "../../../api/serviceProviderSearch";
 import Map, { Marker } from "react-map-gl";
-import { MdLocationPin, MdOutlineRateReview } from "react-icons/md";
+import {
+  MdLocationPin,
+  MdOutlineRateReview,
+  MdVerifiedUser,
+} from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GoPerson } from "react-icons/go";
 import { GrLocation, GrMail } from "react-icons/gr";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { FiImage } from "react-icons/fi";
+import { FaBusinessTime } from "react-icons/fa";
 
 const BusinessInfo = () => {
   const user = useRecoilValue(serviceProviderAuthState);
@@ -59,9 +64,14 @@ const BusinessInfo = () => {
                 </div>
               )}
               <div className="7/12 pl-8">
-                <h1 className="text-5xl font-semibold capitalize">
-                  {serviceProvider.name}
-                </h1>
+                <div className="flex items-center gap-2  ">
+                  <h1 className="text-5xl font-semibold capitalize">
+                    {serviceProvider.name}
+                  </h1>
+                  {serviceProvider?.verified && (
+                    <MdVerifiedUser className="text-3xl text-blue-700" />
+                  )}
+                </div>
                 {console.log(serviceProvider)}
                 <p className="text-xl font-semibold text-gray-500 mb-4">
                   {serviceProvider.type === "individual"
@@ -113,6 +123,14 @@ const BusinessInfo = () => {
                       <h2 className="ml-3 "> {serviceProvider?.email}</h2>
                     </Link>
                   </div>
+                  <div className="flex items-center ">
+                    <FaBusinessTime className="text-xl" />
+                    <h2 className="ml-3 ">
+                      {serviceProvider?.experience <= 1
+                        ? `${serviceProvider?.experience} year`
+                        : `${serviceProvider?.experience} years`}
+                    </h2>
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,7 +153,7 @@ const BusinessInfo = () => {
                   </div>
                 ))}
               </div>
-              {serviceProvider?.portfolioImages.filter((image) => image)
+              {serviceProvider?.portfolioImages?.filter((image) => image)
                 .length > 0 ? (
                 <>
                   <h2 className="border-t-8 border-b-8 py-2 text-center text-3xl my-4 font-semibold">

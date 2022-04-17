@@ -47,7 +47,7 @@ const BusinessReviews = () => {
       <Sidebar active={"reviews"} />
       <div className="w-full max-h-screen overflow-y-scroll py-8 px-8  font-poppins">
         <h1 className="text-3xl font-semibold">Business Reviews</h1>
-        <div className="w-full flex flex-col gap-8 py-8 ">
+        <div className="w-full flex flex-col gap-8 py-8">
           <div className="flex justify-between">
             <input
               type={"text"}
@@ -73,6 +73,15 @@ const BusinessReviews = () => {
               </Select>
             </FormControl>
           </div>
+          {reviews.length === 0 ? (
+            <div className="flex justify-center">
+              <h1 className="text-5xl font-semibold font-smooch text-gray-600 capitalize">
+                You haven't received any reviews yet
+              </h1>
+            </div>
+          ) : (
+            ""
+          )}
           {reviews?.map((review, index) => (
             <div key={index} className="p-5 shadow-xl border rounded-lg">
               <ReviewCard review={review} />

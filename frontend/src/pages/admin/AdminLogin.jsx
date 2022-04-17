@@ -1,76 +1,65 @@
 import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputAdornment from "@mui/material/InputAdornment";
 import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 import axios from "axios";
+import { adminAuthState } from "../../atoms/authAtom";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import authState, { serviceProviderAuthState } from "../../atoms/authAtom";
-import { login } from "../../api/serviceProvider";
-import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import BackButton from "../../components/BackButton";
+import { login } from "../../api/admin";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassoword] = useState(false);
-  // const [user, setUser] = useRecoilState(authState);
 
-  const [serviceProvider, setServiceProvider] = useRecoilState(
-    serviceProviderAuthState
-  );
-
+  const [admin, setAdmin] = useRecoilState(adminAuthState);
   const navigate = useNavigate();
+
   const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required")
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-        "Most contain at least one letter and one number"
-      ),
+    name: Yup.string().required("Name is required"),
+    password: Yup.string().required("Password is required"),
   });
 
-  // useEffect(() => {
-  //   if (serviceProvider) {
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (admin) {
+      navigate("/admin/dashboard");
+    }
+  }, []);
+
   const formik = useFormik({
     initialValues: {
-      email: "",
       password: "",
+      name: "",
     },
     validationSchema: validationSchema,
-    // onSubmit: async (values) => {
-    //   try {
-    //     const { email, password } = values;
-    //     // const response = await axios.post(
-    //     //   "http://localhost:5000/api/serviceProviders/login",
-    //     //   {
-    //     //     email,
-    //     //     password,
-    //     //   }
-    //     // );
-
-    //     const response = await login({ email, password });
-    //     if (response.data) {
-    //       setServiceProvider(response?.data);
-    //       toast.success("Done");
-    //       toast.success(response.message);
-    //     }
-    //     console.log(response);
-    //   } catch (err) {
-    //     console.log(err.response.data.message);
-    //     toast.error(err.response.data.message);
-    //   }
-    // },
+    onSubmit: async (values) => {
+      try {
+        const { name, password } = values;
+        const response = await login({ userName: name, password });
+        if (response.data) {
+          toast.success(response.message, {
+            theme: "dark",
+          });
+          setAdmin(response.data);
+        }
+        navigate("/admin/dashboard");
+        console.log(response);
+      } catch (err) {
+        console.log(err.response.data.message);
+        toast.error(err.response.data.message, {
+          theme: "dark",
+        });
+      }
+    },
   });
   return (
     <div className="w-screen h-screen  flex font-roboto">
+      <BackButton />
       <div className="w-full flex justify-center items-center p-2 bg-[#3B3B3B]/20">
         <div className="flex w-9/12 shadow-2xl h-[70%]">
           <div
@@ -88,18 +77,17 @@ const AdminLogin = () => {
               onSubmit={formik.handleSubmit}
             >
               <TextField
-                id="email"
-                name="email"
-                label="Email"
-                type="email"
+                id="name"
+                name="name"
+                label="Name"
                 variant="outlined"
                 size="small"
                 color="grey"
                 className="w-full"
-                value={formik.values.email}
+                value={formik.values.name}
                 onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
                 onBlur={formik.handleBlur}
               />
               <TextField
@@ -146,7 +134,7 @@ const AdminLogin = () => {
             </form>
           </div>
           <div className="w-6/12 bg-[#3B3B3B] flex flex-center rounded-r-xl">
-            <img src={logo} alt="logo" className="w-80" />
+            <img src={logo} alt="logo" className="w-80 bg-white" />
           </div>
         </div>
       </div>

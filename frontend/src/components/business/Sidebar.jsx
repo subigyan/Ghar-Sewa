@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiDashboardLine } from "react-icons/ri";
 import {
   BsPersonSquare,
@@ -13,6 +13,9 @@ import { BiEdit } from "react-icons/bi";
 import { RiQuestionnaireLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
+import { serviceProviderAuthState } from "../../atoms/authAtom";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ active }) => {
   const [showInfo, setShowInfo] = useState(
@@ -21,6 +24,24 @@ const Sidebar = ({ active }) => {
   const [showQuotation, setShowQuotation] = useState(
     active === "requests" || active === "myQuotations"
   );
+
+  const navigate = useNavigate();
+
+  const [serviceProvider, setServiceProvider] = useRecoilState(
+    serviceProviderAuthState
+  );
+
+  const logout = () => {
+    localStorage.removeItem("serviceProvider");
+    setServiceProvider(null);
+    navigate("/business/login");
+  };
+
+  useEffect(() => {
+    if (!serviceProvider) {
+      navigate("/business/login");
+    }
+  }, []);
 
   return (
     <div className="min-w-[325px] h-screen bg-admin_dark text-admin_light py-6 px-8 overflow-y-scroll scrollbar-hide flex flex-col justify-between  ">
@@ -152,7 +173,12 @@ const Sidebar = ({ active }) => {
           )}
         </div>
       </div>
-      <div className="flex p-3 mx-3 items-center rounded-lg bg-[#353637] hover:text-red-500 cursor-pointer mt-4">
+      <div
+        className="flex p-3 mx-3 items-center rounded-lg bg-[#353637] hover:text-red-500 cursor-pointer mt-4"
+        onClick={() => {
+          logout();
+        }}
+      >
         <FiLogOut className="text-2xl cursor-pointer" />
         <p className="text-lg font-semibold ml-2 ">Logout</p>
       </div>
