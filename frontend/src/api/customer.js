@@ -20,10 +20,11 @@ export const login = async (user) => {
   return response.data;
 };
 
-export const getCustomers = async (name) => {
+export const getCustomers = async (name, sort) => {
   const response = await axios.get(API_URL, {
     params: {
       name,
+      sort,
     },
   });
   return response.data;

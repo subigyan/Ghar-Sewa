@@ -29,7 +29,7 @@ import AdminQuotation from "./pages/admin/dashboard/AdminQuotation.jsx";
 
 function App() {
   return (
-    <div>
+    <div className="break-words">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

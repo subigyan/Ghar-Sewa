@@ -8,6 +8,12 @@ import "aos/dist/aos.css";
 import "./home.css";
 import Typewriter from "typewriter-effect";
 import axios from "axios";
+import homeBackImage from "../../../assets/images/home-back.jpg";
+import reviewImage from "../../../assets/icons/reviews.png";
+import workerImage from "../../../assets/icons/workers.png";
+import customerImage from "../../../assets/icons/team.png";
+import technicianImage from "../../../assets/images/technician.png";
+import toolImage from "../../../assets/images/tools.png";
 
 import { GiTap, GiElectric } from "react-icons/gi";
 import { BiBuildingHouse } from "react-icons/bi";
@@ -44,7 +50,139 @@ const Home = () => {
   return (
     <div className=" overflow-x-hidden">
       <Nav />
-      <div className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-32 ">
+      <div className=""></div>
+      <img
+        src={toolImage}
+        className="w-screen h-screen absolute -z-20 object-cover"
+        alt="back"
+      />
+      <img
+        src={homeBackImage}
+        className="w-screen h-screen fixed -z-40"
+        alt="back"
+      />
+
+      {/* <div className="w-screen h-screen flex   items-center pb-16 bg-[#ffba19c9]">
+        <div className="md:w-7/12 w-full  lg:pl-16 ">
+          <h1
+            className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  mt-10 md:px-0 px-8"
+            data-aos="fade-in"
+          >
+            <Typewriter
+              options={{
+                // autoStart: true,
+                loop: false,
+                delay: 70,
+                changeDelay: 1,
+              }}
+              onInit={(typewriter) => {
+                // typewriter.pauseFor(300)
+                typewriter
+                  .typeString("Discover Household Service Providers Near You")
+                  .pauseFor(2000)
+                  .start();
+              }}
+            />
+          </h1>
+
+          <form
+            className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md md:flex hidden  items-center pl-2 shadow-2xl"
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-5/12  h-full py-2 relative">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="service"
+                id="type"
+                placeholder="plumber, electrician"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+                list="browsers"
+              />
+            </div>
+            <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
+            <div className="w-6/12  h-full flex items-center py-2">
+              <BiLocationPlus className="text-2xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+            <button className="w-1/12 bg-[#0B1007] h-full ml-2 flex justify-center items-center rounded-r-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <FiSearch className="text-xl text-white" />
+              )}
+            </button>
+          </form>
+          <form
+            className="mt-3 w-full px-8 md:hidden flex flex-col gap-4  "
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full  "
+                type="text"
+                name="service"
+                id="type"
+                placeholder="Search Service Category"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+              <BiLocationPlus className="text-2xl text-brown w-12 " />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <button className="w-full bg-[#0B1007] h-10  flex justify-center items-center rounded-r-md shadow-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <span className="text-xl text-white"> Search </span>
+              )}
+            </button>
+          </form>
+        </div>
+        <div className="w-4/12  lg:pl-16 md:block hidden">
+          <img src={technicianImage} alt="" className="mt-16 h-96" />
+        </div>
+      </div> */}
+      {/* bg-[#ffba19c9]"  bg-[#ffbc57d8]*/}
+
+      <div
+        className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-32 bg-[#ffcd57e5]
+      "
+      >
         <h1
           className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  mt-10"
           data-aos="fade-in"
@@ -88,14 +226,6 @@ const Home = () => {
               autoComplete="off"
               list="browsers"
             />
-            {/* <div className="w-full h-5 top-full bg-green-500 absolute">
-              <div>Plumber</div>
-              <div>Plumber</div>
-              <div>Plumber</div>
-              <div>Plumber</div>
-              <div>Plumber</div>
-              <div>Plumber</div>
-            </div> */}
           </div>
           <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
           <div className="w-6/12  h-full flex items-center py-2">
@@ -162,7 +292,8 @@ const Home = () => {
           </button>
         </form>
       </div>
-      <div className="border-2  py-6 " id="browse">
+
+      <div className="border-2  py-6 bg-white " id="browse">
         <h1 className="text-3xl font-semibold text-center">
           Discover Service Providers
         </h1>
@@ -299,6 +430,28 @@ const Home = () => {
           </div>
         </div> */}
       </div>
+      <div className="h-96 w-screen bg-black/40 flex flex-center ">
+        <div className="flex items-center justify-center h-full w-[80%]">
+          <div className="w-4/12 flex flex-col flex-center ">
+            <img src={workerImage} alt="logo" className="invert w-36" />
+            <p className=" text-white mt-2 text-5xl font-bold">55</p>
+            <p className=" text-white  text-2xl font-medium">
+              Service Providers
+            </p>
+          </div>
+          <div className="w-4/12 flex flex-col flex-center ">
+            <img src={customerImage} alt="logo" className="invert w-36" />
+            <p className=" text-white mt-2 text-5xl font-bold">55</p>
+            <p className=" text-white  text-2xl font-medium">Consumers</p>
+          </div>
+          <div className="w-4/12 flex flex-col flex-center ">
+            <img src={reviewImage} alt="logo" className="invert w-36 p-4" />
+            <p className=" text-white mt-2 text-5xl font-bold">Thousands</p>
+            <p className=" text-white  text-2xl font-medium">of Reviews</p>
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );

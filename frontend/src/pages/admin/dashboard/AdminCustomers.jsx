@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/admin/Sidebar";
 import { getCustomers, deleteCustomer } from "../../../api/customer";
 import { toast } from "react-toastify";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const AdminCustomers = () => {
   const [customers, setCustomers] = useState([]);
@@ -28,13 +29,24 @@ const AdminCustomers = () => {
       })
       .catch((err) => console.log("No Customers"));
   };
+  const [sort, setSort] = useState("");
+  const [name, setName] = useState("");
 
   const getCustomersByName = (name) => {
-    getCustomers(name)
+    getCustomers(name, sort)
       .then((res) => {
         setCustomers(res.data);
       })
       .catch((err) => console.log("No Customers"));
+  };
+
+  const handleChange = (event) => {
+    setSort(event.target.value);
+    getCustomers(name, event.target.value)
+      .then((res) => {
+        setCustomers(res.data);
+      })
+      .catch((err) => console.log("No Service Providers"));
   };
 
   return (
@@ -44,12 +56,32 @@ const AdminCustomers = () => {
         <h1 className="text-3xl font-semibold">Customers</h1>
         <div className="w-full flex flex-col gap-8 py-8 ">
           <div className="w-10/12 min-w-[800px]">
-            <input
-              type={"text"}
-              className="w-60 border-2 border-gray-300 rounded-lg p-2"
-              placeholder="Search by name"
-              onChange={(e) => getCustomersByName(e.target.value)}
-            />
+            <div className="flex justify-between ">
+              <input
+                type={"text"}
+                className="w-60 border-2 border-gray-300 rounded-lg p-2"
+                placeholder="Search by name"
+                onChange={(e) => {
+                  getCustomersByName(e.target.value);
+                  setName(e.target.value);
+                }}
+              />
+              <FormControl className="w-44">
+                <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={sort}
+                  label="Sort"
+                  onChange={handleChange}
+                  defaultValue={""}
+                >
+                  <MenuItem value={""}>None</MenuItem>
+                  <MenuItem value={"old"}>Oldest</MenuItem>
+                  <MenuItem value={"new"}>Newest</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
               <table className="w-full text-sm text-left text-gray-500 ">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-100  ">
@@ -70,7 +102,10 @@ const AdminCustomers = () => {
                 </thead>
                 <tbody>
                   {customers?.map((customer, index) => (
-                    <tr className="bg-white border-b text-gray-800 hover:bg-gray-50">
+                    <tr
+                      className="bg-white border-b text-gray-800 hover:bg-gray-50"
+                      key={index}
+                    >
                       <th
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 "

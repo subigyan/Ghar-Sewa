@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/admin/Sidebar";
 import { getCustomers } from "../../../api/customer";
 import { getStats } from "../../../api/serviceProvider";
+import { getQuotationStats } from "../../../api/quotation";
 import { getAllReviews } from "../../../api/review";
-import { BsPeopleFill } from "react-icons/bs";
+import { BsPeopleFill, BsChatLeftQuote } from "react-icons/bs";
 import { GrUserWorker } from "react-icons/gr";
 import { MdOutlineRateReview } from "react-icons/md";
 import {
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
   const [serviceProviderCount, setServiceProviderCount] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
   const [serviceTypeCount, setServiceTypeCount] = useState([]);
+  const [quotationStats, setQuotationStats] = useState([]);
 
   useEffect(() => {
     getCustomers()
@@ -41,7 +43,12 @@ const AdminDashboard = () => {
         setReviewCount(res.count);
       })
       .catch((err) => console.log("No Reviews"));
+    getQuotationStats().then((res) => {
+      setQuotationStats(res.data);
+    });
   }, []);
+
+  console.log(quotationStats);
 
   const pieData = [
     {
@@ -90,41 +97,56 @@ const AdminDashboard = () => {
       <div className="w-full max-h-screen overflow-y-scroll overflow-x-hidden py-8 px-8  font-poppins ">
         <h1 className="text-4xl font-semibold">Dashboard</h1>
         <div className="flex w-full mt-8 justify-between">
-          <div className="w-[30%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#334257]">
+          <div className="w-[23%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#334257]">
             <div className="flex items-center">
               <div className=" rounded-lg p-1">
-                <BsPeopleFill className="text-6xl" />
+                <BsPeopleFill className="text-4xl" />
               </div>
               <div>
-                <h1 className="ml-4 text-3xl font-semibold">{customerCount}</h1>
-                <h1 className=" ml-4 text-xl font-semibold">Customers</h1>
+                <h1 className="ml-3 text-2xl font-semibold">{customerCount}</h1>
+                <h1 className=" ml-3 text-lg font-semibold">Customers</h1>
               </div>
             </div>
           </div>
-          <div className="w-[30%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#476072]">
+          <div className="w-[23%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#476072]">
             <div className="flex items-center">
               <div className=" rounded-lg p-1">
-                <GrUserWorker className="text-6xl" />
+                <GrUserWorker className="text-4xl" />
               </div>
               <div>
-                <h1 className="ml-4 text-3xl font-semibold">
+                <h1 className="ml-3 text-2xl font-semibold">
                   {serviceProviderCount}
                 </h1>
-                <h1 className=" ml-4 text-xl font-semibold">
+                <h1 className=" ml-3 text-lg font-semibold">
                   Service Providers
                 </h1>
               </div>
             </div>
           </div>
-          <div className="w-[30%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#548CA8]">
+          <div className="w-[23%]  rounded-2xl border shadow-lg p-4 border-l-8 border-l-[#006395]">
             <div className="flex items-center">
               <div className=" rounded-lg p-1">
-                <MdOutlineRateReview className="text-6xl" />
+                <MdOutlineRateReview className="text-4xl" />
               </div>
               <div>
-                <h1 className="ml-4 text-3xl font-semibold">{reviewCount}</h1>
-                <h1 className=" ml-4 text-xl text-gray-600 font-semibold">
+                <h1 className="ml-3 text-2xl font-semibold">{reviewCount}</h1>
+                <h1 className=" ml-3 text-lg text-gray-600 font-semibold">
                   Reviews
+                </h1>
+              </div>
+            </div>
+          </div>
+          <div className="w-[23%]  rounded-2xl border shadow-lg py-4 pl-3 border-l-8 border-l-[#548CA8]">
+            <div className="flex items-center">
+              <div className=" rounded-lg p-1">
+                <BsChatLeftQuote className="text-3xl" />
+              </div>
+              <div>
+                <h1 className="ml-2 text-2xl font-semibold">
+                  {quotationStats?.totalQuotations}
+                </h1>
+                <h1 className="ml-2 text-lg text-gray-600 font-semibold">
+                  Quotation Requests
                 </h1>
               </div>
             </div>

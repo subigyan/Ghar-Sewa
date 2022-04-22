@@ -185,7 +185,10 @@ const AdminServiceProvider = () => {
                 </thead>
                 <tbody>
                   {serviceProviders?.map((serviceProvider, index) => (
-                    <tr className="bg-white border-b text-gray-800 hover:bg-gray-50">
+                    <tr
+                      className="bg-white border-b text-gray-800 hover:bg-gray-50"
+                      key={index}
+                    >
                       <th
                         scope="row"
                         className="px-4 py-4 font-medium text-gray-900 capitalize hover:underline cursor-pointer"

@@ -10,6 +10,7 @@ const SERVICEPPROVIDER_QUOTATION_URL = "/quotations/serviceprovider/";
 const EDIT_SERVICEPROVIDER_QUOTE_URL = "/quotations/editquote/";
 const DELETE_SERVICEPROVIDER_QUOTE_URL = "/quotations/deletequote/";
 const ALL_QUOTATIONS_URL = "/quotations/all";
+const QUOTATION_STATS_URL = "/quotations/stats";
 
 export const getCustomerQuotations = async (id) => {
   const response = await axios.get(`${CUSTOMER_QUOTATION_URL}${id}`);
@@ -90,5 +91,10 @@ export const getAllQuotations = async (text, name) => {
       name,
     },
   });
+  return response.data;
+};
+
+export const getQuotationStats = async () => {
+  const response = await axios.get(`${QUOTATION_STATS_URL}`);
   return response.data;
 };

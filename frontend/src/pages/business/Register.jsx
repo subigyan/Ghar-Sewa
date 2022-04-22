@@ -26,6 +26,7 @@ import { MdLocationPin } from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import BackButton from "../../components/BackButton";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -48,6 +49,8 @@ const Register = () => {
     serviceProviderAuthState
   );
 
+  const navigate = useNavigate();
+
   const [viewPort, setViewPort] = useState({
     latitude: 27.70784546292888,
     longitude: 85.3255410260927,
@@ -69,8 +72,6 @@ const Register = () => {
     setBusinessType(event.target.value);
   };
 
-  // console.log(businessType);
-  //
   const [showPassword, setShowPassoword] = useState(false);
 
   const phoneRegExp = /^((98|97)|0)[0-9]{8}$/;
@@ -256,6 +257,7 @@ const Register = () => {
             if (response.success) {
               setServiceProvider(response?.data);
               toast.success(response.message);
+              navigate("/business/dashboard");
             } else {
               toast.error(
                 "Error while registering. Business Email id is already registered."
@@ -335,7 +337,7 @@ const Register = () => {
   return (
     <>
       <Nav isHome={false} />
-      <BackButton />
+      <BackButton home={true} />
       <div className="flex items-center justify-center mt-10">
         <div className="lg:w-8/12 md:w-11/12 w-full flex justify-between md:flex-row flex-col ">
           <div className="min-w-[300px] md:w-3/12 p-5 shadow-lg  w-full shadow-slate-400">

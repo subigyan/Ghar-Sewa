@@ -10,10 +10,19 @@ const Review = require("../models/reviewModal");
 //@access Private
 const getCustomers = asyncHandler(async (req, res) => {
   const name = req.query.name;
+  const sort = req.query.sort;
+
   const nameRegex = new RegExp(name, "gi");
+
+  const sortQuery = {};
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  }
   const customers = await Customer.find({
     name: { $regex: nameRegex },
-  });
+  }).sort(sortQuery);
   return res.status(200).json({
     success: true,
     message: "All customers",
@@ -29,15 +38,19 @@ const registerCustomer = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    res.status(400);
-    throw new Error("Please Enter All Fields");
+    res.status(400).json({
+      success: false,
+      message: "Please enter all fields",
+    });
   }
 
   //check if customer already exists
   const customerExist = await Customer.findOne({ email });
   if (customerExist) {
-    return res.status(400);
-    throw new Error("Customer Already Exists");
+    return res.status(400).json({
+      success: false,
+      message: "Customer already exists",
+    });
   }
 
   //hash password

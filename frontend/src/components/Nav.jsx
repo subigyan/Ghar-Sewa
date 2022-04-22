@@ -26,17 +26,16 @@ const Nav = ({ fixed }) => {
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      document
-        .querySelector(".nav")
-        .classList.toggle("scrolled", window.scrollY > 0);
+      let nav = document.querySelector(".nav");
+      nav.classList.toggle("scrolled", window.scrollY > 0);
     });
   }, []);
 
   return (
     <div
-      className={`nav w-full ${
+      className={`nav w-full  ${
         fixed && "fixed"
-      } top-0 left-0 h-20 shadow-sm shadow-violet-400  z-40`}
+      } top-0 left-0 h-20 shadow-lg rounded-b-sm  z-40 bg-white`}
     >
       <div className="lg:flex items-center justify-between  py-4 lg:px-14 px-7">
         <div className="flex items-center justify-between">

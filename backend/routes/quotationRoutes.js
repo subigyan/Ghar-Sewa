@@ -13,6 +13,7 @@ const {
   getQuotationByServiceProvider,
   editServiceProviderQuote,
   deleteServiceProviderQuote,
+  getQuotationStats,
 } = require("../controllers/quotationControllers");
 
 //for customer quotation requests
@@ -29,5 +30,8 @@ router.post("/addQuote/:id", addQuote);
 router.get("/serviceprovider/:id", getQuotationByServiceProvider);
 router.put("/editquote/:id", editServiceProviderQuote);
 router.delete("/deletequote/:id", deleteServiceProviderQuote);
+
+//stats
+router.get("/stats", getQuotationStats);
 
 module.exports = router;

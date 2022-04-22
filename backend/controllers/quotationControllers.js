@@ -301,6 +301,35 @@ const deleteServiceProviderQuote = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getQuotationStats = expressAsyncHandler(async (req, res) => {
+  const quotations = await Quotation.find({});
+  const totalQuotations = quotations.length;
+  const totalCustomers = [
+    ...new Set(quotations.map((quotation) => quotation.customer.toString())),
+  ].length;
+
+  const totalServiceProviders = [
+    ...new Set(
+      quotations.map((quotation) =>
+        quotation.quotations?.serviceProvider?.toString()
+      )
+    ),
+  ].length;
+  const totalQuotes = quotations
+    .map((quotation) => quotation.quotations)
+    .reduce((a, b) => a.concat(b), []).length;
+  res.status(200).json({
+    success: true,
+    message: "Quotation stats",
+    data: {
+      totalQuotations,
+      totalCustomers,
+      totalServiceProviders,
+      totalQuotes,
+    },
+  });
+});
+
 module.exports = {
   getQuotation,
   postQuotations,
@@ -313,4 +342,5 @@ module.exports = {
   getQuotationByServiceProvider,
   editServiceProviderQuote,
   deleteServiceProviderQuote,
+  getQuotationStats,
 };

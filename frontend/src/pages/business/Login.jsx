@@ -75,7 +75,8 @@ const BusinessLogin = () => {
   });
   return (
     <div className="w-screen h-screen  flex font-roboto">
-      <BackButton />
+      <BackButton home={true} />
+
       <div className="w-full flex justify-center items-center p-2 bg-[#3B3B3B]/20">
         <div className="flex w-9/12 shadow-2xl h-[70%]">
           <div
