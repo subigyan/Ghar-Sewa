@@ -39,15 +39,13 @@ const getQuotation = expressAsyncHandler(async (req, res) => {
 const postQuotations = expressAsyncHandler(async (req, res) => {
   // console.log(req.id);
 
-  const { customer, requestHeadline, requestBody, service, requestImage } =
-    req.body;
+  const { customer, requestHeadline, requestBody, service } = req.body;
 
   const newQuotation = await Quotation.create({
     customer,
     requestHeadline,
     requestBody,
     service,
-    requestImage,
   });
 
   res.status(201).json({
@@ -69,7 +67,7 @@ const updateQuotation = expressAsyncHandler(async (req, res) => {
       message: "Quotation not found",
     });
   }
-  const { requestHeadline, requestBody, service, requestImage } = req.body;
+  const { requestHeadline, requestBody, service } = req.body;
 
   const updatedQuotation = await Quotation.findByIdAndUpdate(
     req.params.id,

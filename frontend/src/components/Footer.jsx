@@ -77,7 +77,7 @@ const Footer = () => {
           </a>
           . All Rights Reserved.
         </span>
-        <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+        <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0 sm:mr-20">
           <a
             href="https://facebook.com/"
             className="text-gray-500 hover:text-gray-900 "

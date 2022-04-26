@@ -210,8 +210,8 @@ const ServiceProvider = () => {
                 </div>
                 <div className="flex items-center ">
                   <GrMail className="text-xl" />
-                  <Link to={`mailto:${serviceProvider?.email}`}>
-                    <h2 className="ml-3 "> {serviceProvider?.email}</h2>
+                  <Link to={`mailto:${serviceProvider?.businessEmail}`}>
+                    <h2 className="ml-3 "> {serviceProvider?.businessEmail}</h2>
                   </Link>
                 </div>
                 <div className="flex items-center ">
@@ -455,8 +455,8 @@ const ServiceProvider = () => {
                   className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer"
                   onClick={handleClose}
                 />
-                <h1 className=" text-3xl font-semibold mr-6">
-                  Review Form for Subi Plumbings
+                <h1 className=" text-3xl font-semibold mr-6 capitalize">
+                  Review Form for {serviceProvider?.name}
                 </h1>
                 <Rating
                   name="formRating"

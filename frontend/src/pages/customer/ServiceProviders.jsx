@@ -214,7 +214,7 @@ const ServiceProviders = () => {
           <div className="flex relative justify-between items-center pt-8 pb-10  md:px-10 px-5">
             <div className="">
               <h1 className="text-3xl font-semibold capitalize">
-                {service.trim() === "" ? "Service Providers" : service}
+                {service.trim() === "" ? "All Service Providers" : service}
               </h1>
               <span className="font-medium text-sm absolute bottom-3 text-gray-500 capitalize">
                 Filters:{" "}

@@ -176,7 +176,7 @@ const Nav = ({ fixed }) => {
             <div>
               <Link to="/login">
                 <button
-                  className={`lg:ml-8 lg:my-0 my-2 font-semibold py-2 px-6 shadow rounded shadow-orange-400 ${
+                  className={`lg:ml-8 lg:my-0 my-2 font-semibold py-2 px-6 shadow rounded shadow-primary ${
                     !isTab && " hover:scale-105 transition ease-in duration-100"
                   }`}
                 >

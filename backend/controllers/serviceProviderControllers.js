@@ -126,7 +126,7 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
   if (serviceProvider) {
     res.status(201).json({
       success: true,
-      message: "Service Provider Created successfully",
+      message: "Service Provider Created Successfully",
       data: {
         id: serviceProvider._id,
         name: serviceProvider.name,
@@ -147,9 +147,9 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
 //@route POST /api/serviceProviders/login
 //@access Public
 const loginServiceProvider = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+  email = email.toLowerCase();
   const serviceProvider = await ServiceProvider.findOne({ email });
-
   if (!serviceProvider) {
     return res.status(400).json({
       success: false,
@@ -231,7 +231,7 @@ const updateServiceProvider = asyncHandler(async (req, res) => {
   );
   res.status(200).json({
     success: true,
-    message: "ServiceProvider updated successfully",
+    message: "Business Infromation  Updated Successfully",
     data: updatedServiceProvider,
   });
 });

@@ -118,7 +118,7 @@ const addReview = expressAsyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: "Review created successfully",
+    message: "Review Created Successfully",
     data: newReview,
   });
 });

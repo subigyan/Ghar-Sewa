@@ -39,7 +39,10 @@ const Login = () => {
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
+      .min(
+        8,
+        "Password must be at least 8 characters and contain at least one letter and one number"
+      )
       .required("Password is required")
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
@@ -61,6 +64,7 @@ const Login = () => {
           console.log("token", response?.data);
           setUser(response?.data);
           toast.success(response.message);
+          navigate("/");
         }
       } catch (err) {
         console.log(err.response.data.message);

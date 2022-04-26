@@ -9,7 +9,7 @@ const STATS = "/serviceProviders/stats";
 export const register = async (user) => {
   const response = await axios.post(API_URL + "/register", user);
   console.log("register");
-  if (response) {
+  if (response?.data?.data) {
     localStorage.setItem(
       "serviceProvider",
       JSON.stringify(response?.data?.data)
@@ -21,7 +21,7 @@ export const register = async (user) => {
 //login
 export const login = async (user) => {
   const response = await axios.post(API_URL + "/login", user);
-  if (response) {
+  if (response?.data?.data) {
     localStorage.setItem(
       "serviceProvider",
       JSON.stringify(response?.data?.data)

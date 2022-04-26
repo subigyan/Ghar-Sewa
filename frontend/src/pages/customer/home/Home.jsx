@@ -7,12 +7,16 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./home.css";
 import Typewriter from "typewriter-effect";
-import axios from "axios";
+
+import { getCustomers } from "../../../api/customer";
+import { getStats } from "../../../api/serviceProvider";
+import { getAllReviews } from "../../../api/review";
+
 import homeBackImage from "../../../assets/images/home-back.jpg";
 import reviewImage from "../../../assets/icons/reviews.png";
 import workerImage from "../../../assets/icons/workers.png";
 import customerImage from "../../../assets/icons/team.png";
-import technicianImage from "../../../assets/images/technician.png";
+
 import toolImage from "../../../assets/images/tools.png";
 
 import { GiTap, GiElectric } from "react-icons/gi";
@@ -27,10 +31,29 @@ import Footer from "../../../components/Footer";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [customerCount, setCustomerCount] = useState(0);
+  const [serviceProviderCount, setServiceProviderCount] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
   useEffect(() => {
+    getCustomers()
+      .then((res) => {
+        setCustomerCount(res.count);
+      })
+      .catch((err) => console.log("No Customers"));
+    getStats()
+      .then((res) => {
+        setServiceProviderCount(res?.data?.totalServiceProviders);
+      })
+      .catch((err) => console.log("No Service Providers"));
+    getAllReviews()
+      .then((res) => {
+        setReviewCount(res.count);
+      })
+      .catch((err) => console.log("No Reviews"));
+
     AOS.init({ duration: 2500 });
-    var Tawk_API = Tawk_API || {},
-      Tawk_LoadStart = new Date();
+    var Tawk_API = Tawk_API || {};
     (function () {
       var s1 = document.createElement("script"),
         s0 = document.getElementsByTagName("script")[0];
@@ -179,118 +202,228 @@ const Home = () => {
       </div> */}
       {/* bg-[#ffba19c9]"  bg-[#ffbc57d8]*/}
 
+      {/* <h1
+            className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  "
+            data-aos="fade-in"
+          >
+            <Typewriter
+              options={{
+                // autoStart: true,
+                loop: false,
+                delay: 70,
+                changeDelay: 1,
+              }}
+              onInit={(typewriter) => {
+                // typewriter.pauseFor(300)
+                typewriter
+                  .typeString("Discover Household Service Providers Near You")
+                  .pauseFor(2000)
+                  .start();
+              }}
+            />
+          </h1>
+
+          <form
+            className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md md:flex hidden  items-center pl-2 shadow-2xl"
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-5/12  h-full py-2 relative">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="service"
+                id="type"
+                placeholder="plumber, electrician"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+                list="browsers"
+              />
+            </div>
+            <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
+            <div className="w-6/12  h-full flex items-center py-2">
+              <BiLocationPlus className="text-2xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+            <button className="w-1/12 bg-[#0B1007] h-full ml-2 flex justify-center items-center rounded-r-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <FiSearch className="text-xl text-white" />
+              )}
+            </button>
+          </form>
+          <form
+            className="mt-3 w-full px-8 md:hidden flex flex-col gap-4  "
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full "
+                type="text"
+                name="service"
+                id="type"
+                placeholder="Search Service Category"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
+              <BiLocationPlus className="text-2xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <button className="w-full bg-[#0B1007] h-10  flex justify-center items-center rounded-r-md shadow-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <span className="text-xl text-white"> Search </span>
+              )}
+            </button>
+          </form> */}
       <div
-        className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-32 bg-[#ffcd57e5]
+        className="w-screen h-screen flex flex-col justify-center lg:items-start items-center pb-16 lg:pl-28 bg-[#ffcd57e5]
       "
       >
-        <h1
-          className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  mt-10"
-          data-aos="fade-in"
-        >
-          <Typewriter
-            options={{
-              // autoStart: true,
-              loop: false,
-              delay: 70,
-              changeDelay: 1,
-            }}
-            onInit={(typewriter) => {
-              // typewriter.pauseFor(300)
-              typewriter
-                .typeString("Discover Household Service Providers Near You")
-                .pauseFor(2000)
-                .start();
-            }}
-          />
-        </h1>
+        <div className="md:px-8 px-4 md:py-20 py-8 mx-6 bg-white/40 rounded-xl mt-10">
+          <h1
+            className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  "
+            data-aos="fade-in"
+          >
+            <Typewriter
+              options={{
+                // autoStart: true,
+                loop: false,
+                delay: 70,
+                changeDelay: 1,
+              }}
+              onInit={(typewriter) => {
+                // typewriter.pauseFor(300)
+                typewriter
+                  .typeString("Discover Household Service Providers Near You")
+                  .pauseFor(2000)
+                  .start();
+              }}
+            />
+          </h1>
 
-        <form
-          className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md md:flex hidden  items-center pl-2 shadow-2xl"
-          data-aos="fade-in"
-          action="search"
-          onSubmit={(e) => {
-            setSubmited(true);
-          }}
-        >
-          <div className="flex items-center w-5/12  h-full py-2 relative">
-            <FaTools className="text-xl text-brown w-12" />
-            <input
-              className="h-full px-2 text-lg outline-none w-full"
-              type="text"
-              name="service"
-              id="type"
-              placeholder="plumber, electrician"
-              required
-              value={serviceCategory}
-              onChange={(e) => setServiceCategory(e.target.value)}
-              autoComplete="off"
-              list="browsers"
-            />
-          </div>
-          <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
-          <div className="w-6/12  h-full flex items-center py-2">
-            <BiLocationPlus className="text-2xl text-brown w-12" />
-            <input
-              className="h-full px-2 text-lg outline-none w-full"
-              type="text"
-              name="location"
-              id="location"
-              placeholder="Search Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-          <button className="w-1/12 bg-[#0B1007] h-full ml-2 flex justify-center items-center rounded-r-md">
-            {submited ? (
-              <FaSpinner className="text-xl text-white animate-spin" />
-            ) : (
-              <FiSearch className="text-xl text-white" />
-            )}
-          </button>
-        </form>
-        <form
-          className="mt-3 w-full px-8 md:hidden flex flex-col gap-4  "
-          data-aos="fade-in"
-          action="search"
-          onSubmit={(e) => {
-            setSubmited(true);
-          }}
-        >
-          <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
-            <FaTools className="text-xl text-brown w-12" />
-            <input
-              className="h-full px-2 text-lg outline-none w-full "
-              type="text"
-              name="service"
-              id="type"
-              placeholder="Search Service Category"
-              required
-              value={serviceCategory}
-              onChange={(e) => setServiceCategory(e.target.value)}
-              autoComplete="off"
-            />
-          </div>
-          <div className="flex items-center w-full  py-2   rounded border-2 shadow-md">
-            <BiLocationPlus className="text-2xl text-brown w-12" />
-            <input
-              className="h-full px-2 text-lg outline-none w-full"
-              type="text"
-              name="location"
-              id="location"
-              placeholder="Search Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              autoComplete="off"
-            />
-          </div>
-          <button className="w-full bg-[#0B1007] h-10  flex justify-center items-center rounded-r-md shadow-md">
-            {submited ? (
-              <FaSpinner className="text-xl text-white animate-spin" />
-            ) : (
-              <span className="text-xl text-white"> Search </span>
-            )}
-          </button>
-        </form>
+          <form
+            className="h-14  lg:w-[800px]  w-[90%] bg-white rounded-md md:flex hidden  items-center pl-2 shadow-2xl"
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-5/12  h-full py-2 relative">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="service"
+                id="type"
+                placeholder="plumber, electrician"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+                list="browsers"
+              />
+            </div>
+            <div className="border-l-2 border-gray-400 h-8 mr-2"></div>
+            <div className="w-6/12  h-full flex items-center py-2">
+              <BiLocationPlus className="text-2xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+            <button className="w-1/12 bg-[#0B1007] h-full ml-2 flex justify-center items-center rounded-r-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <FiSearch className="text-xl text-white" />
+              )}
+            </button>
+          </form>
+          <form
+            className="mt-3 w-full  md:hidden flex flex-col gap-4  "
+            data-aos="fade-in"
+            action="search"
+            onSubmit={(e) => {
+              setSubmited(true);
+            }}
+          >
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+              <FaTools className="text-xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full "
+                type="text"
+                name="service"
+                id="type"
+                placeholder="Search Service Category"
+                required
+                value={serviceCategory}
+                onChange={(e) => setServiceCategory(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+              <BiLocationPlus className="text-2xl text-brown w-12" />
+              <input
+                className="h-full px-2 text-lg outline-none w-full"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Search Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <button className="w-full bg-[#0B1007] h-10  flex justify-center items-center rounded-r-md shadow-md">
+              {submited ? (
+                <FaSpinner className="text-xl text-white animate-spin" />
+              ) : (
+                <span className="text-xl text-white"> Search </span>
+              )}
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="border-2  py-6 bg-white " id="browse">
@@ -326,12 +459,14 @@ const Home = () => {
               </p>
             </div>
           </Link>
-          <Link to="/search?service=builder">
+          <Link to="/search?service=contractor">
             <div className="flex flex-col flex-center hover:scale-105 transition ease-in-out duration-400 cursor-pointer mx-12 my-6">
               <div className="h-32 w-32 rounded-full  bg-[#77DF40] flex flex-center shadow-md ">
                 <BiBuildingHouse className="text-6xl text-white " />
               </div>
-              <p className="mt-2 text-lg font-medium text-gray-600">Builder</p>
+              <p className="mt-2 text-lg font-medium text-gray-600">
+                Contractor
+              </p>
             </div>
           </Link>
           <Link to="/search?service=painter">
@@ -430,28 +565,66 @@ const Home = () => {
           </div>
         </div> */}
       </div>
-      <div className="h-96 w-screen bg-black/40 flex flex-center ">
-        <div className="flex items-center justify-center h-full w-[80%]">
-          <div className="w-4/12 flex flex-col flex-center ">
-            <img src={workerImage} alt="logo" className="invert w-36" />
-            <p className=" text-white mt-2 text-5xl font-bold">55</p>
-            <p className=" text-white  text-2xl font-medium">
-              Service Providers
-            </p>
+      <div className="py-14 w-screen bg-black/40 flex flex-center ">
+        <div className="flex sm:flex-row flex-col items-center sm:justify-center  h-full md:w-[80%] w-[95%] sm:gap-0 gap-4">
+          <div className="sm:w-4/12 flex sm:flex-col sm:flex-center gap-4 items-center justify-center">
+            <img src={workerImage} alt="logo" className="invert md:w-36 w-20" />
+            <div className="flex flex-col flex-center">
+              <p className=" text-white sm:mt-2 md:text-5xl text-3xl font-bold">
+                {serviceProviderCount}
+              </p>
+              <p className=" text-white  md:text-2xl text-xl font-medium text-center">
+                Service Providers
+              </p>
+            </div>
           </div>
-          <div className="w-4/12 flex flex-col flex-center ">
-            <img src={customerImage} alt="logo" className="invert w-36" />
-            <p className=" text-white mt-2 text-5xl font-bold">55</p>
-            <p className=" text-white  text-2xl font-medium">Consumers</p>
+          <div className="sm:w-4/12 flex sm:flex-col sm:flex-center gap-4 items-center justify-center ">
+            <img
+              src={customerImage}
+              alt="logo"
+              className="invert md:w-36 w-20"
+            />
+            <div className="flex flex-col flex-center">
+              <p className=" text-white mt-2 md:text-5xl text-3xl font-bold">
+                {customerCount}
+              </p>
+              <p className=" text-white  md:text-2xl text-xl font-medium">
+                Consumers
+              </p>
+            </div>
           </div>
-          <div className="w-4/12 flex flex-col flex-center ">
-            <img src={reviewImage} alt="logo" className="invert w-36 p-4" />
-            <p className=" text-white mt-2 text-5xl font-bold">Thousands</p>
-            <p className=" text-white  text-2xl font-medium">of Reviews</p>
+          <div className="sm:w-4/12 flex sm:flex-col sm:flex-center gap-4 items-center justify-center ">
+            <img
+              src={reviewImage}
+              alt="logo"
+              className="invert md:w-36 w-20 p-4"
+            />
+            <div className="flex flex-col flex-center">
+              <p className=" text-white mt-2 md:text-5xl text-3xl font-bold">
+                {reviewCount}
+              </p>
+              <p className=" text-white  md:text-2xl text-xl font-medium">
+                Reviews
+              </p>
+            </div>
           </div>
         </div>
       </div>
-
+      <div className="w-full min-h-48 py-12 text-center bg-primary/95 text-white flex flex-center flex-col z-50  px-2">
+        <h2 className="text-2xl">
+          Make Better Hiring Descision with Ghar Sewa
+        </h2>
+        <p className="mt-4 text-gray-300">
+          Ghar Sewa is one stop solution for all your home service needs. We are
+          here to help you find the best service provider for your repair and
+          maintenance work.
+        </p>
+        <Link to="/search">
+          <button className="px-4 py-2 bg-stone-400 rounded-md mt-4 hover:bg-neutral-800">
+            View Service Providers
+          </button>
+        </Link>
+      </div>
       <Footer />
     </div>
   );

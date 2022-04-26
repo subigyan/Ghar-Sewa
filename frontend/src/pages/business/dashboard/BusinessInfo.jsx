@@ -4,11 +4,7 @@ import { useRecoilValue } from "recoil";
 import { serviceProviderAuthState } from "../../../atoms/authAtom";
 import { getServiceProvider } from "../../../api/serviceProviderSearch";
 import Map, { Marker } from "react-map-gl";
-import {
-  MdLocationPin,
-  MdOutlineRateReview,
-  MdVerifiedUser,
-} from "react-icons/md";
+import { MdLocationPin, MdVerifiedUser } from "react-icons/md";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GoPerson } from "react-icons/go";
 import { GrLocation, GrMail } from "react-icons/gr";

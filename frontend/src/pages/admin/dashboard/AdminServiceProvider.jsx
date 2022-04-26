@@ -26,6 +26,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { FiImage } from "react-icons/fi";
 import { updateServiceProvider } from "../../../api/serviceProvider";
 import { FaBusinessTime } from "react-icons/fa";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const AdminServiceProvider = () => {
   const [serviceProviders, setServiceProviders] = useState([]);
@@ -97,7 +99,7 @@ const AdminServiceProvider = () => {
             setServiceProviders(res.data);
           })
           .catch((err) => console.log("No Service Providers"));
-        toast.success("Successfully provided verfication status", {
+        toast.success("Successfully Provided Verification Status", {
           theme: "dark",
         });
       })
@@ -120,6 +122,11 @@ const AdminServiceProvider = () => {
       .catch((err) => console.log("No Service Providers"));
   };
 
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const usersPerPage = 8;
+  const pagesVisited = (pageNumber - 1) * usersPerPage;
+
   return (
     <div className="w-screen flex font-montserrat">
       <Sidebar active={"serviceProvider"} />
@@ -135,6 +142,7 @@ const AdminServiceProvider = () => {
                 onChange={(e) => {
                   getServiceProviderByName(e.target.value);
                   setSName(e.target.value);
+                  setPageNumber(1);
                 }}
               />
               <FormControl className="w-32">
@@ -184,88 +192,109 @@ const AdminServiceProvider = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {serviceProviders?.map((serviceProvider, index) => (
-                    <tr
-                      className="bg-white border-b text-gray-800 hover:bg-gray-50"
-                      key={index}
-                    >
-                      <th
-                        scope="row"
-                        className="px-4 py-4 font-medium text-gray-900 capitalize hover:underline cursor-pointer"
-                        onClick={() => {
-                          setCurrentServiceProvider(serviceProvider);
-                          setViewPort({
-                            ...viewPort,
-                            latitude: serviceProvider?.address?.latitude,
-                            longitude: serviceProvider?.address?.longitude,
-                          });
-                          console.log(viewPort);
-                          handleOpen();
-                        }}
+                  {serviceProviders
+                    ?.slice(pagesVisited, pagesVisited + usersPerPage)
+                    .map((serviceProvider, index) => (
+                      <tr
+                        className="bg-white border-b text-gray-800 hover:bg-gray-50"
+                        key={index}
                       >
-                        {serviceProvider.name}
-                      </th>
-                      <td className="px-4 py-4">{serviceProvider.email}</td>
-                      <td className="px-4 py-4">
-                        {serviceProvider.phoneNumber}
-                      </td>
-                      <td className="px-4 py-4 capitalize">
-                        {serviceProvider.type}
-                      </td>
-                      <td className="pl-4 py-4 capitalize">
-                        {" "}
-                        {`${serviceProvider?.address.neighbourhood}, ${
-                          serviceProvider?.address.city.toLowerCase() ===
-                          serviceProvider?.address.district.toLowerCase()
-                            ? serviceProvider?.address.city
-                            : serviceProvider?.address.city +
-                              " " +
-                              serviceProvider?.address.district
-                        } `}
-                      </td>
-
-                      <td className="px-4 py-4">
-                        {new Date(
-                          serviceProvider?.createdAt
-                        ).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </td>
-                      <td className="pr-2 py-4 text-right flex flex-col gap-2 ">
-                        <span
-                          className="font-medium text-red-600 cursor-pointer  hover:underline"
-                          onClick={() =>
-                            deleteServiceProviderInfo(serviceProvider._id)
-                          }
+                        <th
+                          scope="row"
+                          className="px-4 py-4 font-medium text-gray-900 capitalize hover:underline cursor-pointer"
+                          onClick={() => {
+                            setCurrentServiceProvider(serviceProvider);
+                            setViewPort({
+                              ...viewPort,
+                              latitude: serviceProvider?.address?.latitude,
+                              longitude: serviceProvider?.address?.longitude,
+                            });
+                            console.log(viewPort);
+                            handleOpen();
+                          }}
                         >
-                          Delete
-                        </span>
-                        {serviceProvider.verified ? (
+                          {serviceProvider.name}
+                        </th>
+                        <td className="px-4 py-4">{serviceProvider.email}</td>
+                        <td className="px-4 py-4">
+                          {serviceProvider.phoneNumber}
+                        </td>
+                        <td className="px-4 py-4 capitalize">
+                          {serviceProvider.type}
+                        </td>
+                        <td className="pl-4 py-4 capitalize">
+                          {" "}
+                          {`${serviceProvider?.address.neighbourhood}, ${
+                            serviceProvider?.address.city.toLowerCase() ===
+                            serviceProvider?.address.district.toLowerCase()
+                              ? serviceProvider?.address.city
+                              : serviceProvider?.address.city +
+                                " " +
+                                serviceProvider?.address.district
+                          } `}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {new Date(
+                            serviceProvider?.createdAt
+                          ).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td className="pr-2 py-4 text-right flex flex-col gap-2 ">
                           <span
-                            className=" text-orange-500 font-semibold whitespace-nowrap cursor-pointer  hover:underline"
+                            className="font-medium text-red-600 cursor-pointer  hover:underline"
                             onClick={() =>
-                              removeVerification(serviceProvider._id)
+                              deleteServiceProviderInfo(serviceProvider._id)
                             }
                           >
-                            Remove Verification Status
+                            Delete
                           </span>
-                        ) : (
-                          <span
-                            className="font-medium text-blue-600 cursor-pointer  hover:underline ml-4 whitespace-nowrap"
-                            onClick={() =>
-                              provideVerification(serviceProvider._id)
-                            }
-                          >
-                            Provide Verification Status
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                          {serviceProvider.verified ? (
+                            <span
+                              className=" text-orange-500 font-semibold whitespace-nowrap cursor-pointer  hover:underline"
+                              onClick={() =>
+                                removeVerification(serviceProvider._id)
+                              }
+                            >
+                              Remove Verification Status
+                            </span>
+                          ) : (
+                            <span
+                              className="font-medium text-blue-600 cursor-pointer  hover:underline ml-4 whitespace-nowrap"
+                              onClick={() =>
+                                provideVerification(serviceProvider._id)
+                              }
+                            >
+                              Provide Verification Status
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
+              {serviceProviders.length > 0 && (
+                <div className="my-8 flex flex-center ">
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={
+                        serviceProviders.length > 0
+                          ? Math.ceil(serviceProviders.length / 8)
+                          : 1
+                      }
+                      variant="outlined"
+                      color="primary"
+                      page={pageNumber}
+                      onChange={(e, val) => {
+                        setPageNumber(val);
+                      }}
+                    />
+                  </Stack>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -360,7 +389,7 @@ const AdminServiceProvider = () => {
                     <div className="flex items-center ">
                       <FaBusinessTime className="text-xl" />
                       <h2 className="ml-3 ">
-                        {currentServiceProvider?.experience} Years Experience
+                        {currentServiceProvider?.experience} Years of Experience
                       </h2>
                     </div>
                   </div>

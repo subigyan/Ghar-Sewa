@@ -11,12 +11,16 @@ const About = () => {
           <div className=" md:w-1/2 flex justify-center flex-col gap-8 w-full">
             <h1 className="text-4xl font-semibold">About Ghar Sewa</h1>
             <p className="text-justify text-lg">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem,
-              corrupti quasi odio quibusdam optio velit aliquam commodi, ea
-              autem dolorem vel eligendi et adipisci suscipit totam sequi
-              accusantium unde neque cupiditate similique expedita aperiam
-              repudiandae recusandae! Laboriosam impedit animi dolorum
-              cupiditate facere! Neque nam modi, quis similique sequi eius ex!
+              Ghar Sewa is an application that aids its users to find
+              maintenance and repair companies and individual contractors near
+              them, as well as provides a medium for such companies and
+              contractors to present their skills and services to the
+              public.With high demand and increasing supply of home service
+              business, Ghar Sewa application seeks to provide a platform that
+              enables home service professionals to present their skills and
+              service and be searchable on the internet, as well as acts as a
+              portal that assists consumers in finding suitable maintenance and
+              repair workers or companies as per their requirements.
             </p>
           </div>
           <div className="md:w-1/2 md:flex hidden">

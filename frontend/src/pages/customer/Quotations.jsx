@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
 import { useRecoilState } from "recoil";
 import authState from "../../atoms/authAtom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDeleteOutline, MdOutlineAddCircleOutline } from "react-icons/md";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
@@ -18,7 +18,13 @@ import {
   deleteQuotation,
 } from "../../api/quotation";
 import { toast } from "react-toastify";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 
 const Quotations = () => {
   const [user, setUser] = useRecoilState(authState);
@@ -173,9 +179,31 @@ const Quotations = () => {
             onClick={handleOpen}
           />
         </div>
+        <div className="flex justify-between mt-6 py-2">
+          <input
+            type={"text"}
+            className="w-60 border-2 border-gray-300 rounded-lg p-2"
+            placeholder="Search by text "
+          />
+          <FormControl className="w-44">
+            <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Sort"
+              defaultValue={""}
+            >
+              <MenuItem value={""}>None</MenuItem>
+              <MenuItem value={"old"}>Oldest</MenuItem>
+              <MenuItem value={"new"}>Newest</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
         {quotations.length === 0 ? (
-          <div className="flex flex-center font-smooch  w-full h-[full]   mt-8 text-slate-700  ">
-            <h1 className="text-4xl">No Quotations Found</h1>
+          <div className="absolute font-smooch top-1/2 left-1/2 -translate-x-1/2 text-slate-700  ">
+            <h1 className="text-5xl text-gray-500">
+              No Quotation Requests Found
+            </h1>
           </div>
         ) : (
           ""
@@ -252,9 +280,14 @@ const Quotations = () => {
                               >
                                 {quotation?.serviceProvider?.name?.[0].toUpperCase()}
                               </Avatar>
-                              <p className="ml-2 capitalize">
-                                {quotation?.serviceProvider?.name}
-                              </p>
+                              {console.log(quotation?.serviceProvider?._id)}
+                              <Link
+                                to={`/serviceProvider/${quotation?.serviceProvider?._id}`}
+                              >
+                                <p className="ml-2 capitalize hover:underline">
+                                  {quotation?.serviceProvider?.name}
+                                </p>
+                              </Link>
                             </div>
                             <p className="px-1 mt-2">{quotation?.quote}</p>
                           </div>

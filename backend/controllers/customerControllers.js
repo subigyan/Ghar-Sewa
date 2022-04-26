@@ -67,12 +67,11 @@ const registerCustomer = asyncHandler(async (req, res) => {
   if (customer) {
     return res.status(201).json({
       success: true,
-      message: "Customer Created successfully",
+      message: "Customer Registered Successfully",
       data: {
         id: customer._id,
         name: customer.name,
         email: customer.email,
-
         token: generateToken(customer._id),
       },
     });

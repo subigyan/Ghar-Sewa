@@ -7,7 +7,7 @@ const BackButton = ({ home }) => {
 
   return (
     <div
-      className="fixed top-6 left-8 bg-white shadow-sm shadow-slate-500 p-2 rounded-full cursor-pointer"
+      className="fixed top-2 left-8 bg-white shadow-sm shadow-slate-500 p-2 rounded-full cursor-pointer"
       onClick={() => {
         if (home) {
           navigate("/business");

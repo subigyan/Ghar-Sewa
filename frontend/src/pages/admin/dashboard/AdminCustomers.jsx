@@ -3,6 +3,8 @@ import Sidebar from "../../../components/admin/Sidebar";
 import { getCustomers, deleteCustomer } from "../../../api/customer";
 import { toast } from "react-toastify";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const AdminCustomers = () => {
   const [customers, setCustomers] = useState([]);
@@ -49,6 +51,11 @@ const AdminCustomers = () => {
       .catch((err) => console.log("No Service Providers"));
   };
 
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const usersPerPage = 8;
+  const pagesVisited = (pageNumber - 1) * usersPerPage;
+
   return (
     <div className="w-screen flex font-montserrat">
       <Sidebar active={"customer"} />
@@ -64,6 +71,7 @@ const AdminCustomers = () => {
                 onChange={(e) => {
                   getCustomersByName(e.target.value);
                   setName(e.target.value);
+                  setPageNumber(1);
                 }}
               />
               <FormControl className="w-44">
@@ -101,40 +109,62 @@ const AdminCustomers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {customers?.map((customer, index) => (
-                    <tr
-                      className="bg-white border-b text-gray-800 hover:bg-gray-50"
-                      key={index}
-                    >
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 "
+                  {customers
+                    ?.slice(pagesVisited, pagesVisited + usersPerPage)
+                    .map((customer, index) => (
+                      <tr
+                        className="bg-white border-b text-gray-800 hover:bg-gray-50"
+                        key={index}
                       >
-                        {customer.name}
-                      </th>
-                      <td className="px-6 py-4">{customer.email}</td>
-                      <td className="px-6 py-4">
-                        {new Date(customer?.createdAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span
-                          className="font-medium text-red-600 cursor-pointer  hover:underline"
-                          onClick={() => deleteCustomerInfo(customer._id)}
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 "
                         >
-                          Delete
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                          {customer.name}
+                        </th>
+                        <td className="px-6 py-4">{customer.email}</td>
+                        <td className="px-6 py-4">
+                          {new Date(customer?.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <span
+                            className="font-medium text-red-600 cursor-pointer  hover:underline"
+                            onClick={() => deleteCustomerInfo(customer._id)}
+                          >
+                            Delete
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
+
+              {customers.length > 0 && (
+                <div className="my-8 flex flex-center ">
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={
+                        customers.length > 0
+                          ? Math.ceil(customers.length / 8)
+                          : 1
+                      }
+                      variant="outlined"
+                      color="primary"
+                      page={pageNumber}
+                      onChange={(e, val) => {
+                        setPageNumber(val);
+                      }}
+                    />
+                  </Stack>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -19,14 +19,12 @@ export const getCustomerQuotations = async (id) => {
 
 export const postQuotation = async (quotation) => {
   console.log(quotation);
-  const { customer, requestHeadline, requestBody, service, requestImage } =
-    quotation;
+  const { customer, requestHeadline, requestBody, service } = quotation;
   const response = await axios.post(POST_QUOTATION_URL, {
     customer,
     requestHeadline,
     requestBody,
     service,
-    requestImage,
   });
   return response.data;
 };

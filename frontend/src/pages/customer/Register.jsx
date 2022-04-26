@@ -69,6 +69,7 @@ const Register = () => {
         if (response) {
           setUser(response?.data);
           toast.success(response.message);
+          navigate("/");
         }
       } catch (err) {
         console.log("xxzz");

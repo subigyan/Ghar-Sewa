@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
 import { getCustomerReviews } from "../../api/review";
-import { Modal, Rating, TextField } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Rating,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useRecoilState } from "recoil";
 import authState from "../../atoms/authAtom";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
 import { updateReview, deleteReview } from "../../api/review";
 import { toast } from "react-toastify";
@@ -44,6 +52,7 @@ const Reviews = () => {
   const [reviewHeadline, setReviewHeadline] = useState("");
   const [reviewBody, setReviewBody] = useState("");
   const [reviewId, setReviewId] = useState("");
+  const [serviceProvider, setServiceProvider] = useState("");
 
   const updateUserReview = (id, review) => {
     updateReview(id, review)
@@ -84,6 +93,26 @@ const Reviews = () => {
         ) : (
           ""
         )}
+        <div className="flex justify-between mt-4 py-2">
+          <input
+            type={"text"}
+            className="w-60 border-2 border-gray-300 rounded-lg p-2"
+            placeholder="Search by text "
+          />
+          <FormControl className="w-44">
+            <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Sort"
+              defaultValue={""}
+            >
+              <MenuItem value={""}>None</MenuItem>
+              <MenuItem value={"old"}>Oldest</MenuItem>
+              <MenuItem value={"new"}>Newest</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
 
         <div className="w-full flex flex-col gap-8 py-8">
           {reviews.map(
@@ -100,9 +129,13 @@ const Reviews = () => {
                       {review?.customer?.name?.[0]}
                     </Avatar> */}
                         <div className="">
-                          <p className=" font-semibold capitalize text-2xl">
-                            To: {review?.serviceProvider?.name}
-                          </p>
+                          <Link
+                            to={`/serviceProvider/${review?.serviceProvider?._id}`}
+                          >
+                            <p className=" font-semibold capitalize text-2xl hover:underline">
+                              To: {review?.serviceProvider?.name}
+                            </p>
+                          </Link>
                           <div>
                             <Rating
                               value={review.rating}
@@ -132,6 +165,7 @@ const Reviews = () => {
                           setReviewBody(review?.review);
                           setReviewStars(review?.rating);
                           setReviewId(review?._id);
+                          setServiceProvider(review?.serviceProvider?.name);
                           handleOpen();
                         }}
                       />
@@ -176,8 +210,8 @@ const Reviews = () => {
             className="absolute -top-2 -right-2 m-4 text-4xl text-red-700 cursor-pointer"
             onClick={handleClose}
           />
-          <h1 className=" text-3xl font-semibold mr-6">
-            Review Form for Subi Plumbings
+          <h1 className=" text-3xl font-semibold mr-6 capitalize">
+            Review Form for {serviceProvider}
           </h1>
           <Rating
             name="edit rating"

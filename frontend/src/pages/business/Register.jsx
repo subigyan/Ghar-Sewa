@@ -158,7 +158,7 @@ const Register = () => {
     // onSubmit: (val) => console.log(val),
   });
 
-  console.log(formik);
+  // console.log(formik);
   const handleNext = async () => {
     if (activeStep === 0) {
       if (
@@ -166,7 +166,9 @@ const Register = () => {
         formik.errors?.userPhone ||
         formik.errors?.password
       ) {
-        toast.error("Please fill all the required user information fields");
+        toast.error("Please fill all the required user information fields", {
+          theme: "dark",
+        });
         console.log("Error");
       } else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -201,7 +203,6 @@ const Register = () => {
         );
         console.log("Error");
       } else {
-        // alert(JSON.stringify(formik.values));
         try {
           let {
             name,
@@ -221,7 +222,7 @@ const Register = () => {
             services,
             experience,
           } = formik.values;
-          console.log(formik.values, "Type:", type);
+          // console.log(formik.values, "Type:", type);
           const address = {
             neighbourhood,
             city,
@@ -233,7 +234,20 @@ const Register = () => {
             owner = "";
           }
 
-          // console.log(businessType);
+          console.log({
+            name,
+            phoneNumber,
+            email,
+            password,
+            type,
+            businessEmail,
+            businessContactNumber,
+            description,
+            owner,
+            address,
+            services,
+            experience,
+          });
           const response = await register({
             name,
             phoneNumber,
@@ -256,7 +270,9 @@ const Register = () => {
             // console.log(response);
             if (response.success) {
               setServiceProvider(response?.data);
-              toast.success(response.message);
+              toast.success(response.message, {
+                theme: "dark",
+              });
               navigate("/business/dashboard");
             } else {
               toast.error(
@@ -271,8 +287,6 @@ const Register = () => {
       }
     }
   };
-
-  console.log(formik);
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);

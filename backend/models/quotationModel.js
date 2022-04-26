@@ -19,9 +19,6 @@ const quotationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter a service"],
     },
-    requestImage: {
-      type: String,
-    },
     quotations: [
       {
         serviceProvider: {

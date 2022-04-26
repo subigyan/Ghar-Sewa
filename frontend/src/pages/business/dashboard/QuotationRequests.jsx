@@ -67,7 +67,9 @@ const QuotationRequests = () => {
         setQuote("");
         setQuoteId("");
         console.log(res);
-        toast.success("Quotation Posted");
+        toast.success("Quotation Posted", {
+          theme: "dark",
+        });
       })
       .catch((err) => console.log("Error Adding Quote"));
   };

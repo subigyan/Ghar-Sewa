@@ -18,6 +18,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import CountUp from "react-countup";
 
 const AdminDashboard = () => {
   const [customerCount, setCustomerCount] = useState(0);
@@ -103,7 +104,9 @@ const AdminDashboard = () => {
                 <BsPeopleFill className="text-4xl" />
               </div>
               <div>
-                <h1 className="ml-3 text-2xl font-semibold">{customerCount}</h1>
+                <h1 className="ml-3 text-2xl font-semibold">
+                  <CountUp end={customerCount} />
+                </h1>
                 <h1 className=" ml-3 text-lg font-semibold">Customers</h1>
               </div>
             </div>
@@ -115,7 +118,7 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <h1 className="ml-3 text-2xl font-semibold">
-                  {serviceProviderCount}
+                  <CountUp end={serviceProviderCount} />
                 </h1>
                 <h1 className=" ml-3 text-lg font-semibold">
                   Service Providers
@@ -129,7 +132,9 @@ const AdminDashboard = () => {
                 <MdOutlineRateReview className="text-4xl" />
               </div>
               <div>
-                <h1 className="ml-3 text-2xl font-semibold">{reviewCount}</h1>
+                <h1 className="ml-3 text-2xl font-semibold">
+                  <CountUp end={reviewCount} />
+                </h1>
                 <h1 className=" ml-3 text-lg text-gray-600 font-semibold">
                   Reviews
                 </h1>
@@ -143,7 +148,7 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <h1 className="ml-2 text-2xl font-semibold">
-                  {quotationStats?.totalQuotations}
+                  <CountUp end={quotationStats?.totalQuotations} />
                 </h1>
                 <h1 className="ml-2 text-lg text-gray-600 font-semibold">
                   Quotation Requests

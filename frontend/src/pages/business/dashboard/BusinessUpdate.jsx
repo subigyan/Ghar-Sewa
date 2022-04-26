@@ -235,14 +235,20 @@ const BusinessUpdate = () => {
           // console.log(response);
           if (response.success) {
             setServiceProvider(response?.data);
-            toast.success(response.message);
+            toast.success(response.message, {
+              theme: "dark",
+            });
           } else {
-            toast.error(`Error: ${response.message}`);
+            toast.error(`Error: ${response.message},{
+              theme: "dark",
+            }`);
           }
           // toast.success("Business registered successfully");
         }
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, {
+          theme: "dark",
+        });
       }
     },
   });
@@ -294,7 +300,9 @@ const BusinessUpdate = () => {
               formik.handleSubmit();
             }}
           >
-            <h1 className="text-3xl font-semibold">Update Info</h1>
+            <h1 className="text-3xl font-semibold">
+              Update Business Information
+            </h1>
 
             <div className="mt-6  flex flex-col bg-white">
               {/* <TextField

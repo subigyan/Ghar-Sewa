@@ -15,6 +15,7 @@ const serviceProviderSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Please enter an email"],
+      lowercase: true,
       unique: true,
     },
     password: {
@@ -29,6 +30,7 @@ const serviceProviderSchema = new mongoose.Schema(
     businessEmail: {
       type: String,
       unique: true,
+      lowercase: true,
     },
     businessContactNumber: {
       type: Number,

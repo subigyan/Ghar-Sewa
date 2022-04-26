@@ -11,6 +11,7 @@ import { Modal } from "@mui/material";
 import { PieChart, Pie, Cell } from "recharts";
 import { MdOutlineRateReview } from "react-icons/md";
 import { GoVerified } from "react-icons/go";
+import CountUp from "react-countup";
 
 const BusinessDashboard = () => {
   const user = useRecoilValue(serviceProviderAuthState);
@@ -127,7 +128,7 @@ const BusinessDashboard = () => {
                 <AiFillStar className="text-6xl" />
               </div>
               <h1 className="ml-4 text-4xl font-semibold">
-                {reviewStats.averageRating || 0} Stars
+                <CountUp end={reviewStats.averageRating || 0} /> Stars
               </h1>
             </div>
           </div>
@@ -137,7 +138,7 @@ const BusinessDashboard = () => {
                 <MdOutlineRateReview className="text-6xl" />
               </div>
               <h1 className="ml-4 text-4xl font-semibold">
-                {reviewStats.totalReviews} Reviews
+                <CountUp end={reviewStats.totalReviews} /> Reviews
               </h1>
             </div>
           </div>

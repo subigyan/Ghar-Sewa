@@ -179,7 +179,7 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="lg:w-[75%] w-[90%]  flex flex-center sm:flex-row flex-col">
+        <div className="lg:w-[75%] w-[90%]  flex flex-center sm:flex-row flex-col ">
           <div
             className="w-1/2 my-6  min-w-[340px] p-2 "
             data-aos="zoom-in-right"
