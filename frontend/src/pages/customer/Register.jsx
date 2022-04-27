@@ -205,35 +205,6 @@ const Register = () => {
               }}
             />
 
-            {/* <input
-              type="text"
-              className="w-full h-10 border border-gray-400 px-4 rounded-sm "
-              placeholder="Full Name"
-            />
-            <input
-              type="email"
-              className="w-full h-10 border border-gray-400 px-4 rounded-sm "
-              placeholder="Email"
-            />
-            <input
-              type="text"
-              className="w-full h-10 border border-gray-400 px-4 rounded-sm "
-              placeholder="Password"
-            />
-            <input
-              type="text"
-              className="w-full h-10 border border-gray-400 px-4 rounded-sm "
-              placeholder="Confirm Password"
-            /> */}
-            {/* <div className="flex  items-center w-full mt-4">
-              <input
-                type="checkbox"
-                className="h-4 w-4 p-0"
-                name="agree"
-                id="agree"
-              />
-              <p className="ml-5">I agree with the terms and conditions.</p>
-            </div> */}
             <button
               className="bg-gray-300 py-2 w-full border-2 border-gray-400 rounded mt-4"
               type="submit"
@@ -254,3 +225,33 @@ const Register = () => {
 };
 
 export default Register;
+
+// {/* <input
+//               type="text"
+//               className="w-full h-10 border border-gray-400 px-4 rounded-sm "
+//               placeholder="Full Name"
+//             />
+//             <input
+//               type="email"
+//               className="w-full h-10 border border-gray-400 px-4 rounded-sm "
+//               placeholder="Email"
+//             />
+//             <input
+//               type="text"
+//               className="w-full h-10 border border-gray-400 px-4 rounded-sm "
+//               placeholder="Password"
+//             />
+//             <input
+//               type="text"
+//               className="w-full h-10 border border-gray-400 px-4 rounded-sm "
+//               placeholder="Confirm Password"
+//             /> */}
+//             {/* <div className="flex  items-center w-full mt-4">
+//               <input
+//                 type="checkbox"
+//                 className="h-4 w-4 p-0"
+//                 name="agree"
+//                 id="agree"
+//               />
+//               <p className="ml-5">I agree with the terms and conditions.</p>
+//             </div> */}

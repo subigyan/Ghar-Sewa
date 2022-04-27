@@ -81,9 +81,6 @@ const Login = () => {
       <div className="absolute h-1/2 bottom-0 right-0 -z-10 w-8/12 rounded-l-full bg-[#3B3B3B] md:hidden block"></div>
 
       <div className="md:flex w-5/12 hidden h-full  flex-center flex-col  ">
-        {/* <div className="w-full flex flex-center  ml-20">
-          <img src={logo} alt="" className="w-[420px] bg-white" />
-        </div> */}
         <img
           src={loginIng}
           alt="login"

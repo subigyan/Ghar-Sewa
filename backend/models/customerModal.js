@@ -6,10 +6,6 @@ const customerSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter a name"],
     },
-    // phoneNumber: {
-    //   type: Number,
-    //   required: [true, "Please enter a phone number"],
-    // },
     email: {
       type: String,
       required: [true, "Please enter an email"],
@@ -26,7 +22,5 @@ const customerSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// const customerModel = mongoose.model("Customer", customerSchema);
 
 module.exports = mongoose.model("Customer", customerSchema);
