@@ -30,6 +30,9 @@ const Quotations = () => {
   const [user, setUser] = useRecoilState(authState);
   const [quotations, setQuotations] = useState([]);
 
+  const [sort, setSort] = useState("");
+  const [text, setText] = useState("");
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!user) {
@@ -38,7 +41,7 @@ const Quotations = () => {
   });
   useEffect(() => {
     if (user?.id) {
-      getCustomerQuotations(user.id)
+      getCustomerQuotations(user.id, text, sort)
         .then((res) => {
           setQuotations(res.data);
         })
@@ -46,7 +49,7 @@ const Quotations = () => {
     } else {
       navigate("/");
     }
-  }, [user?.id]);
+  }, [user?.id, text, sort]);
 
   const [quotationService, setQuotationService] = React.useState("plumber");
   const [quotationHeadline, setQuotationHeadline] = useState("");
@@ -182,8 +185,10 @@ const Quotations = () => {
         <div className="flex justify-between mt-6 py-2">
           <input
             type={"text"}
-            className="w-60 border-2 border-gray-300 rounded-lg p-2"
-            placeholder="Search by text "
+            className="w-60 border-2 border-gray-300 rounded-lg p-2 px-4"
+            placeholder="Search by text, service"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
           <FormControl className="w-44">
             <InputLabel id="demo-simple-select-label">Sort</InputLabel>
@@ -192,10 +197,13 @@ const Quotations = () => {
               id="demo-simple-select"
               label="Sort"
               defaultValue={""}
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
             >
               <MenuItem value={""}>None</MenuItem>
               <MenuItem value={"old"}>Oldest</MenuItem>
               <MenuItem value={"new"}>Newest</MenuItem>
+              <MenuItem value={"replied"}>With Quotation</MenuItem>
             </Select>
           </FormControl>
         </div>

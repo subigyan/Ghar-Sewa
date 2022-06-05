@@ -4,14 +4,37 @@ const Review = require("../models/reviewModal");
 const Customer = require("../models/customerModal");
 const ServiceProvider = require("../models/serviceProviderModal");
 
-//@desc Get all reviews
-//@route GET /api/reviews
+//@desc Get all reviews of customer
+//@route GET /api/reviews/customer/:id
 //@access Public
 const getReview = expressAsyncHandler(async (req, res) => {
   try {
-    const review = await Review.find({ customer: req.params.id }).populate(
-      "serviceProvider"
-    );
+    const text = req.query.text;
+    const sort = req.query.sort;
+
+    const textRegex = new RegExp(text, "gi");
+
+    const sortQuery = {};
+
+    if (sort === "new") {
+      sortQuery.createdAt = -1;
+    } else if (sort === "old") {
+      sortQuery.createdAt = 1;
+    } else if (sort === "rating") {
+      sortQuery.rating = 1;
+    } else if (sort === "-rating") {
+      sortQuery.rating = -1;
+    }
+
+    const review = await Review.find({
+      customer: req.params.id,
+      $or: [
+        { review: { $regex: textRegex } },
+        { reviewHeadline: { $regex: textRegex } },
+      ],
+    })
+      .populate("serviceProvider")
+      .sort(sortQuery);
 
     if (!review) {
       return res.status(404).json({
@@ -21,6 +44,7 @@ const getReview = expressAsyncHandler(async (req, res) => {
     }
     return res.status(200).json({
       success: true,
+
       message: "Customer Reviews",
       count: review.length,
       data: review,
@@ -40,7 +64,7 @@ const getReview = expressAsyncHandler(async (req, res) => {
 const getProviderReview = expressAsyncHandler(async (req, res) => {
   try {
     const text = req.query.text;
-    const textRegex = new RegExp(text, "i");
+    const textRegex = new RegExp(text, "gi");
     const sort = req.query.sort;
 
     const sortQuery = {};
@@ -85,7 +109,7 @@ const getProviderReview = expressAsyncHandler(async (req, res) => {
 });
 
 //@desc add single review
-//@route GET /api/reviews/:id
+//@route POST /api/reviews/:id
 //@access Private
 const addReview = expressAsyncHandler(async (req, res) => {
   // console.log(req.user.id);

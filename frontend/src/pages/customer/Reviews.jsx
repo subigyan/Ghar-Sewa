@@ -23,6 +23,8 @@ const Reviews = () => {
   const [user, setUser] = useRecoilState(authState);
   const [reviews, setReviews] = React.useState([]);
   const navigate = useNavigate();
+  const [sort, setSort] = useState("");
+  const [text, setText] = useState("");
 
   useEffect(() => {
     if (!user) {
@@ -32,7 +34,7 @@ const Reviews = () => {
 
   useEffect(() => {
     if (user?.id) {
-      getCustomerReviews(user.id)
+      getCustomerReviews(user.id, text, sort)
         .then((res) => {
           setReviews(res.data);
         })
@@ -40,7 +42,7 @@ const Reviews = () => {
     } else {
       navigate("/");
     }
-  }, [navigate, user?.id]);
+  }, [navigate, user?.id, text, sort]);
 
   // console.log("ok");
   //
@@ -96,8 +98,10 @@ const Reviews = () => {
         <div className="flex justify-between mt-4 py-2">
           <input
             type={"text"}
-            className="w-60 border-2 border-gray-300 rounded-lg p-2"
+            className="w-60 border-2 border-gray-300 rounded-lg p-2 px-4"
             placeholder="Search by text "
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
           <FormControl className="w-44">
             <InputLabel id="demo-simple-select-label">Sort</InputLabel>
@@ -105,11 +109,15 @@ const Reviews = () => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Sort"
+              value={sort}
               defaultValue={""}
+              onChange={(e) => setSort(e.target.value)}
             >
               <MenuItem value={""}>None</MenuItem>
               <MenuItem value={"old"}>Oldest</MenuItem>
               <MenuItem value={"new"}>Newest</MenuItem>
+              <MenuItem value={"rating"}>Ratings (Low to High)</MenuItem>
+              <MenuItem value={"-rating"}>Ratings (High to High)</MenuItem>
             </Select>
           </FormControl>
         </div>

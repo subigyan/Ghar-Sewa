@@ -144,15 +144,56 @@ const getAllQuotations = expressAsyncHandler(async (req, res) => {
 
 const getCustomerQuotations = expressAsyncHandler(async (req, res) => {
   const customer = await Customer.findById(req.params.id);
+  const text = req.query.text;
+  const textRegex = new RegExp(text, "gi");
+  const sort = req.query.sort;
+
+  const sortQuery = {};
+  let findQuery = {
+    $elemMatch: {},
+  };
+  if (sort === "new") {
+    sortQuery.createdAt = -1;
+  } else if (sort === "old") {
+    sortQuery.createdAt = 1;
+  }
+
   if (!customer) {
     return res.status(404).json({
       success: false,
       message: "Customer not found",
     });
   }
-  const quotations = await Quotation.find({ customer: customer.id }).populate(
-    "quotations.serviceProvider"
-  );
+  const quotaion = {};
+  if (sort === "replied") {
+    quotations = await Quotation.find({
+      customer: customer.id,
+      $or: [
+        { requestHeadline: { $regex: textRegex } },
+        { requestBody: { $regex: textRegex } },
+        { service: { $regex: textRegex } },
+        { "quotations.quote": { $regex: textRegex } },
+      ],
+      quotations: {
+        $elemMatch: {},
+      },
+    })
+      .populate("quotations.serviceProvider")
+      .sort(sortQuery);
+  } else {
+    quotations = await Quotation.find({
+      customer: customer.id,
+      $or: [
+        { requestHeadline: { $regex: textRegex } },
+        { requestBody: { $regex: textRegex } },
+        { service: { $regex: textRegex } },
+        { "quotations.quote": { $regex: textRegex } },
+      ],
+    })
+      .populate("quotations.serviceProvider")
+      .sort(sortQuery);
+  }
+
   res.status(200).json({
     success: true,
     message: "Customer Quotations",

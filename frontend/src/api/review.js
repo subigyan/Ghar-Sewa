@@ -35,8 +35,13 @@ export const postReview = async (serviceProviderReview) => {
   return response.data;
 };
 
-export const getCustomerReviews = async (id) => {
-  const response = await axios.get(`${CUSTOMER_REVIEW_URL}${id}`);
+export const getCustomerReviews = async (id, text, sort) => {
+  const response = await axios.get(`${CUSTOMER_REVIEW_URL}${id}`, {
+    params: {
+      text,
+      sort,
+    },
+  });
 
   return response.data;
 };

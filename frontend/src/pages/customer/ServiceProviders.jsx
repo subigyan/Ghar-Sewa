@@ -250,8 +250,8 @@ const ServiceProviders = () => {
           </div>
           <div className="bg-slate-100 min-h-[500px] flex flex-col ] py-8  md:px-10 sm:px-5 space-y-5 relative">
             <span className="font-medium text-sm absolute top-2  md:right-12 right-5  text-gray-500 capitalize">
-              Service Providers: {pageNumber - 1} - {pageNumber * usersPerPage}{" "}
-              of {nameFiltered.length}
+              Service Providers: {(pageNumber - 1) * usersPerPage} -{" "}
+              {pageNumber * usersPerPage} of {nameFiltered.length}
             </span>
             {/* {nameFiltered.length > 0
               ? nameFiltered.map((serviceProvider) => {
