@@ -6,12 +6,12 @@ const useDeviceProvider = () => {
 
   //choose the screen size
   const handleResize = () => {
-    if (window.innerWidth < 720) {
+    if (window.innerWidth < 768) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
     }
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1024) {
       setIsTab(true);
     } else {
       setIsTab(false);

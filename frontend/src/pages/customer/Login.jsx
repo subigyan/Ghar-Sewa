@@ -92,7 +92,7 @@ const Login = () => {
 
       <div className="md:w-7/12 flex flex-col justify-center items-center p-2">
         <div
-          className="md:w-[500px] w-[350px] shadow-2xl bg-white border border-gray-100 rounded-md flex flex-col justify-center  px-8 pb-8 py-4"
+          className="md:w-[500px] min-w-[350px] w-[400px] shadow-2xl bg-white border border-gray-100 rounded-md flex flex-col justify-center  px-8 pb-8 py-4"
           data-aos="fade-left"
           data-aos-duration="700"
         >

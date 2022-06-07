@@ -149,9 +149,7 @@ const getCustomerQuotations = expressAsyncHandler(async (req, res) => {
   const sort = req.query.sort;
 
   const sortQuery = {};
-  let findQuery = {
-    $elemMatch: {},
-  };
+
   if (sort === "new") {
     sortQuery.createdAt = -1;
   } else if (sort === "old") {

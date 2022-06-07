@@ -28,11 +28,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Loading from "../../components/Loading";
 
 const ServiceProvider = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [loading, setLoading] = useState(false);
 
   const [openImage, setOpenImage] = useState(false);
   const handleOpenImage = () => setOpenImage(true);
@@ -71,6 +73,7 @@ const ServiceProvider = () => {
   });
 
   useEffect(() => {
+    setLoading(true);
     getServiceProvider(id)
       .then((res) => {
         setServiceProvider(res.data);
@@ -79,8 +82,12 @@ const ServiceProvider = () => {
           latitude: res?.data?.address?.latitude,
           longitude: res?.data?.address?.longitude,
         });
+        setLoading(false);
       })
-      .catch((err) => toast.error("User Not Found"));
+      .catch((err) => {
+        toast.error("User Not Found");
+        setLoading(false);
+      });
 
     getServiceProviderReviews(id)
       .then((res) => {
@@ -151,16 +158,18 @@ const ServiceProvider = () => {
     <>
       <Nav fixed={false} />
 
-      {serviceProvider ? (
-        <div className="max-w-screen flex flex-col  mt-4 lg:px-24 px-7 font-roboto  text-gray-700">
+      {loading ? (
+        <Loading />
+      ) : serviceProvider ? (
+        <div className="max-w-screen flex flex-col  mt-4 lg:px-24 px-7 font-roboto  text-gray-700 ">
           <div className="flex md:flex-row flex-col justify-between">
-            <div className="md:w-3/12 w-full min-w-[250px]  py-5 px-2 gap-4 flex flex-col text-lg">
-              <div className="flex flex-center">
+            <div className="md:w-3/12 w-full min-w-[250px]  py-5 px-2 gap-4 flex flex-col text-lg bg-white">
+              <div className="flex flex-center ">
                 {serviceProvider?.profileImage ? (
                   <img
                     src={serviceProvider?.profileImage}
                     alt="logo"
-                    className="md:w-full md:max-h-max max-h-80 sm:w-8/12 w-full  border-8 border-slate-300"
+                    className="md:w-full md:max-h-max max-h-80 sm:w-8/12 w-full  border-8 border-slate-300 "
                   />
                 ) : (
                   <div
@@ -531,6 +540,8 @@ const ServiceProvider = () => {
           <h1 className="text-5xl font-smooch">Service Provider Not Found</h1>
         </div>
       )}
+
+      {}
     </>
   );
 };

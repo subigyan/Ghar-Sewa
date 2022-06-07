@@ -166,6 +166,7 @@ const BusinessImages = () => {
                   type="file"
                   onChange={handleImageUpload}
                   className="bg-green-400 hidden"
+                  accept="image/*"
                 />
               </div>
             </div>

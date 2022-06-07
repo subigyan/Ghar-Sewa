@@ -46,6 +46,7 @@ function App() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/quotations" element={<Quotations />} />
           <Route path="/business/dashboard" element={<BusinessDashboard />} />
+
           <Route
             path="/business/dashboard/reviews"
             element={<BusinessReviews />}
@@ -71,6 +72,8 @@ function App() {
             element={<BusinessQuotations />}
           />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/" element={<AdminDashboard />} />
+
           <Route
             path="/admin/dashboard/customers"
             element={<AdminCustomers />}

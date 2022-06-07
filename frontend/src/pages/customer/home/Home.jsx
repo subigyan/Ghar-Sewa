@@ -316,7 +316,7 @@ const Home = () => {
       >
         <div className="md:px-8 px-4 md:py-20 py-8 mx-6 bg-white/40 rounded-xl mt-10">
           <h1
-            className="sm:text-5xl text-4xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  "
+            className="sm:text-5xl text-3xl  font-bold text-gray-800 mb-8 tracking-wide lg:w-[710px]  w-[90%]  "
             data-aos="fade-in"
           >
             <Typewriter
@@ -388,7 +388,7 @@ const Home = () => {
               setSubmited(true);
             }}
           >
-            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+            <div className="flex items-center w-full  sm:py-2 py-1   rounded border-2 shadow-md bg-white">
               <FaTools className="text-xl text-brown w-12" />
               <input
                 className="h-full px-2 text-lg outline-none w-full "
@@ -402,7 +402,7 @@ const Home = () => {
                 autoComplete="off"
               />
             </div>
-            <div className="flex items-center w-full  py-2   rounded border-2 shadow-md bg-white">
+            <div className="flex items-center w-full sm:py-2 py-1   rounded border-2 shadow-md bg-white">
               <BiLocationPlus className="text-2xl text-brown w-12" />
               <input
                 className="h-full px-2 text-lg outline-none w-full"
@@ -568,8 +568,8 @@ const Home = () => {
       <div className="py-14 w-screen bg-black/40 flex flex-center ">
         <div className="flex sm:flex-row flex-col items-center sm:justify-center  h-full md:w-[80%] w-[95%] sm:gap-0 gap-4">
           <div className="sm:w-4/12 flex sm:flex-col sm:flex-center gap-4 items-center justify-center">
-            <img src={workerImage} alt="logo" className="invert md:w-36 w-20" />
-            <div className="flex flex-col flex-center">
+            <img src={workerImage} alt="logo" className="invert md:w-36 w-24" />
+            <div className="flex flex-col flex-center w-[200px]">
               <p className=" text-white sm:mt-2 md:text-5xl text-3xl font-bold">
                 {serviceProviderCount}
               </p>
@@ -582,9 +582,9 @@ const Home = () => {
             <img
               src={customerImage}
               alt="logo"
-              className="invert md:w-36 w-20"
+              className="invert md:w-36 w-24"
             />
-            <div className="flex flex-col flex-center">
+            <div className="flex flex-col flex-center w-[200px]">
               <p className=" text-white mt-2 md:text-5xl text-3xl font-bold">
                 {customerCount}
               </p>
@@ -597,9 +597,9 @@ const Home = () => {
             <img
               src={reviewImage}
               alt="logo"
-              className="invert md:w-36 w-20 p-4"
+              className="invert md:w-36 w-28 p-4"
             />
-            <div className="flex flex-col flex-center">
+            <div className="flex flex-col flex-center w-[200px] ">
               <p className=" text-white mt-2 md:text-5xl text-3xl font-bold">
                 {reviewCount}
               </p>

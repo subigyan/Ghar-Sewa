@@ -98,7 +98,7 @@ const Register = () => {
       </div>
       <div className="md:w-7/12 flex justify-center items-center p-2">
         <div
-          className="md:w-[500px] w-[350px] shadow-2xl rounded-md p-4  flex flex-col justify-center  z-50 bg-white"
+          className="md:w-[500px] min-w-[350px] w-[400px] shadow-2xl rounded-md p-4  flex flex-col justify-center  z-50 bg-white"
           data-aos="fade-left"
           data-aos-duration="700"
         >

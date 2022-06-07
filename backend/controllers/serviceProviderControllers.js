@@ -313,7 +313,8 @@ const searchServiceProvider = asyncHandler(async (req, res) => {
         //   { "address.city": { $regex: locationSplitThreeRegex } },
         //   { "address.fullLocation": { $regex: locationRegex } },
         // ],
-        locationQuery,
+
+        ...locationQuery,
       },
     ],
   })

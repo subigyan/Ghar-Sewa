@@ -57,8 +57,8 @@ const Nav = ({ fixed }) => {
         </div>
 
         <ul
-          className={`flex lg:flex-row flex-col lg:items-center lg:pb-0 pb-2 absolute lg:static    lg:z-auto  left-0 w-full   lg:w-auto lg:pl-0  pl-7 transition-all duration-500  text-base  ${
-            open
+          className={`flex lg:flex-row flex-col lg:items-center lg:pb-0 pb-2 absolute lg:static lg:z-auto  left-0 w-full   lg:w-auto lg:pl-0  pl-7 transition-all duration-500  text-base  ${
+            open && isTab
               ? "top-20 bg-white shadow-neutral-700 shadow-md border-t z-50"
               : "-top-[400px] "
           }`}

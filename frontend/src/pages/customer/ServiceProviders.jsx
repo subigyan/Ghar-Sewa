@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
 import Rating from "@mui/material/Rating";
 import { GrLocation } from "react-icons/gr";
-import { FiImage, FiPhoneCall } from "react-icons/fi";
+import { FiChevronDown, FiImage, FiPhoneCall } from "react-icons/fi";
 import { Link, useSearchParams } from "react-router-dom";
 import { searchServiceProviders } from "../../api/serviceProviderSearch";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,6 +16,7 @@ import Footer from "../../components/Footer";
 import { FcSearch } from "react-icons/fc";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import Loading from "../../components/Loading";
 
 const ServiceProviders = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -33,12 +34,41 @@ const ServiceProviders = () => {
   const [nameInput, setNameInput] = useState("");
   const [businessTypeFilter, setBusinessTypeFilter] = useState("");
   const [starFilter, setStarFilter] = useState(0);
+  const [showFilter, setShowFilter] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const filterData = () => {
+    setBusinessTypeFilter(businessType);
+    setStarFilter(star);
+    // console.log(businessTypeFilter, starFilter, "||", businessType, star);
+    const filteredServiceProviders = serviceProviders.filter(
+      (serviceProvider) => {
+        let overallRating = 0;
+        serviceProvider.reviews.forEach((review) => {
+          overallRating += review.rating / serviceProvider.reviews.length;
+        });
+        // console.log(serviceProvider);
+        return (
+          serviceProvider.type.includes(businessType) && overallRating >= star
+        );
+      }
+    );
+    setNameFiltered(filteredServiceProviders);
+    console.log(filteredServiceProviders);
+  };
 
   useEffect(() => {
+    setLoading(true);
     const getServiceProvider = async () => {
       const response = await searchServiceProviders(service, location, sort);
       setServiceProviders(response.data);
       setNameFiltered(response.data);
+      setLoading(false);
+      if (businessTypeFilter !== "" || starFilter !== 0) {
+        setServiceProviders(serviceProviders.reverse());
+        setNameFiltered(nameFiltered.reverse());
+        filterData();
+      }
     };
     getServiceProvider();
   }, [searchParams, service, location, sort]);
@@ -51,6 +81,9 @@ const ServiceProviders = () => {
       location,
       sort: event.target.value,
     });
+    // if (businessTypeFilter !== "" || starFilter !== 0) {
+    //   filterData();
+    // }
   };
 
   const handleStarChange = (event) => {
@@ -79,26 +112,6 @@ const ServiceProviders = () => {
 
   console.log("Star", star, starFilter);
 
-  const filterData = () => {
-    setBusinessTypeFilter(businessType);
-    setStarFilter(star);
-    // console.log(businessTypeFilter, starFilter, "||", businessType, star);
-    const filteredServiceProviders = serviceProviders.filter(
-      (serviceProvider) => {
-        let overallRating = 0;
-        serviceProvider.reviews.forEach((review) => {
-          overallRating += review.rating / serviceProvider.reviews.length;
-        });
-        // console.log(serviceProvider);
-        return (
-          serviceProvider.type.includes(businessType) && overallRating >= star
-        );
-      }
-    );
-    setNameFiltered(filteredServiceProviders);
-    console.log(filteredServiceProviders);
-  };
-
   // console.log(nameFiltered, serviceProviders);
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -119,9 +132,8 @@ const ServiceProviders = () => {
   return (
     <>
       <Nav fixed={false} />
-
-      <div className="max-w-screen flex  lg:px-14 px-7 font-roboto md:flex-row flex-col ">
-        <div className="md:w-3/12 w-full min-w-[250px] border-2 py-5 px-2 gap-2 flex flex-col">
+      <div className="max-w-screen flex  lg:px-14 px-6 font-roboto md:flex-row flex-col ">
+        <div className="md:w-3/12 w-full min-w-[250px] border-2 py-5 px-2 gap-2 flex flex-col sm:hidden">
           <h3 className="text-xl font-semibold ml-1 text-gray-800">
             Search Service Provider
           </h3>
@@ -143,75 +155,188 @@ const ServiceProviders = () => {
               }}
             />
           </div>
-          <h3 className="text-xl font-semibold ml-1 text-gray-800 sm:mt-6 mt-3">
-            Filter By
-          </h3>
-          <h4 className="ml-1 sm:mt-2 text-lg font-semibold text-gray-600">
-            Business Type
-          </h4>
-          <div className="ml-6 flex flex-col">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  color="default"
-                  onChange={() => setBusinessType("")}
-                  checked={businessType === ""}
-                />
-              }
-              label="All"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  color="default"
-                  onChange={() => setBusinessType("individual")}
-                  checked={businessType === "individual"}
-                />
-              }
-              label="Individual"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  color="default"
-                  onChange={() => setBusinessType("company")}
-                  checked={businessType === "company"}
-                />
-              }
-              label="Company"
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-semibold ml-1 text-gray-800 sm:mt-6 mt-3">
+              Filter By
+            </h3>
+            <FiChevronDown
+              className={`text-xl transition-all sm:mt-6 mt-3 block md:hidden ${
+                !showFilter ? "rotate-180" : ""
+              } cursor-pointer`}
+              onClick={() => setShowFilter(!showFilter)}
             />
           </div>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <Select
-              value={star}
-              onChange={handleStarChange}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              size="small"
-              color="grey"
+
+          {showFilter && (
+            <>
+              <h4 className="ml-1 sm:mt-2 text-lg font-semibold text-gray-600">
+                Business Type
+              </h4>
+              <div className="ml-6 flex flex-col">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      color="default"
+                      onChange={() => setBusinessType("")}
+                      checked={businessType === ""}
+                    />
+                  }
+                  label="All"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      color="default"
+                      onChange={() => setBusinessType("individual")}
+                      checked={businessType === "individual"}
+                    />
+                  }
+                  label="Individual"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      color="default"
+                      onChange={() => setBusinessType("company")}
+                      checked={businessType === "company"}
+                    />
+                  }
+                  label="Company"
+                />
+              </div>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <Select
+                  value={star}
+                  onChange={handleStarChange}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                  size="small"
+                  color="grey"
+                >
+                  <MenuItem value={0}>
+                    <em>Stars</em>
+                  </MenuItem>
+                  <MenuItem value={0.51}>One Star and Higher</MenuItem>
+                  <MenuItem value={1.51}>Two Stars and Higher</MenuItem>
+                  <MenuItem value={2.51}>Three Stars and Higher</MenuItem>
+                  <MenuItem value={3.51}>Four Stars and Higher</MenuItem>
+                  <MenuItem value={4.51}>Five Stars</MenuItem>
+                </Select>
+              </FormControl>
+              <button
+                className="py-2 bg-dark text-white rounded-sm mt-1 mx-2"
+                onClick={filterData}
+              >
+                Apply
+              </button>
+            </>
+          )}
+        </div>
+        <div className="md:w-3/12 w-full min-w-[250px] border-2 py-5 px-2 gap-2 sm:flex flex-col hidden">
+          <h3 className="text-xl font-semibold ml-1 text-gray-800">
+            Search Service Provider
+          </h3>
+          <div className="flex items-center h-12  bg-white border-2 px-1 rounded mt-2">
+            <span className="w-1/12 h-full flex justify-center items-center  ">
+              <MdPersonSearch className="text-black text-xl" />
+            </span>
+            <input
+              className="h-full px-1 text-lg outline-none  w-11/12 "
+              type="text"
+              name="service"
+              id="type"
+              placeholder="Search"
+              required
+              value={nameInput}
+              onChange={(e) => {
+                filterByName(e);
+                setPageNumber(1);
+              }}
+            />
+          </div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-semibold ml-1 text-gray-800 sm:mt-6 mt-3">
+              Filter By
+            </h3>
+            <FiChevronDown
+              className={`text-xl transition-all sm:mt-6 mt-3 block md:hidden ${
+                !showFilter ? "rotate-180" : ""
+              } cursor-pointer`}
+              onClick={() => setShowFilter(!showFilter)}
+            />
+          </div>
+
+          <>
+            <h4 className="ml-1 sm:mt-2 text-lg font-semibold text-gray-600">
+              Business Type
+            </h4>
+            <div className="ml-6 flex flex-col">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    color="default"
+                    onChange={() => setBusinessType("")}
+                    checked={businessType === ""}
+                  />
+                }
+                label="All"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    color="default"
+                    onChange={() => setBusinessType("individual")}
+                    checked={businessType === "individual"}
+                  />
+                }
+                label="Individual"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    color="default"
+                    onChange={() => setBusinessType("company")}
+                    checked={businessType === "company"}
+                  />
+                }
+                label="Company"
+              />
+            </div>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <Select
+                value={star}
+                onChange={handleStarChange}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                size="small"
+                color="grey"
+              >
+                <MenuItem value={0}>
+                  <em>Stars</em>
+                </MenuItem>
+                <MenuItem value={0.51}>One Star and Higher</MenuItem>
+                <MenuItem value={1.51}>Two Stars and Higher</MenuItem>
+                <MenuItem value={2.51}>Three Stars and Higher</MenuItem>
+                <MenuItem value={3.51}>Four Stars and Higher</MenuItem>
+                <MenuItem value={4.51}>Five Stars</MenuItem>
+              </Select>
+            </FormControl>
+            <button
+              className="py-2 bg-dark text-white rounded-sm mt-1 mx-2"
+              onClick={filterData}
             >
-              <MenuItem value={0}>
-                <em>Stars</em>
-              </MenuItem>
-              <MenuItem value={0.51}>One Star and Higher</MenuItem>
-              <MenuItem value={1.51}>Two Stars and Higher</MenuItem>
-              <MenuItem value={2.51}>Three Stars and Higher</MenuItem>
-              <MenuItem value={3.51}>Four Stars and Higher</MenuItem>
-              <MenuItem value={4.51}>Five Stars</MenuItem>
-            </Select>
-          </FormControl>
-          <button
-            className="py-2 bg-dark text-white rounded-sm mt-1 mx-2"
-            onClick={filterData}
-          >
-            Apply
-          </button>
+              Apply
+            </button>
+          </>
         </div>
         <div className="md:w-9/12 w-full shadow-lg border-gray-100">
-          <div className="flex relative justify-between items-center pt-8 pb-10  md:px-10 px-5">
+          <div className="flex relative justify-between items-center pt-8 pb-10  md:px-10 px-5 flex-wrap gap-y-2">
             <div className="">
               <h1 className="text-3xl font-semibold capitalize">
                 {service.trim() === "" ? "All Service Providers" : service}
@@ -269,17 +394,21 @@ const ServiceProviders = () => {
                     filterByName={false}
                   />
                 ))} */}
-            {nameFiltered.length === 0 ? (
-              <div className="w-full h-full flex flex-center">
-                <FcSearch className="text-8xl" />
-                <p className="text-5xl font-smooch text-gray-600">
-                  No Result Found
-                </p>
-              </div>
+            {loading ? (
+              <Loading />
             ) : (
-              ""
-            )}
-            {/* {nameFiltered?.map((serviceProvider) => {
+              <>
+                {nameFiltered.length === 0 ? (
+                  <div className="w-full h-full flex flex-center">
+                    <FcSearch className="text-8xl" />
+                    <p className="text-5xl font-smooch text-gray-600">
+                      No Result Found
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* {nameFiltered?.map((serviceProvider) => {
               return (
                 <ServiceProviderCard
                   key={serviceProvider._id}
@@ -287,25 +416,27 @@ const ServiceProviders = () => {
                 />
               );
             })} */}
-            {displayUsers}
-            {nameFiltered.length > 0 && (
-              <div className="mt-8 flex flex-center">
-                <Stack spacing={2}>
-                  <Pagination
-                    count={
-                      nameFiltered.length > 0
-                        ? Math.ceil(nameFiltered.length / 10)
-                        : 1
-                    }
-                    variant="outlined"
-                    color="primary"
-                    page={pageNumber}
-                    onChange={(e, val) => {
-                      setPageNumber(val);
-                    }}
-                  />
-                </Stack>
-              </div>
+                {displayUsers}
+                {nameFiltered.length > 0 && (
+                  <div className="mt-8 flex flex-center">
+                    <Stack spacing={2}>
+                      <Pagination
+                        count={
+                          nameFiltered.length > 0
+                            ? Math.ceil(nameFiltered.length / 10)
+                            : 1
+                        }
+                        variant="outlined"
+                        color="primary"
+                        page={pageNumber}
+                        onChange={(e, val) => {
+                          setPageNumber(val);
+                        }}
+                      />
+                    </Stack>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -429,7 +560,7 @@ const ServiceProviderCard = ({
             </button>
           ))}
         </div>
-        <p className="mt-4 line-clamp-2">{description}</p>
+        <p className="mt-4 line-clamp-2 break-all">{description}</p>
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ const Quotations = () => {
     } else {
       navigate("/");
     }
-  }, [user?.id, text, sort]);
+  }, [user?.id, text, sort, navigate]);
 
   const [quotationService, setQuotationService] = React.useState("plumber");
   const [quotationHeadline, setQuotationHeadline] = useState("");

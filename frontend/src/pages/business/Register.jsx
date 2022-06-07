@@ -155,6 +155,7 @@ const Register = () => {
       services: [],
     },
     validationSchema: validationSchema,
+    validateOnChange: false,
     // onSubmit: (val) => console.log(val),
   });
 
@@ -273,6 +274,12 @@ const Register = () => {
               toast.success(response.message, {
                 theme: "dark",
               });
+              toast.success(
+                "Go to Business info to manage business information",
+                {
+                  theme: "dark",
+                }
+              );
               navigate("/business/dashboard");
             } else {
               toast.error(
@@ -388,6 +395,7 @@ const Register = () => {
                   <h1 className="text-3xl">User Information</h1>
                 </div>
                 <div className="mt-6  flex flex-col bg-white">
+                  {console.log(formik)}
                   <TextField
                     required
                     id="email"
@@ -755,19 +763,19 @@ const Register = () => {
             <Box sx={{ mb: 2 }}>
               <div>
                 <button
-                  className="px-4 py-2 bg-indigo-800 text-white rounded"
-                  onClick={handleNext}
-                  type="button"
-                >
-                  {activeStep >= steps.length - 1 ? "Submit" : "Next"}
-                </button>
-                <button
                   disabled={activeStep === 0}
-                  className="px-4 py-2  border shadow-sm border-gray-600  rounded ml-5 disabled:text-gray-300 "
+                  className="px-4 py-2  border shadow-sm border-gray-600  rounded  disabled:text-gray-300 "
                   onClick={handleBack}
                   type="button"
                 >
                   Back
+                </button>
+                <button
+                  className="px-4 py-2 bg-indigo-800 text-white rounded ml-5"
+                  onClick={handleNext}
+                  type="button"
+                >
+                  {activeStep >= steps.length - 1 ? "Submit" : "Next"}
                 </button>
               </div>
             </Box>

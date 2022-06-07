@@ -33,8 +33,7 @@ const getReview = expressAsyncHandler(async (req, res) => {
         { reviewHeadline: { $regex: textRegex } },
       ],
     })
-      .populate("serviceProvider")
-      .sort(sortQuery);
+    .sort(sortQuery);
 
     if (!review) {
       return res.status(404).json({

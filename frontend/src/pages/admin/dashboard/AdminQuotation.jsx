@@ -25,14 +25,16 @@ import Sidebar from "../../../components/admin/Sidebar";
 
 const AdminQuotation = () => {
   const [quotations, setQuotations] = useState([]);
+  const [sort, setSort] = useState("");
+  const [text, setText] = useState("");
 
   useEffect(() => {
-    getAllQuotations()
+    getAllQuotations(text, sort)
       .then((res) => {
         setQuotations(res.data);
       })
       .catch((err) => console.log("No Quotations"));
-  }, []);
+  }, [text, sort]);
 
   console.log(quotations);
 
@@ -55,9 +57,6 @@ const AdminQuotation = () => {
       });
   };
 
-  const [sort, setSort] = useState("");
-  const [text, setText] = useState("");
-
   const handleChange = (event) => {
     setSort(event.target.value);
     getAllQuotations(text, event.target.value)
@@ -67,14 +66,14 @@ const AdminQuotation = () => {
       .catch((err) => console.log("No Service Providers"));
   };
 
-  const getQuotationByText = (event) => {
-    setText(event.target.value);
-    getAllQuotations(event.target.value, sort)
-      .then((res) => {
-        setQuotations(res.data);
-      })
-      .catch((err) => console.log("No Service Providers"));
-  };
+  // const getQuotationByText = (event) => {
+  //   setText(event.target.value);
+  //   getAllQuotations(event.target.value, sort)
+  //     .then((res) => {
+  //       setQuotations(res.data);
+  //     })
+  //     .catch((err) => console.log("No Service Providers"));
+  // };
 
   const deleteQuotationRequest = (id) => {
     deleteQuotation(id)
@@ -105,7 +104,9 @@ const AdminQuotation = () => {
             type={"text"}
             className="w-60 border-2 border-gray-300 rounded-lg p-2"
             placeholder="Search by text "
-            onChange={getQuotationByText}
+            onChange={(event) => {
+              setText(event.target.value);
+            }}
           />
           <FormControl className="w-44">
             <InputLabel id="demo-simple-select-label">Sort</InputLabel>
